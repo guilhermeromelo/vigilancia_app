@@ -36,11 +36,11 @@ class AppTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.text = initialValue;
     return Padding(
       padding: externalPadding ?? EdgeInsets.zero,
       child: TextFormField(
         autofocus: autoFocus ?? false,
-        initialValue: initialValue,
         onChanged: onChangedFunction,
         validator: validatorFunction,
         controller: controller,

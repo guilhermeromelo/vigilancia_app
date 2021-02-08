@@ -20,7 +20,7 @@ Componente responsável por montar uma tela com appBar do Scaffold e também o c
  Opicional: passar o ícone da direita1 e sua função e/ou passar o ícone da direita2 e sua função
 
  Ex:
-Internal_header(
+InternalHeader(
     leftIcon: Icons.arrow_back_ios,
     leftIconFunction: () {
       print("função esquerdo");
@@ -52,8 +52,6 @@ class InternalHeader extends StatelessWidget {
   final String title;
   final Widget body;
   @required
-  final bool hasNavigationBar;
-  final int navigationBarIndex;
 
   const InternalHeader(
       {Key key,
@@ -64,9 +62,7 @@ class InternalHeader extends StatelessWidget {
         this.rightIcon2,
         this.rightIcon2Function,
         this.title,
-        this.body,
-        this.hasNavigationBar,
-        this.navigationBarIndex})
+        this.body})
       : super(key: key);
 
   @override

@@ -79,7 +79,7 @@ class _MenuState extends State<Menu> {
           colorButton: Colors.white,
           textButton: "Porteiros e Vigilantes",
           fncOnPressed: () {
-            Navigator.pushNamed(context, '/transshipment/transshipment_page');
+            Navigator.pushNamed(context, 'doormanAndGuard/registration');
           },
           iconButton: Icons.admin_panel_settings,
         ),
