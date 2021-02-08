@@ -16,6 +16,7 @@ class AppTextFormField extends StatelessWidget {
   Function suffixIconOnPressed;
   EdgeInsets externalPadding;
   bool autoFocus;
+  bool obscureText;
 
   TextEditingController controller = TextEditingController();
 
@@ -32,6 +33,7 @@ class AppTextFormField extends StatelessWidget {
     this.suffixIconOnPressed,
     this.externalPadding,
     this.autoFocus,
+    this.obscureText
   }) : super(key: key);
 
   @override
@@ -40,6 +42,7 @@ class AppTextFormField extends StatelessWidget {
     return Padding(
       padding: externalPadding ?? EdgeInsets.zero,
       child: TextFormField(
+        obscureText: obscureText ?? false,
         autofocus: autoFocus ?? false,
         onChanged: onChangedFunction,
         validator: validatorFunction,
@@ -47,39 +50,37 @@ class AppTextFormField extends StatelessWidget {
         keyboardType: keyboardInputType ?? TextInputType.text,
         style: TextStyle(fontSize: 18),
         decoration: InputDecoration(
-          labelText: labelText,
-          labelStyle: TextStyle(
-            color: AppColors.mainBlue,
-            fontSize: 20,
-          ),
-          suffixIcon: IconButton(
-            icon: Icon(
-              suffixIcon,
-              color: suffixIconColor,
-              size: 20,
+            labelText: labelText,
+            labelStyle: TextStyle(
+              color: AppColors.mainBlue,
+              fontSize: 20,
             ),
-            onPressed: suffixIconOnPressed,
-          ),
-          filled: true,
-          fillColor: Colors.white,
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          contentPadding: EdgeInsets.fromLTRB(25, 10, 25, 10),
-          errorStyle: TextStyle(
-            fontSize: 16,
-          )
-        ),
-
+            suffixIcon: IconButton(
+              icon: Icon(
+                suffixIcon,
+                color: suffixIconColor,
+                size: 20,
+              ),
+              onPressed: suffixIconOnPressed,
+            ),
+            filled: true,
+            fillColor: Colors.white,
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            contentPadding: EdgeInsets.fromLTRB(25, 10, 25, 10),
+            errorStyle: TextStyle(
+              fontSize: 16,
+            )),
         inputFormatters: [inputFormatterField ?? defaultMask],
       ),
     );

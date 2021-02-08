@@ -41,7 +41,7 @@ class _DoormanAndGuardRegistrationPageState
 }
 
 class UserRegistrationSubPage extends StatefulWidget {
-  final _formKeyJunto = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
   bool isDoormanAndGuardUpdate;
 
@@ -57,7 +57,7 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: widget._formKeyJunto,
+      key: widget._formKey,
       child: ListView(
         children: [
           AppTextFormField(

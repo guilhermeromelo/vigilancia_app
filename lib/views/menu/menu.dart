@@ -71,7 +71,7 @@ class _MenuState extends State<Menu> {
           colorButton: Colors.white,
           textButton: "Postos de Trabalho",
           fncOnPressed: () {
-            Navigator.pushNamed(context, '/packages/packages_page');
+            Navigator.pushNamed(context, 'workplace/registration');
           },
           iconButton: Icons.wb_shade,
         ),

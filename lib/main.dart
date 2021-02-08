@@ -4,6 +4,7 @@ import 'package:vigilancia_app/views/doormanAndGuard/doormanAndGuardRegistration
 import 'package:vigilancia_app/views/menu/menu.dart';
 import 'package:vigilancia_app/views/schedule/schedulePage.dart';
 import 'package:vigilancia_app/views/users/userRegistration.dart';
+import 'package:vigilancia_app/views/workplace/workplaceRegistration.dart';
 
 void main() async {
   //WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +22,8 @@ void main() async {
       'users/registration': (context) => UserRegistrationPage(),
       //DoormanAndGuard
       'doormanAndGuard/registration': (context) => DoormanAndGuardRegistrationPage(),
+      //WorkPlaces
+      'workplace/registration': (context) => WorkplaceRegistrationPage(),
     },
   ));
 }
