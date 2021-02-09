@@ -13,7 +13,7 @@ class AppColors {
   static const Color lightBlue = Color(0X333B70A2);
 
 
-
+/*
   //Verde claro - menu lateral
   static const Color verdeClaro = Color(0XFFBEE2C7);
 
@@ -33,7 +33,7 @@ class AppColors {
   static const Color cinzaMenu = Color(0X1709160D);
 
   //Background caixa de dialogo
-  static const Color cinza70 = Color(0XB3C4C4C4);
+  static const Color cinza70 = Color(0XB3C4C4C4);*/
 }
 /*
 Verde Logo: #009748

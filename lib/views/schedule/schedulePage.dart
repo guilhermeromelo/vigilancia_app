@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vigilancia_app/views/shared/appTextFormField/formatedTextField.dart';
+import 'package:vigilancia_app/views/shared/cards/workplaceCard.dart';
 import 'package:vigilancia_app/views/shared/constants/appColors.dart';
 import 'package:vigilancia_app/views/shared/header/internalHeader.dart';
 
@@ -45,8 +46,8 @@ class _ScheduleSubPageState extends State<ScheduleSubPage> {
             AppTextFormField(
               labelText: "Pesquisar",
               externalPadding: EdgeInsets.only(top: 15, left: 10, right: 10),
-              validatorFunction: (text){
-                if(text.isEmpty) return "Campo Vazio";
+              validatorFunction: (text) {
+                if (text.isEmpty) return "Campo Vazio";
               },
             )
           ],
