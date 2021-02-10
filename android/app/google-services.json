@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "969345985128",
+    "project_id": "vigilanciaapp-f9971",
+    "storage_bucket": "vigilanciaapp-f9971.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:969345985128:android:2285c359b550c1338ce9dd",
+        "android_client_info": {
+          "package_name": "com.guilhermemelo.vigilancia_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "969345985128-l1g6hrtogam5e09n99bpbrebrfp0g7kl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJTTOE8TV-UYIh8VDCXoG73A51TUkk9WA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "969345985128-l1g6hrtogam5e09n99bpbrebrfp0g7kl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
