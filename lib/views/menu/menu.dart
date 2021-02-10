@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:vigilancia_app/controllers/guard/guardDAO.dart';
+import 'package:vigilancia_app/models/guard/guard.dart';
 import 'package:vigilancia_app/views/shared/constants/appColors.dart';
 
 class Menu extends StatefulWidget {
@@ -54,8 +56,12 @@ class _MenuState extends State<Menu> {
         botaoInicio(
           colorButton: Colors.white,
           textButton: "Escala",
-          fncOnPressed: () {
-            Navigator.pushNamed(context, 'schedule/schedulePage');
+          fncOnPressed: () async {
+            //Navigator.pushNamed(context, 'schedule/schedulePage');
+
+            Guard guard = Guard(cpf: "111.111.111-11", type: 1, name: "Nome111", id: 2);
+            deleteGuard(guard, context);
+
           },
           iconButton: Icons.pending_actions,
         ),
