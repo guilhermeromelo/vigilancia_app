@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:vigilancia_app/views/schedule/singletonSchedule.dart';
 import 'package:vigilancia_app/views/shared/appTextFormField/formatedTextField.dart';
 import 'package:vigilancia_app/views/shared/cards/workplaceCard.dart';
 import 'package:vigilancia_app/views/shared/constants/appColors.dart';
 import 'package:vigilancia_app/views/shared/header/internalHeader.dart';
+import 'package:vigilancia_app/views/shared/titleOrRowBuilder/TitleOrRowBuilder.dart';
 
 class SchedulePage extends StatefulWidget {
   @override
@@ -17,9 +19,15 @@ class _SchedulePageState extends State<SchedulePage> {
       leftIcon: Icons.arrow_back_ios,
       leftIconFunction: () {},
       rightIcon2: Icons.wb_sunny,
-      rightIcon2Function: () {},
+      rightIcon2Function: () {
+        SingletonSchedule().isDaytime = true;
+        Navigator.pushNamed(context, 'schedule/scheduleSort');
+      },
       rightIcon1: Icons.nightlight_round,
-      rightIcon1Function: () {},
+      rightIcon1Function: () {
+        SingletonSchedule().isDaytime = false;
+        Navigator.pushNamed(context, 'schedule/scheduleSort');
+      },
       body: ScheduleSubPage(),
     );
   }

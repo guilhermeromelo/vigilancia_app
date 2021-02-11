@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:vigilancia_app/controllers/guard/guardDAO.dart';
+import 'package:vigilancia_app/models/guard/guard.dart';
 import 'package:vigilancia_app/views/shared/appTextFormField/formatedTextField.dart';
 import 'package:vigilancia_app/views/shared/button/AppButton.dart';
+import 'package:vigilancia_app/views/shared/constants/masks.dart';
 import 'package:vigilancia_app/views/shared/header/InternalHeaderWithTabBar.dart';
-import 'package:vigilancia_app/views/shared/header/internalHeader.dart';
 
 String name = "";
 String cpf = "";
 
-class DoormanAndGuardRegistrationPage extends StatefulWidget {
+class GuardRegistrationPage extends StatefulWidget {
   bool isDoormanAndGuardUpdate = false;
 
   @override
-  _DoormanAndGuardRegistrationPageState createState() =>
-      _DoormanAndGuardRegistrationPageState();
+  _GuardRegistrationPageState createState() => _GuardRegistrationPageState();
 }
 
-class _DoormanAndGuardRegistrationPageState
-    extends State<DoormanAndGuardRegistrationPage> {
+class _GuardRegistrationPageState extends State<GuardRegistrationPage> {
   @override
   Widget build(BuildContext context) {
     name = "";
@@ -34,18 +34,24 @@ class _DoormanAndGuardRegistrationPageState
       rightIcon1Function: () {
         if (widget.isDoormanAndGuardUpdate == false) {}
       },
-      widget1: UserRegistrationSubPage(isDoormanAndGuardUpdate: widget.isDoormanAndGuardUpdate,),
-      widget2: UserRegistrationSubPage(isDoormanAndGuardUpdate: widget.isDoormanAndGuardUpdate,),
+      widget1: UserRegistrationSubPage(
+        isDoormanAndGuardUpdate: widget.isDoormanAndGuardUpdate,
+        index: 0,
+      ),
+      widget2: UserRegistrationSubPage(
+        isDoormanAndGuardUpdate: widget.isDoormanAndGuardUpdate,
+        index: 1,
+      ),
     );
   }
 }
 
 class UserRegistrationSubPage extends StatefulWidget {
   final _formKey = GlobalKey<FormState>();
-
+  int index;
   bool isDoormanAndGuardUpdate;
 
-  UserRegistrationSubPage({Key key, this.isDoormanAndGuardUpdate})
+  UserRegistrationSubPage({Key key, this.isDoormanAndGuardUpdate, this.index})
       : super(key: key);
 
   @override
@@ -77,15 +83,22 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
             },
             initialValue: cpf,
             labelText: "CPF",
+            inputFormatterField: AppMasks.cpfMask,
             externalPadding: EdgeInsets.only(top: 15, left: 10, right: 10),
             validatorFunction: (text) {
               if (text.isEmpty) return "Campo Vazio";
             },
           ),
           AppButton(
-            labelText: widget.isDoormanAndGuardUpdate == false ? "Cadastrar" : "Atualizar",
-            onPressedFunction: (){
-
+            labelText: widget.isDoormanAndGuardUpdate == false
+                ? "Cadastrar"
+                : "Atualizar",
+            onPressedFunction: () {
+              if (widget._formKey.currentState.validate()) {
+                Guard guard =
+                    Guard(id: 0, name: name, cpf: cpf, type: widget.index);
+                addGuard(guard, context);
+              }
             },
           ),
         ],

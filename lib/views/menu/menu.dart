@@ -14,6 +14,7 @@ class _MenuState extends State<Menu> {
   @override
   Widget build(BuildContext context) {
     bool boolMobile = size.width < size.height;
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Inicio"),
@@ -57,10 +58,10 @@ class _MenuState extends State<Menu> {
           colorButton: Colors.white,
           textButton: "Escala",
           fncOnPressed: () async {
-            //Navigator.pushNamed(context, 'schedule/schedulePage');
+            Navigator.pushNamed(context, 'schedule/schedulePage');
 
-            Guard guard = Guard(cpf: "111.111.111-11", type: 1, name: "Nome111", id: 2);
-            deleteGuard(guard, context);
+            //Guard guard = Guard(cpf: "111.111.111-11", type: 1, name: "Nome111", id: 2);
+            //deleteGuard(guard, context);
 
           },
           iconButton: Icons.pending_actions,
@@ -77,7 +78,7 @@ class _MenuState extends State<Menu> {
           colorButton: Colors.white,
           textButton: "Postos de Trabalho",
           fncOnPressed: () {
-            Navigator.pushNamed(context, 'workplace/registration');
+            Navigator.pushNamed(context, 'workplaces/registration');
           },
           iconButton: Icons.wb_shade,
         ),
@@ -85,7 +86,7 @@ class _MenuState extends State<Menu> {
           colorButton: Colors.white,
           textButton: "Porteiros e Vigilantes",
           fncOnPressed: () {
-            Navigator.pushNamed(context, 'doormanAndGuard/registration');
+            Navigator.pushNamed(context, 'guards/registration');
           },
           iconButton: Icons.admin_panel_settings,
         ),

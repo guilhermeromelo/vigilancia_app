@@ -74,7 +74,8 @@ class _WorkplaceRegistrationSubPageState
               placeName = text;
             },
           ),
-          TitleBuilder(EdgeInsets.only(top: 15, bottom: 5), "Porteiros"),
+          TitleBuilder(
+              padding: EdgeInsets.only(top: 15, bottom: 5), title: "Porteiros"),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -87,7 +88,9 @@ class _WorkplaceRegistrationSubPageState
               )
             ],
           ),
-          TitleBuilder(EdgeInsets.only(top: 15, bottom: 5), "Vigilantes"),
+          TitleBuilder(
+              padding: EdgeInsets.only(top: 15, bottom: 5),
+              title: "Vigilantes"),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
