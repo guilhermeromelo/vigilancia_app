@@ -7,13 +7,13 @@ import 'package:vigilancia_app/views/shared/cards/guardCard.dart';
 import 'package:vigilancia_app/views/shared/header/internalHeader.dart';
 import 'package:vigilancia_app/views/shared/titleOrRowBuilder/TitleOrRowBuilder.dart';
 
-class ScheduleSort extends StatefulWidget {
+class SelectGuardsPage extends StatefulWidget {
   List<int> selectedIndex = List();
   @override
-  _ScheduleSortState createState() => _ScheduleSortState();
+  _SelectGuardsPageState createState() => _SelectGuardsPageState();
 }
 
-class _ScheduleSortState extends State<ScheduleSort> {
+class _SelectGuardsPageState extends State<SelectGuardsPage> {
   bool isDaytime = SingletonSchedule().isDaytime;
 
   @override
@@ -35,25 +35,25 @@ class _ScheduleSortState extends State<ScheduleSort> {
         Navigator.of(context).pop();
       },
       leftIcon: Icons.arrow_back_ios,
-      body: ScheduleSortSubPage(
+      body: SelectGuardsSubPage(
         selectedIndex: widget.selectedIndex,
       ),
     );
   }
 }
 
-class ScheduleSortSubPage extends StatefulWidget {
+class SelectGuardsSubPage extends StatefulWidget {
   List<Guard> guardList = List();
   List<Guard> doormanList = List();
   List<int> selectedIndex = List();
 
-  ScheduleSortSubPage({Key key, this.selectedIndex}) : super(key: key);
+  SelectGuardsSubPage({Key key, this.selectedIndex}) : super(key: key);
 
   @override
-  _ScheduleSortSubPageState createState() => _ScheduleSortSubPageState();
+  _SelectGuardsSubPageState createState() => _SelectGuardsSubPageState();
 }
 
-class _ScheduleSortSubPageState extends State<ScheduleSortSubPage> {
+class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
   Size get size => MediaQuery.of(context).size;
 
   @override
@@ -234,13 +234,15 @@ class _ScheduleSortSubPageState extends State<ScheduleSortSubPage> {
         labelText: "PROSSEGUIR",
         onPressedFunction: () {
           print(widget.selectedIndex.toString());
+          SingletonSchedule().selectedGuardsID = widget.selectedIndex;
+          Navigator.pushNamed(context, 'schedule/selectWorkplacesPage');
         },
       ),
     );
   }
 }
 
-//STREAM
+//Future
 var GuardStream = FirebaseFirestore.instance
     .collection("guards")
     .where('visible', isEqualTo: true)

@@ -21,12 +21,12 @@ class _SchedulePageState extends State<SchedulePage> {
       rightIcon2: Icons.wb_sunny,
       rightIcon2Function: () {
         SingletonSchedule().isDaytime = true;
-        Navigator.pushNamed(context, 'schedule/scheduleSort');
+        Navigator.pushNamed(context, 'schedule/selectGuardsPage');
       },
       rightIcon1: Icons.nightlight_round,
       rightIcon1Function: () {
         SingletonSchedule().isDaytime = false;
-        Navigator.pushNamed(context, 'schedule/scheduleSort');
+        Navigator.pushNamed(context, 'schedule/selectGuardsPage');
       },
       body: ScheduleSubPage(),
     );

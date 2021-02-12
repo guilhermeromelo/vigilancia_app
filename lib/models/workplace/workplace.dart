@@ -5,7 +5,7 @@ class Workplace{
   String name;
   int doormanQt;
   int guardQt;
-  int type; //0 - Diurno, 1 - Noturno
+  int type; //0 - Diurno, 1 - Noturno, 2 - Diurno e Noturno
 
   Workplace({Key key, this.name, this.doormanQt, this.guardQt,
     this.type, this.id});

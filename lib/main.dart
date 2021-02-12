@@ -6,7 +6,10 @@ import 'package:vigilancia_app/controllers/guard/guardDAO.dart';
 import 'package:vigilancia_app/views/guards/guardRegistration.dart';
 import 'package:vigilancia_app/views/menu/menu.dart';
 import 'package:vigilancia_app/views/schedule/schedulePage.dart';
-import 'package:vigilancia_app/views/schedule/scheduleSort.dart';
+import 'package:vigilancia_app/views/schedule/singletonSchedule.dart';
+import 'package:vigilancia_app/views/schedule/sort/selectGuardsPage.dart';
+import 'package:vigilancia_app/views/schedule/sort/selectWorkplacesPage.dart';
+import 'package:vigilancia_app/views/schedule/sort/sortResultsPage.dart';
 import 'package:vigilancia_app/views/users/userRegistration.dart';
 import 'package:vigilancia_app/views/workplaces/workplaceRegistration.dart';
 
@@ -26,6 +29,8 @@ void main() async {
 
   //FirebaseFirestore.instance.collection("teste").doc().set({"deuCerto":true});
 
+  SingletonSchedule().isDaytime=true;
+
   runApp(MaterialApp(
     initialRoute: 'menu',
     debugShowCheckedModeBanner: false,
@@ -34,7 +39,9 @@ void main() async {
       'menu': (context) => Menu(),
       //Schedule
       'schedule/schedulePage': (context) => SchedulePage(),
-      'schedule/scheduleSort': (context) => ScheduleSort(),
+      'schedule/selectGuardsPage': (context) => SelectGuardsPage(),
+      'schedule/selectWorkplacesPage': (context) => SelectWorkplacePage(),
+      'schedule/resultsPage': (context) => SortResultsPage(),
       //Users
       'users/registration': (context) => UserRegistrationPage(),
       //Guards

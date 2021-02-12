@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:vigilancia_app/controllers/workplace/workplaceDAO.dart';
+import 'package:vigilancia_app/models/workplace/workplace.dart';
 import 'package:vigilancia_app/views/shared/appTextFormField/formatedTextField.dart';
 import 'package:vigilancia_app/views/shared/button/AppButton.dart';
 import 'package:vigilancia_app/views/shared/contSpinner/cont_spinner.dart';
@@ -10,7 +12,7 @@ int doormanQt = 0;
 int guardQt = 0;
 
 class WorkplaceRegistrationPage extends StatefulWidget {
-  bool isUserUpdate = false;
+  bool isWorkplaceUpdate = false;
 
   @override
   _WorkplaceRegistrationPageState createState() =>
@@ -20,25 +22,26 @@ class WorkplaceRegistrationPage extends StatefulWidget {
 class _WorkplaceRegistrationPageState extends State<WorkplaceRegistrationPage> {
   @override
   Widget build(BuildContext context) {
-    placeName = "";
     return InternalHeaderWithTabBar(
       tabQuantity_x2_or_x3: 2,
       text1: "Diurno",
       text2: "Noturno",
-      title: widget.isUserUpdate
+      title: widget.isWorkplaceUpdate
           ? "Atualizar Posto Trabalho"
           : "Novo Posto Trabalho",
       leftIcon: Icons.arrow_back_ios,
       leftIconFunction: () {},
-      rightIcon1: widget.isUserUpdate == false ? Icons.delete : null,
+      rightIcon1: widget.isWorkplaceUpdate == false ? Icons.delete : null,
       rightIcon1Function: () {
-        if (widget.isUserUpdate == false) {}
+        if (widget.isWorkplaceUpdate == false) {}
       },
       widget1: WorkplaceRegistrationSubPage(
-        isUserUpdate: widget.isUserUpdate,
+        isUserUpdate: widget.isWorkplaceUpdate,
+        index: 0,
       ),
       widget2: WorkplaceRegistrationSubPage(
-        isUserUpdate: widget.isUserUpdate,
+        isUserUpdate: widget.isWorkplaceUpdate,
+        index: 1,
       ),
     );
   }
@@ -47,8 +50,10 @@ class _WorkplaceRegistrationPageState extends State<WorkplaceRegistrationPage> {
 class WorkplaceRegistrationSubPage extends StatefulWidget {
   bool isUserUpdate;
   final _formKey = GlobalKey<FormState>();
+  int index;
 
-  WorkplaceRegistrationSubPage({Key key, this.isUserUpdate}) : super(key: key);
+  WorkplaceRegistrationSubPage({Key key, this.isUserUpdate, this.index})
+      : super(key: key);
 
   @override
   _WorkplaceRegistrationSubPageState createState() =>
@@ -105,7 +110,17 @@ class _WorkplaceRegistrationSubPageState
           ),
           AppButton(
             labelText: widget.isUserUpdate == false ? "Cadastrar" : "Atualizar",
-            onPressedFunction: () {},
+            onPressedFunction: () {
+              if (widget._formKey.currentState.validate()) {
+                Workplace newWorkplace = Workplace(
+                    id: 0,
+                    guardQt: guardQt,
+                    name: placeName,
+                    doormanQt: doormanQt,
+                    type: widget.index);
+                addWorkplace(newWorkplace, context);
+              }
+            },
           ),
         ],
       ),
