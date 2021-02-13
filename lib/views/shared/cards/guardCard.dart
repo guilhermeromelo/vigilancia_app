@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:vigilancia_app/views/shared/constants/appColors.dart';
 
 class GuardCard extends StatefulWidget {
-  String text;
+  String name;
   int id;
+  int type;
+  String cpf;
+
   IconData icon;
   bool isChecked;
   Function checkFunction;
 
-  GuardCard({Key key, this.text, this.icon, this.isChecked = false, this.id, this.checkFunction}) : super(key: key);
+  GuardCard({Key key, this.name, this.icon, this.isChecked = false, this.id, this.checkFunction, this.type, this.cpf}) : super(key: key);
 
   @override
   _GuardCardState createState() => _GuardCardState();
@@ -42,7 +45,7 @@ class _GuardCardState extends State<GuardCard> {
           ),
           Expanded(
               child: Text(
-                widget.text ?? "",
+                widget.name ?? "",
                 maxLines: 1,
                 style: TextStyle(color: Colors.black, fontSize: 19),
                 overflow: TextOverflow.ellipsis,
@@ -53,7 +56,7 @@ class _GuardCardState extends State<GuardCard> {
               onPressed: (){
                 setState(() {
                   widget.isChecked = !widget.isChecked;
-                  widget.checkFunction(widget.id, widget.isChecked);
+                  widget.checkFunction(widget.id, widget.isChecked, widget.name, widget.type, widget.cpf);
                 });
               },
             ),)

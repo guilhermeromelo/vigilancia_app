@@ -20,6 +20,8 @@ class WorkplaceEditableCard extends StatefulWidget {
   bool isChecked = false;
   int doormanQt;
   int guardQt;
+  int initialDoormanQt;
+  int initialGuardQt;
   Function doormanFunction;
   Function guardFunction;
   Function checkFunction;
@@ -32,7 +34,9 @@ class WorkplaceEditableCard extends StatefulWidget {
       this.doormanQt,
       this.doormanFunction,
       this.guardFunction,
-      this.checkFunction})
+      this.checkFunction,
+      this.initialDoormanQt,
+      this.initialGuardQt})
       : super(key: key);
 
   @override
@@ -112,7 +116,7 @@ class _WorkplaceEditableCardState extends State<WorkplaceEditableCard> {
                               padding: EdgeInsets.only(left: 15),
                               child: ContSpinner(
                                 initialValue: widget.doormanQt,
-                                originalValue: widget.doormanQt,
+                                originalValue: widget.initialDoormanQt,
                                 onChangeFunction: (value) {
                                   widget.doormanQt = int.parse(value);
                                   widget.doormanFunction(value);
@@ -131,7 +135,7 @@ class _WorkplaceEditableCardState extends State<WorkplaceEditableCard> {
                                 padding: EdgeInsets.only(left: 15),
                                 child: ContSpinner(
                                     initialValue: widget.guardQt,
-                                    originalValue: widget.guardQt,
+                                    originalValue: widget.initialGuardQt,
                                     onChangeFunction: (value) {
                                       widget.guardQt = int.parse(value);
                                       widget.guardFunction(value);

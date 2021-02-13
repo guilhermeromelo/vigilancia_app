@@ -4,12 +4,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vigilancia_app/views/schedule/singletonSchedule.dart';
+import 'package:vigilancia_app/views/schedule/sort/sortAlgorithm.dart';
 import 'package:vigilancia_app/views/shared/button/AppButton.dart';
 import 'package:vigilancia_app/views/shared/cards/workplaceEdititableCard.dart';
 import 'package:vigilancia_app/views/shared/header/internalHeader.dart';
 
 Size size;
-Map<dynamic, dynamic> map2 = new Map();
+//Map<dynamic, dynamic> map2 = new Map();
+List<Map<dynamic, dynamic>> list = List();
 
 class SelectWorkplacePage extends StatefulWidget {
   List<int> selectedIndex = List();
@@ -78,21 +80,23 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
               child: Text("Erro Encontrado :( \n" + snapshot.error.toString()));
         } else if (snapshot.hasData) {
 
-          List<Map<dynamic, dynamic>> list = List();
+          list = List();
           snapshot.data.docs.forEach((element) {
             list.add({
               'name': element['name'],
               'guardQt': element['guardQt'],
               'doormanQt': element['doormanQt'],
+              'initialGuardQt': element['guardQt'],
+              'initialDoormanQt': element['doormanQt'],
               'id': element['id'],
               'type': element['type'],
               'isChecked': false
             });
           });
-          map2 = list.asMap();
-          print(map2);
+          //map2 = list.asMap();
+          //print(map2);
           return ListView.builder(
-            itemCount: map2.length,
+            itemCount: list.length,
             itemBuilder: ItemBuilder,
           );
         } else {
@@ -104,7 +108,7 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
   }
 
   Widget ItemBuilder(BuildContext context, int index) {
-    if (index == map2.length - 1) {
+    if (index == list.length - 1) {
       return Column(
         children: [
           WorkplaceCardBuilder(index),
@@ -113,8 +117,16 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
             child: AppButton(
               labelText: "SORTEAR",
               onPressedFunction: () {
-                print(map2);
-                SingletonSchedule().workplacesMap = map2;
+                //print(list);
+                List<Map<dynamic, dynamic>> selectedWorkplaces = new List();
+                list.forEach((element) {
+                  if(element['isChecked'] == true) {
+                    selectedWorkplaces.add(element);
+                  }
+                });
+                print(selectedWorkplaces);
+                SingletonSchedule().selectedWorkplaces = selectedWorkplaces;
+                sortGuards();
                 Navigator.pushNamed(context, 'schedule/resultsPage');
               },
             ),
@@ -132,18 +144,20 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
     return Padding(
       padding: EdgeInsets.only(top: 20),
       child: WorkplaceEditableCard(
-        name: map2[index]['name'],
-        guardQt: map2[index]['guardQt'],
-        doormanQt: map2[index]['doormanQt'],
-        isChecked: map2[index]['isChecked'],
+        name: list[index]['name'],
+        guardQt: list[index]['guardQt'],
+        doormanQt: list[index]['doormanQt'],
+        initialDoormanQt: list[index]['initialDoormanQt'],
+        isChecked: list[index]['isChecked'],
+        initialGuardQt: list[index]['initialGuardQt'],
         doormanFunction: (newValue) {
-          map2[index]['doormanQt'] = int.parse(newValue);
+          list[index]['doormanQt'] = int.parse(newValue);
         },
         guardFunction: (newValue) {
-          map2[index]['guardQt'] = int.parse(newValue);
+          list[index]['guardQt'] = int.parse(newValue);
         },
         checkFunction: (newValue) {
-          map2[index]['isChecked'] = newValue;
+          list[index]['isChecked'] = newValue;
         },
       ),
     );

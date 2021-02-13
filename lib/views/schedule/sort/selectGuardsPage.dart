@@ -8,7 +8,7 @@ import 'package:vigilancia_app/views/shared/header/internalHeader.dart';
 import 'package:vigilancia_app/views/shared/titleOrRowBuilder/TitleOrRowBuilder.dart';
 
 class SelectGuardsPage extends StatefulWidget {
-  List<int> selectedIndex = List();
+  List<Guard> selectedGuards = List();
   @override
   _SelectGuardsPageState createState() => _SelectGuardsPageState();
 }
@@ -19,7 +19,7 @@ class _SelectGuardsPageState extends State<SelectGuardsPage> {
   @override
   void initState() {
     // TODO: implement initState
-    widget.selectedIndex = List();
+    widget.selectedGuards = List();
     super.initState();
   }
 
@@ -36,7 +36,7 @@ class _SelectGuardsPageState extends State<SelectGuardsPage> {
       },
       leftIcon: Icons.arrow_back_ios,
       body: SelectGuardsSubPage(
-        selectedIndex: widget.selectedIndex,
+        selectedGuards: widget.selectedGuards,
       ),
     );
   }
@@ -45,9 +45,9 @@ class _SelectGuardsPageState extends State<SelectGuardsPage> {
 class SelectGuardsSubPage extends StatefulWidget {
   List<Guard> guardList = List();
   List<Guard> doormanList = List();
-  List<int> selectedIndex = List();
+  List<Guard> selectedGuards = List();
 
-  SelectGuardsSubPage({Key key, this.selectedIndex}) : super(key: key);
+  SelectGuardsSubPage({Key key, this.selectedGuards}) : super(key: key);
 
   @override
   _SelectGuardsSubPageState createState() => _SelectGuardsSubPageState();
@@ -213,14 +213,17 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
         child: Padding(
           padding: EdgeInsets.only(top: 4, bottom: 4),
           child: GuardCard(
-            text: guard.name,
+            name: guard.name,
             id: guard.id,
-            isChecked: (widget.selectedIndex.contains(guard.id)) ? true : false,
-            checkFunction: (int id, bool isChecked) {
+            type: guard.type,
+            cpf: guard.cpf,
+            isChecked: (widget.selectedGuards.contains(guard.id)) ? true : false,
+            checkFunction: (int id, bool isChecked, String name, int type, String cpf) {
+              Guard guard = new Guard(id: id, name: name, type: type, cpf: cpf);
               if (isChecked) {
-                widget.selectedIndex.add(id);
+                widget.selectedGuards.add(guard);
               } else {
-                widget.selectedIndex.remove(id);
+                widget.selectedGuards.removeWhere((element) => element.id == guard.id);
               }
             },
           ),
@@ -233,8 +236,19 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
       child: AppButton(
         labelText: "PROSSEGUIR",
         onPressedFunction: () {
-          print(widget.selectedIndex.toString());
-          SingletonSchedule().selectedGuardsID = widget.selectedIndex;
+          print(widget.selectedGuards.toString());
+          List<Guard> singletonSelectedGuards = new List();
+          List<Guard> singletonSelectedDoormans = new List();
+          widget.selectedGuards.forEach((element) {
+            if(element.type == 1){
+              singletonSelectedDoormans.add(element);
+            }else{
+              singletonSelectedGuards.add(element);
+            }
+          });
+          SingletonSchedule().selectedGuards = singletonSelectedGuards;
+          SingletonSchedule().selectedDoormans = singletonSelectedDoormans;
+          print("selected doormans..."+ singletonSelectedDoormans.toString());
           Navigator.pushNamed(context, 'schedule/selectWorkplacesPage');
         },
       ),
