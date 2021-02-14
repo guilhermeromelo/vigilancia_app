@@ -172,8 +172,8 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
                 });
                 print(selectedWorkplaces);
                 SingletonSchedule().selectedWorkplaces = selectedWorkplaces;
-                //sortGuards();
-                //Navigator.pushNamed(context, 'schedule/resultsPage');
+                sortGuards();
+                Navigator.pushNamed(context, 'schedule/resultsPage');
               },
             ),
           )
