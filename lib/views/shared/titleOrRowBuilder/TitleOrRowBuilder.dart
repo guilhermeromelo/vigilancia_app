@@ -29,7 +29,7 @@ Padding RowBuilder({Key key, EdgeInsets padding, String subject, String text}) {
         Expanded(
             child: Text(text ?? "",
                 style: TextStyle(fontSize: 18, color: Colors.black),
-                textAlign: TextAlign.justify))
+                ))
       ],
     ),
   );

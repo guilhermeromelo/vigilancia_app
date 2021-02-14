@@ -4,42 +4,51 @@ import 'package:vigilancia_app/models/guard/guard.dart';
 import 'package:vigilancia_app/views/schedule/singletonSchedule.dart';
 
 void sortGuards() {
-  SingletonSchedule().selectedWorkplaces.forEach((element) {
+  List<Guard> singletonDoormans = new List();
+  singletonDoormans.clear();
+  singletonDoormans.addAll(SingletonSchedule().selectedDoormans);
+  List<Guard> singletonGuards = new List();
+  singletonGuards.clear();
+  singletonGuards.addAll(SingletonSchedule().selectedGuards);
+
+  SingletonSchedule().selectedWorkplacesWithGuards = SingletonSchedule().selectedWorkplaces;
+  SingletonSchedule().selectedWorkplacesWithGuards.forEach((element) {
     Map<dynamic, dynamic> map = element;
     int doormanQt = map['doormanQt'];
     int guardQt = map['guardQt'];
+
     Map<dynamic, dynamic> sortedDoormans = new Map();
     Map<dynamic, dynamic> sortedGuards = new Map();
+
 
     //SORT AND WRITE DOORMANS -----------------------------------------------------------------------------------------------------------------
     for (int i = 0; i < doormanQt; i++) {
       print("\nDOORMANS--------------------------");
 
       //SORT THE INDEX OF DOORMANS LIST
-      print('tamanho' + SingletonSchedule().selectedDoormans.length.toString());
+      print('tamanho' + singletonDoormans.length.toString());
 
       int sortIndex;
-      if (SingletonSchedule().selectedDoormans.length - 1 == 0) {
+      if (singletonDoormans.length - 1 == 0) {
         sortIndex = 0;
       } else {
         sortIndex =
-            randomNumber(SingletonSchedule().selectedDoormans.length - 1);
+            randomNumber(singletonDoormans.length);
       }
 
       print('Numero Sorteado: ' + sortIndex.toString());
       print('LISTA PORTEIROS ANTES REMOVER: ' +
-          SingletonSchedule().selectedDoormans.toString());
+          singletonDoormans.toString());
 
       //GET THE SORTED DOORMAN AND REMOVE HIM FROM THE DOORMANS LIST
       Guard selectedDoorman =
-          SingletonSchedule().selectedDoormans.elementAt(sortIndex);
-      SingletonSchedule()
-          .selectedDoormans
+          singletonDoormans.elementAt(sortIndex);
+      singletonDoormans
           .removeWhere((element) => element.id == selectedDoorman.id);
 
       print('ELEMENTO RETIRADO: ' + selectedDoorman.toString());
       print('LISTA PORTEIROS DEPOIS REMOVER: ' +
-          SingletonSchedule().selectedDoormans.toString());
+          singletonDoormans.toString());
 
       //WRITE THE SORTED DOORMAN INTO SCHEDULE SINGLETON
       sortedDoormans.addAll({
@@ -59,29 +68,28 @@ void sortGuards() {
       print("\nGUARDS--------------------------");
 
       //SORT THE INDEX OF DOORMANS LIST
-      print('tamanho' + SingletonSchedule().selectedGuards.length.toString());
+      print('tamanho' + singletonGuards.length.toString());
 
       int sortIndex;
-      if (SingletonSchedule().selectedGuards.length - 1 == 0) {
+      if (singletonGuards.length - 1 == 0) {
         sortIndex = 0;
       } else {
-        sortIndex = randomNumber(SingletonSchedule().selectedGuards.length - 1);
+        sortIndex = randomNumber(singletonGuards.length);
       }
 
       print('Numero Sorteado: ' + sortIndex.toString());
       print('LISTA VIGILANTES ANTES REMOVER: ' +
-          SingletonSchedule().selectedGuards.toString());
+          singletonGuards.toString());
 
       //GET THE SORTED DOORMAN AND REMOVE HIM FROM THE DOORMANS LIST
       Guard selectedGuard =
-          SingletonSchedule().selectedGuards.elementAt(sortIndex);
-      SingletonSchedule()
-          .selectedGuards
+          singletonGuards.elementAt(sortIndex);
+      singletonGuards
           .removeWhere((element) => element.id == selectedGuard.id);
 
       print('ELEMENTO RETIRADO: ' + selectedGuard.toString());
       print('LISTA VIGILANTES DEPOIS REMOVER: ' +
-          SingletonSchedule().selectedGuards.toString());
+          singletonGuards.toString());
 
       //WRITE THE SORTED DOORMAN INTO SCHEDULE SINGLETON
       sortedGuards.addAll({
@@ -98,6 +106,10 @@ void sortGuards() {
     element.addAll({'guards': sortedGuards});
     element.addAll({'doormans': sortedDoormans});
   });
+
+
+  print("RESULTADO... " + SingletonSchedule().selectedWorkplacesWithGuards.toString());
+
 }
 
 int randomNumber(int max) {

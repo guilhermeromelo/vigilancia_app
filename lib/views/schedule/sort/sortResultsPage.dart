@@ -1,9 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:vigilancia_app/models/guard/guard.dart';
 import 'package:vigilancia_app/views/schedule/singletonSchedule.dart';
+import 'package:vigilancia_app/views/schedule/sort/sortAlgorithm.dart';
 import 'package:vigilancia_app/views/shared/button/AppButton.dart';
 import 'package:vigilancia_app/views/shared/header/internalHeader.dart';
+import 'package:vigilancia_app/views/shared/titleOrRowBuilder/TitleOrRowBuilder.dart';
 
 class SortResultsPage extends StatefulWidget {
   @override
@@ -25,6 +28,12 @@ class _SortResultsPageState extends State<SortResultsPage> {
         Navigator.of(context).pop();
       },
       leftIcon: Icons.arrow_back_ios,
+      rightIcon2: Icons.sync,
+      rightIcon2Function: (){
+        setState(() {
+          sortGuards();
+        });
+      },
       body: SortResultsSubPage(),
     );
   }
@@ -36,17 +45,75 @@ class SortResultsSubPage extends StatefulWidget {
 }
 
 class _SortResultsSubPageState extends State<SortResultsSubPage> {
-  @override
+    @override
   Widget build(BuildContext context) {
+
+    //print(SingletonSchedule().selectedWorkplacesWithGuards);
+
     return Container(
-      child: ListView(
-        children: [
-          Padding(
-            padding: EdgeInsets.only(bottom: 20),
-            child: Text(SingletonSchedule().selectedWorkplaces.toString()),
-          )
-        ],
+      child: ListView.builder(
+        itemCount: SingletonSchedule().selectedWorkplacesWithGuards.length,
+        itemBuilder: itemBuilder,
       ),
     );
   }
+}
+
+Widget itemBuilder(BuildContext context, int index) {
+
+  Map<dynamic,dynamic> tempMap = new Map();
+  tempMap = SingletonSchedule().selectedWorkplacesWithGuards.elementAt(index)['guards'];
+  List<Guard> guardList = List();
+  tempMap.forEach((key, value) {
+    Map<dynamic, dynamic> tempMap2 = value;
+    Guard newGuard = new Guard();
+    tempMap2.forEach((key, value) {
+      if(key == 'name'){
+        newGuard.name = value;
+      }
+      if(key == 'type'){
+        newGuard.type = value;
+      }
+      if(key == 'cpf'){
+        newGuard.cpf = value;
+      }
+      if(key == 'id'){
+        newGuard.id = value;
+      }
+    });
+    guardList.add(newGuard);
+  });
+
+  tempMap = SingletonSchedule().selectedWorkplacesWithGuards.elementAt(index)['doormans'];
+  List<Guard> doormansList = List();
+  tempMap.forEach((key, value) {
+    Map<dynamic, dynamic> tempMap2 = value;
+    Guard newGuard = new Guard();
+    tempMap2.forEach((key, value) {
+      if(key == 'name'){
+        newGuard.name = value;
+      }
+      if(key == 'type'){
+        newGuard.type = value;
+      }
+      if(key == 'cpf'){
+        newGuard.cpf = value;
+      }
+      if(key == 'id'){
+        newGuard.id = value;
+      }
+    });
+    doormansList.add(newGuard);
+  });
+
+  return Column(
+    children: [
+      TitleBuilder(padding: EdgeInsets.only(top: index == 0 ? 10 : 25, bottom: 5),
+          title:
+              SingletonSchedule().selectedWorkplacesWithGuards.elementAt(index)['name']),
+      ...doormansList.map((e) => RowBuilder(subject:"Porteiro: ", text: e.name, padding: EdgeInsets.only(left: 8))).toList(),
+      ...guardList.map((e) => RowBuilder(subject:"Vigilante: ", text: e.name, padding: EdgeInsets.only(left: 8))).toList(),
+      //Text(SingletonSchedule().selectedWorkplacesWithGuards.toString(), style: TextStyle(fontSize: 19),)
+    ],
+  );
 }

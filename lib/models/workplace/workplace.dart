@@ -25,3 +25,11 @@ Workplace docToWorkplace(var doc) {
   workplace.doormanQt = doc['doormanQt'];
   return workplace;
 }
+
+class TempModification{
+  int id;
+  int doormanQt;
+  int guardQt;
+
+  TempModification({Key key, this.id, this.doormanQt, this.guardQt});
+}
