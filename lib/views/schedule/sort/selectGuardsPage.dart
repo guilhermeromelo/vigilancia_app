@@ -5,10 +5,15 @@ import 'package:vigilancia_app/views/schedule/singletonSchedule.dart';
 import 'package:vigilancia_app/views/shared/button/AppButton.dart';
 import 'package:vigilancia_app/views/shared/cards/guardCard.dart';
 import 'package:vigilancia_app/views/shared/header/internalHeader.dart';
+import 'package:vigilancia_app/views/shared/header/internalHeaderWithTabBarx5.dart';
 import 'package:vigilancia_app/views/shared/titleOrRowBuilder/TitleOrRowBuilder.dart';
 
+List<Guard> guardList = List();
+List<Guard> doormanList = List();
+
+List<Guard> selectedGuards = List();
+
 class SelectGuardsPage extends StatefulWidget {
-  List<Guard> selectedGuards = List();
   @override
   _SelectGuardsPageState createState() => _SelectGuardsPageState();
 }
@@ -19,42 +24,9 @@ class _SelectGuardsPageState extends State<SelectGuardsPage> {
   @override
   void initState() {
     // TODO: implement initState
-    widget.selectedGuards = List();
+    selectedGuards = List();
     super.initState();
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return InternalHeader(
-      title: "Sortear - " + (isDaytime ? "Diurno" : "Noturno"),
-      rightIcon1: Icons.refresh,
-      rightIcon1Function: () {
-        setState(() {});
-      },
-      leftIconFunction: (){
-        Navigator.of(context).pop();
-      },
-      leftIcon: Icons.arrow_back_ios,
-      body: SelectGuardsSubPage(
-        selectedGuards: widget.selectedGuards,
-      ),
-    );
-  }
-}
-
-class SelectGuardsSubPage extends StatefulWidget {
-  List<Guard> guardList = List();
-  List<Guard> doormanList = List();
-  List<Guard> selectedGuards = List();
-
-  SelectGuardsSubPage({Key key, this.selectedGuards}) : super(key: key);
-
-  @override
-  _SelectGuardsSubPageState createState() => _SelectGuardsSubPageState();
-}
-
-class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
-  Size get size => MediaQuery.of(context).size;
 
   @override
   Widget build(BuildContext context) {
@@ -67,63 +39,176 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
       future: GuardStream,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Container(
-            alignment: Alignment.center,
-            child: CircularProgressIndicator(),
-          );
+          return selectGuardsPageHeader(
+              widget1: ContainerWithCircularProgress(),
+              widget2: ContainerWithCircularProgress(),
+              widget3: ContainerWithCircularProgress(),
+              widget4: ContainerWithCircularProgress(),
+              widget5: ContainerWithCircularProgress());
         } else if (snapshot.hasError) {
-          return Container(
-              alignment: Alignment.center,
-              child: Text("Erro Encontrado :( \n" + snapshot.error.toString()));
+          return selectGuardsPageHeader(
+              widget1: ContainerWithErrorMessage(snapshot.error.toString()),
+              widget2: ContainerWithErrorMessage(snapshot.error.toString()),
+              widget3: ContainerWithErrorMessage(snapshot.error.toString()),
+              widget4: ContainerWithErrorMessage(snapshot.error.toString()),
+              widget5: ContainerWithErrorMessage(snapshot.error.toString()));
         } else if (snapshot.hasData) {
-          if (snapshot.data.size == 0) {
-            return Container(
-                alignment: Alignment.center,
-                child: Text("Nenhum Porteiro ou Vigilante foi encontrado"));
-          } else {
-            snapshot.data.docs.forEach((element) {
-              if (element['type'] == 0) {
-                widget.guardList.add(docToGuard(element));
-              } else {
-                widget.doormanList.add(docToGuard(element));
-              }
-            });
-            /*
-            print("\n\n Porteiros:\n");
-            widget.doormanList.forEach((element) {
-              print(element.toString());
-            });
-            print("\n\n Vigilantes:\n");
-            widget.guardList.forEach((element) {
-              print(element.toString());
-            });
-             */
-            return ListView.builder(
-              padding: EdgeInsets.only(top: 10),
-              itemCount: widget.doormanList.length + widget.guardList.length,
-              itemBuilder: guardItemBuiler,
-            );
-          }
+          doormanList.clear();
+          guardList.clear();
+          snapshot.data.docs.forEach((element) {
+            if (element['type'] == 0) {
+              guardList.add(docToGuard(element));
+            } else {
+              doormanList.add(docToGuard(element));
+            }
+          });
+          return selectGuardsPageHeader(
+            widget1: SelectGuardsSubPage(
+              tabBarIndex: 0,
+            ),
+            widget2: SelectGuardsSubPage(
+              tabBarIndex: 1,
+            ),
+            widget3: SelectGuardsSubPage(
+              tabBarIndex: 2,
+            ),
+            widget4: SelectGuardsSubPage(
+              tabBarIndex: 3,
+            ),
+            widget5: SelectGuardsSubPage(
+              tabBarIndex: 4,
+            ),
+          );
         } else {
-          return Container(
-              alignment: Alignment.center, child: Text("Erro Encontrado :("));
+          return selectGuardsPageHeader(
+              widget1: ContainerWithErrorMessage(""),
+              widget2: ContainerWithErrorMessage(""),
+              widget3: ContainerWithErrorMessage(""),
+              widget4: ContainerWithErrorMessage(""),
+              widget5: ContainerWithErrorMessage(""));
         }
       },
     );
   }
 
+  Widget selectGuardsPageHeader(
+      {Key key,
+      Widget widget1,
+      Widget widget2,
+      Widget widget3,
+      Widget widget4,
+      Widget widget5}) {
+    return InternalHeaderWithTabBarx5(
+      title: "Sortear - " + (isDaytime ? "Diurno" : "Noturno"),
+      rightIcon1: Icons.refresh,
+      rightIcon1Function: () {
+        setState(() {});
+      },
+      leftIconFunction: () {
+        Navigator.of(context).pop();
+      },
+      leftIcon: Icons.arrow_back_ios,
+      text1: "A-D",
+      text2: "A",
+      text3: "B",
+      text4: "C",
+      text5: "D",
+      widget1: widget1,
+      widget2: widget2,
+      widget3: widget3,
+      widget4: widget4,
+      widget5: widget5,
+    );
+  }
+}
+
+class SelectGuardsSubPage extends StatefulWidget {
+/*  List<Guard> guardList = List();
+  List<Guard> doormanList = List();*/
+  List<Guard> doormanListLocal = List();
+  List<Guard> guardListLocal = List();
+
+  int tabBarIndex;
+
+  SelectGuardsSubPage(
+      {Key key, this.tabBarIndex,/* this.guardList, this.doormanList*/})
+      : super(key: key);
+
+  @override
+  _SelectGuardsSubPageState createState() => _SelectGuardsSubPageState();
+}
+
+class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
+  Size get size => MediaQuery.of(context).size;
+  String team;
+
+  @override
+  Widget build(BuildContext context) {
+    switch (widget.tabBarIndex) {
+      case 0:
+        {
+          team = "";
+          break;
+        }
+      case 1:
+        {
+          team = "A";
+          break;
+        }
+      case 2:
+        {
+          team = "B";
+          break;
+        }
+      case 3:
+        {
+          team = "C";
+          break;
+        }
+      case 4:
+        {
+          team = "D";
+          break;
+        }
+    }
+
+    widget.doormanListLocal.clear();
+    widget.guardListLocal.clear();
+    if (team.isEmpty) {
+      widget.doormanListLocal.addAll(doormanList);
+      widget.guardListLocal.addAll(guardList) ;
+    } else {
+      doormanList.forEach((element) {
+        if (element.team == team) {
+          widget.doormanListLocal.add(element);
+        }
+      });
+      guardList.forEach((element) {
+        if (element.team == team) {
+          widget.guardListLocal.add(element);
+        }
+      });
+    }
+
+    return ListView.builder(
+      padding: EdgeInsets.only(top: 10),
+      itemCount: widget.doormanListLocal.length + widget.guardListLocal.length,
+      itemBuilder: guardItemBuiler,
+    );
+  }
+
   //ItemBuilder
   Widget guardItemBuiler(BuildContext context, int index) {
-    if (widget.doormanList.length != 0 &&
-        index <= (widget.doormanList.length - 1)) {
+    if (widget.doormanListLocal.length != 0 &&
+        index <= (widget.doormanListLocal.length - 1)) {
       if (index == 0) {
-        if (widget.guardList.length == 0 && widget.doormanList.length == 1) {
+        if (widget.guardListLocal.length == 0 && widget.doormanListLocal.length == 1) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TitleBuilder(
                   title: "PORTEIROS", padding: EdgeInsets.only(bottom: 5)),
-              guardCardBuilder(widget.doormanList.elementAt(index)),
+              guardCardBuilder(widget.doormanListLocal.elementAt(index)),
               Container(
                 width: size.width,
                 child: buttonBuilder(),
@@ -136,16 +221,16 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
             children: [
               TitleBuilder(
                   title: "PORTEIROS", padding: EdgeInsets.only(bottom: 5)),
-              guardCardBuilder(widget.doormanList.elementAt(index))
+              guardCardBuilder(widget.doormanListLocal.elementAt(index))
             ],
           );
         }
-      } else if (widget.guardList.length == 0 &&
-          index == (widget.doormanList.length - 1)) {
+      } else if (widget.guardListLocal.length == 0 &&
+          index == (widget.doormanListLocal.length - 1)) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            guardCardBuilder(widget.doormanList.elementAt(index)),
+            guardCardBuilder(widget.doormanListLocal.elementAt(index)),
             Container(
               width: size.width,
               child: buttonBuilder(),
@@ -153,20 +238,20 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
           ],
         );
       } else {
-        return guardCardBuilder(widget.doormanList.elementAt(index));
+        return guardCardBuilder(widget.doormanListLocal.elementAt(index));
       }
-    } else if (widget.guardList.length != 0 &&
-        index > (widget.doormanList.length - 1)) {
-      if (index == widget.doormanList.length) {
-        if (widget.guardList.length == 1) {
+    } else if (widget.guardListLocal.length != 0 &&
+        index > (widget.doormanListLocal.length - 1)) {
+      if (index == widget.doormanListLocal.length) {
+        if (widget.guardListLocal.length == 1) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TitleBuilder(
                   title: "VIGILANTES",
                   padding: EdgeInsets.only(bottom: 5, top: 20)),
-              guardCardBuilder(widget.guardList
-                  .elementAt(index - widget.doormanList.length)),
+              guardCardBuilder(widget.guardListLocal
+                  .elementAt(index - widget.doormanListLocal.length)),
               Container(
                 width: size.width,
                 child: buttonBuilder(),
@@ -181,17 +266,17 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
                   title: "VIGILANTES",
                   padding: EdgeInsets.only(bottom: 5, top: 20)),
               guardCardBuilder(
-                  widget.guardList.elementAt(index - widget.doormanList.length))
+                  guardList.elementAt(index - widget.doormanListLocal.length))
             ],
           );
         }
       } else if (index ==
-          widget.guardList.length + widget.doormanList.length - 1) {
+          widget.guardListLocal.length + widget.doormanListLocal.length - 1) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             guardCardBuilder(
-                widget.guardList.elementAt(index - widget.doormanList.length)),
+                widget.guardListLocal.elementAt(index - widget.doormanListLocal.length)),
             Container(
               width: size.width,
               child: buttonBuilder(),
@@ -200,7 +285,7 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
         );
       } else {
         return guardCardBuilder(
-            widget.guardList.elementAt(index - widget.doormanList.length));
+            widget.guardListLocal.elementAt(index - widget.doormanListLocal.length));
       }
     } else {
       return Text("Erro Encontrado :(");
@@ -208,6 +293,14 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
   }
 
   Widget guardCardBuilder(Guard guard) {
+    bool isChecked = false;
+    selectedGuards.forEach((element) {
+      if(element.id == guard.id){
+        isChecked = true;
+      }
+    });
+
+
     return Container(
         alignment: Alignment.center,
         child: Padding(
@@ -217,13 +310,14 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
             id: guard.id,
             type: guard.type,
             cpf: guard.cpf,
-            isChecked: (widget.selectedGuards.contains(guard.id)) ? true : false,
-            checkFunction: (int id, bool isChecked, String name, int type, String cpf) {
+            isChecked: isChecked,
+            checkFunction:
+                (int id, bool isChecked, String name, int type, String cpf) {
               Guard guard = new Guard(id: id, name: name, type: type, cpf: cpf);
               if (isChecked) {
-                widget.selectedGuards.add(guard);
+                selectedGuards.add(guard);
               } else {
-                widget.selectedGuards.removeWhere((element) => element.id == guard.id);
+                selectedGuards.removeWhere((element) => element.id == guard.id);
               }
             },
           ),
@@ -236,24 +330,36 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
       child: AppButton(
         labelText: "PROSSEGUIR",
         onPressedFunction: () {
-          print(widget.selectedGuards.toString());
+          print(selectedGuards.toString());
           List<Guard> singletonSelectedGuards = new List();
           List<Guard> singletonSelectedDoormans = new List();
-          widget.selectedGuards.forEach((element) {
-            if(element.type == 1){
+          selectedGuards.forEach((element) {
+            if (element.type == 1) {
               singletonSelectedDoormans.add(element);
-            }else{
+            } else {
               singletonSelectedGuards.add(element);
             }
           });
           SingletonSchedule().selectedGuards = singletonSelectedGuards;
           SingletonSchedule().selectedDoormans = singletonSelectedDoormans;
-          print("selected doormans..."+ singletonSelectedDoormans.toString());
+          print("selected doormans..." + singletonSelectedDoormans.toString());
           Navigator.pushNamed(context, 'schedule/selectWorkplacesPage');
         },
       ),
     );
   }
+}
+
+Widget ContainerWithCircularProgress() {
+  return Container(
+    alignment: Alignment.center,
+    child: CircularProgressIndicator(),
+  );
+}
+
+Widget ContainerWithErrorMessage(String erro) {
+  return Container(
+      alignment: Alignment.center, child: Text("Erro Encontrado :( \n" + erro));
 }
 
 //Future

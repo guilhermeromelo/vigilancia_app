@@ -34,6 +34,7 @@ void addGuard(Guard newGuard, BuildContext context) async {
     "name": newGuard.name,
     "cpf": newGuard.cpf,
     "type": newGuard.type,
+    "team": newGuard.team,
     "visible": true
   });
 }
@@ -46,6 +47,7 @@ void updateGuard(Guard updateGuard, BuildContext context) async {
     "name": updateGuard.name,
     "cpf": updateGuard.cpf,
     "type": updateGuard.type,
+    "team": updateGuard.team,
   });
 }
 

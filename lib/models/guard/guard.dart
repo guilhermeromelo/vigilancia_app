@@ -5,12 +5,13 @@ class Guard {
   String name;
   String cpf;
   int type; // 0 - Vigilante,  1 - Porteiro
+  String team; // A B C D
 
-  Guard({Key key, this.name, this.cpf, this.type, this.id});
+  Guard({Key key, this.name, this.cpf, this.type, this.id, this.team});
 
   @override
   String toString() {
-    return 'Guard{id: $id, name: $name, cpf: $cpf, type: $type}';
+    return 'Guard{id: $id, name: $name, cpf: $cpf, type: $type, team: $team}';
   }
 }
 
@@ -20,5 +21,6 @@ Guard docToGuard(var doc) {
   guard.name = doc['name'];
   guard.cpf = doc['cpf'];
   guard.type = doc['type'];
+  guard.team = doc['team'];
   return guard;
 }
