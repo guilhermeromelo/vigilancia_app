@@ -123,16 +123,16 @@ class _SelectGuardsPageState extends State<SelectGuardsPage> {
 }
 
 class SelectGuardsSubPage extends StatefulWidget {
-/*  List<Guard> guardList = List();
-  List<Guard> doormanList = List();*/
   List<Guard> doormanListLocal = List();
   List<Guard> guardListLocal = List();
 
   int tabBarIndex;
 
-  SelectGuardsSubPage(
-      {Key key, this.tabBarIndex,/* this.guardList, this.doormanList*/})
-      : super(key: key);
+  SelectGuardsSubPage({
+    Key key,
+    this.tabBarIndex,
+    /* this.guardList, this.doormanList*/
+  }) : super(key: key);
 
   @override
   _SelectGuardsSubPageState createState() => _SelectGuardsSubPageState();
@@ -141,6 +141,9 @@ class SelectGuardsSubPage extends StatefulWidget {
 class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
   Size get size => MediaQuery.of(context).size;
   String team;
+  bool hasSelectAllOptionOnDoormans = false;
+  bool hasSelectAllOptionOnGuards = false;
+  int isAllSelected = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -176,7 +179,7 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
     widget.guardListLocal.clear();
     if (team.isEmpty) {
       widget.doormanListLocal.addAll(doormanList);
-      widget.guardListLocal.addAll(guardList) ;
+      widget.guardListLocal.addAll(guardList);
     } else {
       doormanList.forEach((element) {
         if (element.team == team) {
@@ -190,11 +193,30 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
       });
     }
 
-    return ListView.builder(
-      padding: EdgeInsets.only(top: 10),
-      itemCount: widget.doormanListLocal.length + widget.guardListLocal.length,
-      itemBuilder: guardItemBuiler,
-    );
+    if (widget.doormanListLocal.isNotEmpty) {
+      hasSelectAllOptionOnDoormans = true;
+    } else if (widget.guardListLocal.isNotEmpty) {
+      hasSelectAllOptionOnGuards = true;
+    }
+
+    updateSelectAllCheckBoxStatus();
+
+    if (widget.doormanListLocal.length + widget.guardListLocal.length == 0) {
+      return Container(
+          alignment: Alignment.center,
+          child: Text(
+            "Desculpe! Não encontrei ninguém cadastrado neste time :(",
+            style: TextStyle(fontSize: 20),
+            textAlign: TextAlign.center,
+          ));
+    } else {
+      return ListView.builder(
+        padding: EdgeInsets.only(top: 10),
+        itemCount:
+            widget.doormanListLocal.length + widget.guardListLocal.length,
+        itemBuilder: guardItemBuiler,
+      );
+    }
   }
 
   //ItemBuilder
@@ -202,10 +224,14 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
     if (widget.doormanListLocal.length != 0 &&
         index <= (widget.doormanListLocal.length - 1)) {
       if (index == 0) {
-        if (widget.guardListLocal.length == 0 && widget.doormanListLocal.length == 1) {
+        if (widget.guardListLocal.length == 0 &&
+            widget.doormanListLocal.length == 1) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Visibility(
+                  visible: hasSelectAllOptionOnDoormans,
+                  child: selectAllOption()),
               TitleBuilder(
                   title: "PORTEIROS", padding: EdgeInsets.only(bottom: 5)),
               guardCardBuilder(widget.doormanListLocal.elementAt(index)),
@@ -219,6 +245,9 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Visibility(
+                  visible: hasSelectAllOptionOnDoormans,
+                  child: selectAllOption()),
               TitleBuilder(
                   title: "PORTEIROS", padding: EdgeInsets.only(bottom: 5)),
               guardCardBuilder(widget.doormanListLocal.elementAt(index))
@@ -247,6 +276,9 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Visibility(
+                  visible: hasSelectAllOptionOnGuards,
+                  child: selectAllOption()),
               TitleBuilder(
                   title: "VIGILANTES",
                   padding: EdgeInsets.only(bottom: 5, top: 20)),
@@ -262,11 +294,14 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Visibility(
+                  visible: hasSelectAllOptionOnGuards,
+                  child: selectAllOption()),
               TitleBuilder(
                   title: "VIGILANTES",
                   padding: EdgeInsets.only(bottom: 5, top: 20)),
-              guardCardBuilder(
-                  guardList.elementAt(index - widget.doormanListLocal.length))
+              guardCardBuilder(widget.guardListLocal
+                  .elementAt(index - widget.doormanListLocal.length))
             ],
           );
         }
@@ -275,8 +310,8 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            guardCardBuilder(
-                widget.guardListLocal.elementAt(index - widget.doormanListLocal.length)),
+            guardCardBuilder(widget.guardListLocal
+                .elementAt(index - widget.doormanListLocal.length)),
             Container(
               width: size.width,
               child: buttonBuilder(),
@@ -284,22 +319,57 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
           ],
         );
       } else {
-        return guardCardBuilder(
-            widget.guardListLocal.elementAt(index - widget.doormanListLocal.length));
+        return guardCardBuilder(widget.guardListLocal
+            .elementAt(index - widget.doormanListLocal.length));
       }
     } else {
-      return Text("Erro Encontrado :(");
+      return ContainerWithErrorMessage("");
     }
+  }
+
+  void updateSelectAllCheckBoxStatus(){
+    //LOAD ISALLSELECTED INFO
+    bool isAtLeastOneSelectedInList = false;
+    bool isAllCheckedInList = true;
+
+    widget.guardListLocal.forEach((element) {
+      bool contains = false;
+      selectedGuards.forEach((elementSelected) {
+        if (elementSelected.id == element.id) contains = true;
+      });
+
+      if (contains) {
+        isAtLeastOneSelectedInList = true;
+      } else {
+        isAllCheckedInList = false;
+      }
+    });
+
+    widget.doormanListLocal.forEach((element) {
+      bool contains = false;
+      selectedGuards.forEach((elementSelected) {
+        if (elementSelected.id == element.id) contains = true;
+      });
+
+      if (contains) {
+        isAtLeastOneSelectedInList = true;
+      } else {
+        isAllCheckedInList = false;
+      }
+    });
+
+    if (isAtLeastOneSelectedInList) isAllSelected = 1;
+
+    if (isAllCheckedInList) isAllSelected = 2;
   }
 
   Widget guardCardBuilder(Guard guard) {
     bool isChecked = false;
     selectedGuards.forEach((element) {
-      if(element.id == guard.id){
+      if (element.id == guard.id) {
         isChecked = true;
       }
     });
-
 
     return Container(
         alignment: Alignment.center,
@@ -319,6 +389,10 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
               } else {
                 selectedGuards.removeWhere((element) => element.id == guard.id);
               }
+              setState(() {
+                isAllSelected = 0;
+                updateSelectAllCheckBoxStatus();
+              });
             },
           ),
         ));
@@ -348,6 +422,75 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
       ),
     );
   }
+
+  Widget selectAllOption() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        IconButton(
+            icon: Icon(isAllSelected == 0
+                ? Icons.check_box_outline_blank
+                : isAllSelected == 1
+                    ? Icons.indeterminate_check_box_outlined
+                    : Icons.check_box_outlined),
+            onPressed: () {
+              setState(() {
+                if (isAllSelected == 2) {
+                  isAllSelected = 0;
+                } else {
+                  isAllSelected = 2;
+                }
+                if (isAllSelected == 2) {
+                  widget.guardListLocal.forEach((element) {
+                    bool flag = false;
+                    selectedGuards.forEach((elementSelected) {
+                      if (elementSelected.id == element.id) {
+                        flag = true;
+                      }
+                    });
+                    if (flag == false) {
+                      selectedGuards.add(element);
+                    }
+                  });
+                  widget.doormanListLocal.forEach((element) {
+                    bool flag = false;
+                    selectedGuards.forEach((elementSelected) {
+                      if (elementSelected.id == element.id) {
+                        flag = true;
+                      }
+                    });
+                    if (flag == false) {
+                      selectedGuards.add(element);
+                    }
+                  });
+                } else {
+                  widget.guardListLocal.forEach((element) {
+                    Guard guardToDelete = new Guard();
+                    selectedGuards.forEach((elementSelected) {
+                      if (elementSelected.id == element.id)
+                        guardToDelete = elementSelected;
+                    });
+                    selectedGuards.remove(guardToDelete);
+                  });
+
+                  widget.doormanListLocal.forEach((element) {
+                    Guard guardToDelete = new Guard();
+                    selectedGuards.forEach((elementSelected) {
+                      if (elementSelected.id == element.id)
+                        guardToDelete = elementSelected;
+                    });
+                    selectedGuards.remove(guardToDelete);
+                  });
+                }
+              });
+            }),
+        Text(
+          "Selecionar Todos",
+          style: TextStyle(fontSize: 19),
+        )
+      ],
+    );
+  }
 }
 
 Widget ContainerWithCircularProgress() {
@@ -359,7 +502,12 @@ Widget ContainerWithCircularProgress() {
 
 Widget ContainerWithErrorMessage(String erro) {
   return Container(
-      alignment: Alignment.center, child: Text("Erro Encontrado :( \n" + erro));
+      alignment: Alignment.center,
+      child: Text(
+        "Erro Encontrado :( \n" + erro,
+        style: TextStyle(fontSize: 20),
+        textAlign: TextAlign.center,
+      ));
 }
 
 //Future

@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vigilancia_app/models/workplace/workplace.dart';
 import 'package:vigilancia_app/views/schedule/singletonSchedule.dart';
+import 'package:vigilancia_app/views/schedule/sort/selectGuardsPage.dart';
 import 'package:vigilancia_app/views/schedule/sort/sortAlgorithm.dart';
 import 'package:vigilancia_app/views/shared/button/AppButton.dart';
 import 'package:vigilancia_app/views/shared/cards/workplaceEdititableCard.dart';
@@ -85,9 +86,7 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
             child: CircularProgressIndicator(),
           );
         } else if (snapshot.hasError) {
-          return Container(
-              alignment: Alignment.center,
-              child: Text("Erro Encontrado :( \n" + snapshot.error.toString()));
+          return ContainerWithErrorMessage(snapshot.error.toString());
         } else if (snapshot.hasData) {
           list = List();
           snapshot.data.docs.forEach((element) {
@@ -109,8 +108,7 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
             itemBuilder: ItemBuilder,
           );
         } else {
-          return Container(
-              alignment: Alignment.center, child: Text("Erro Encontrado :("));
+          return ContainerWithErrorMessage("");
         }
       },
     );
