@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vigilancia_app/views/shared/appTextFormField/formatedTextField.dart';
+import 'package:vigilancia_app/views/shared/appTextFormField/appTextFormField.dart';
 import 'package:vigilancia_app/views/shared/button/AppButton.dart';
 import 'package:vigilancia_app/views/shared/constants/appColors.dart';
 import 'package:vigilancia_app/views/shared/header/InternalHeaderWithTabBar.dart';

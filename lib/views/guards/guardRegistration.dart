@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:vigilancia_app/controllers/guard/guardDAO.dart';
 import 'package:vigilancia_app/models/guard/guard.dart';
-import 'package:vigilancia_app/views/shared/appTextFormField/formatedTextField.dart';
+import 'package:vigilancia_app/views/shared/appTextFormField/appTextFormField.dart';
 import 'package:vigilancia_app/views/shared/button/AppButton.dart';
+import 'package:vigilancia_app/views/shared/comboBox/comboBox.dart';
 import 'package:vigilancia_app/views/shared/constants/masks.dart';
 import 'package:vigilancia_app/views/shared/header/InternalHeaderWithTabBar.dart';
 
 String name = "";
 String cpf = "";
+String team = "";
 
 class GuardRegistrationPage extends StatefulWidget {
   bool isDoormanAndGuardUpdate = false;
@@ -21,6 +23,7 @@ class _GuardRegistrationPageState extends State<GuardRegistrationPage> {
   Widget build(BuildContext context) {
     name = "";
     cpf = "";
+    team = "";
     return InternalHeaderWithTabBar(
       tabQuantity_x2_or_x3: 2,
       text1: "Vigilante",
@@ -62,6 +65,7 @@ class UserRegistrationSubPage extends StatefulWidget {
 class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
   @override
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width * 0.94;
     return Form(
       key: widget._formKey,
       child: ListView(
@@ -89,6 +93,24 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
               if (text.isEmpty) return "Campo Vazio";
             },
           ),
+          Padding(
+            padding: EdgeInsets.only(
+                top: 15, left: (width - 150)/2 , right: (width - 150)/2),
+            child: ComboBox(
+              currentObject: team.isNotEmpty ? team : null,
+              title: "Time",
+              objects: [
+                "A",
+                "B",
+                "C",
+                "D",
+              ],
+              onTapFunction: getComboBoxItem,
+              validatorFunction: (text){
+                if(team.isEmpty) return "Campo Vazio";
+              },
+            ),
+          ),
           AppButton(
             labelText: widget.isDoormanAndGuardUpdate == false
                 ? "Cadastrar"
@@ -96,7 +118,7 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
             onPressedFunction: () {
               if (widget._formKey.currentState.validate()) {
                 Guard guard =
-                    Guard(id: 0, name: name, cpf: cpf, type: widget.index);
+                    Guard(id: 0, name: name, cpf: cpf, type: widget.index, team: team);
                 addGuard(guard, context);
               }
             },
@@ -104,5 +126,9 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
         ],
       ),
     );
+  }
+
+  void getComboBoxItem(String text) {
+    team = text;
   }
 }

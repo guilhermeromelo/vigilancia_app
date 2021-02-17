@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vigilancia_app/controllers/workplace/workplaceDAO.dart';
 import 'package:vigilancia_app/models/workplace/workplace.dart';
-import 'package:vigilancia_app/views/shared/appTextFormField/formatedTextField.dart';
+import 'package:vigilancia_app/views/shared/appTextFormField/appTextFormField.dart';
 import 'package:vigilancia_app/views/shared/button/AppButton.dart';
 import 'package:vigilancia_app/views/shared/contSpinner/cont_spinner.dart';
 import 'package:vigilancia_app/views/shared/header/InternalHeaderWithTabBar.dart';

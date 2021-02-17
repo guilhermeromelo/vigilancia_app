@@ -38,7 +38,7 @@ class _GuardCardState extends State<GuardCard> {
           Padding(
             padding: EdgeInsets.only(right: 7, left: 10),
             child: Icon(
-              widget.icon ?? Icons.schedule,
+              widget.icon ?? widget.type == 1 ? Icons.record_voice_over : Icons.admin_panel_settings,
               size: 21,
               color: AppColors.mainBlue,
             ),
