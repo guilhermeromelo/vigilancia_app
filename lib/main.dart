@@ -2,8 +2,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:vigilancia_app/controllers/guard/guardDAO.dart';
 import 'package:vigilancia_app/views/guards/guardRegistration.dart';
+import 'package:vigilancia_app/views/login/login_page.dart';
 import 'package:vigilancia_app/views/menu/menu.dart';
 import 'package:vigilancia_app/views/schedule/schedulePage.dart';
 import 'package:vigilancia_app/views/schedule/singletonSchedule.dart';
@@ -12,6 +14,7 @@ import 'package:vigilancia_app/views/schedule/sort/selectWorkplacesPage.dart';
 import 'package:vigilancia_app/views/schedule/sort/sortResultsPage.dart';
 import 'package:vigilancia_app/views/users/userRegistration.dart';
 import 'package:vigilancia_app/views/workplaces/workplaceRegistration.dart';
+import 'package:intl/intl.dart';
 
 import 'models/guard/guard.dart';
 
@@ -28,13 +31,24 @@ void main() async {
   }*/
 
   //FirebaseFirestore.instance.collection("teste").doc().set({"deuCerto":true});
-
+/*
+  DateFormat("dd/MM/yy - HH:mm")
+      .format(DateTime.now())
+      .toString();
+*/
   SingletonSchedule().isDaytime=true;
 
   runApp(MaterialApp(
+    localizationsDelegates: [
+      GlobalMaterialLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate
+    ],
+    supportedLocales: [const Locale('pt', 'BR')],
     initialRoute: 'menu',
     debugShowCheckedModeBanner: false,
     routes: {
+      //Login
+      'login': (context) => LoginPage(),
       //Menu
       'menu': (context) => Menu(),
       //Schedule

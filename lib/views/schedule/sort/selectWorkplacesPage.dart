@@ -3,13 +3,16 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:vigilancia_app/models/workplace/workplace.dart';
 import 'package:vigilancia_app/views/schedule/singletonSchedule.dart';
 import 'package:vigilancia_app/views/schedule/sort/selectGuardsPage.dart';
 import 'package:vigilancia_app/views/schedule/sort/sortAlgorithm.dart';
-import 'package:vigilancia_app/views/shared/button/AppButton.dart';
-import 'package:vigilancia_app/views/shared/cards/workplaceEdititableCard.dart';
-import 'package:vigilancia_app/views/shared/header/internalHeader.dart';
+import 'package:vigilancia_app/views/shared/components/appTextFormField/appTextFormField.dart';
+import 'package:vigilancia_app/views/shared/components/button/AppButton.dart';
+import 'package:vigilancia_app/views/shared/components/cards/workplaceEdititableCard.dart';
+import 'package:vigilancia_app/views/shared/components/header/internalHeader.dart';
+import 'package:vigilancia_app/views/shared/components/popup/popup.dart';
 import 'package:vigilancia_app/views/workplaces/workplaceRegistration.dart';
 
 Size size;
@@ -18,6 +21,7 @@ List<Map<dynamic, dynamic>> list = List();
 int isAllSelected = 0;
 List<int> idSelected = new List();
 List<TempModification> tempModification = new List();
+String selectedDate = DateFormat("dd/MM/yy").format(DateTime.now()).toString();
 
 class SelectWorkplacePage extends StatefulWidget {
   List<int> selectedIndex = List();
@@ -159,19 +163,36 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
           Container(
             width: size.width,
             child: AppButton(
-              labelText: "SORTEAR",
+              labelText: "Sortear",
               onPressedFunction: () {
                 //print(list);
-                List<Map<dynamic, dynamic>> selectedWorkplaces = new List();
-                list.forEach((element) {
-                  if (element['isChecked'] == true) {
-                    selectedWorkplaces.add(element);
-                  }
-                });
-                print(selectedWorkplaces);
-                SingletonSchedule().selectedWorkplaces = selectedWorkplaces;
-                sortGuards();
-                Navigator.pushNamed(context, 'schedule/resultsPage');
+
+                showDialog(
+                  context: context,
+                  builder: (context){
+                    return PopUpSchedule(
+                      onButtonPressed: () async {
+                        List<Map<dynamic, dynamic>> selectedWorkplaces = new List();
+                        list.forEach((element) {
+                          if (element['isChecked'] == true) {
+                            selectedWorkplaces.add(element);
+                          }
+                        });
+                        print(selectedWorkplaces);
+                        SingletonSchedule().selectedWorkplaces = selectedWorkplaces;
+                        sortGuards();
+
+                        await Navigator.popUntil(context,
+                            ModalRoute.withName('schedule/schedulePage'));
+                        Navigator.pushNamed(context, 'schedule/resultsPage');
+                      },
+                      onFormTextFieldChange: getItem,
+                      formTextFieldValidator: (text){
+                        if(selectedDate.isEmpty) return "Campo Vazio";
+                      },
+                    );
+                  },
+                );
               },
             ),
           )
@@ -266,6 +287,11 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
         },
       ),
     );
+  }
+
+  void getItem(text){
+    selectedDate = text;
+    print(selectedDate);
   }
 }
 

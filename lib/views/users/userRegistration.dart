@@ -1,9 +1,14 @@
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-import 'package:vigilancia_app/views/shared/appTextFormField/appTextFormField.dart';
-import 'package:vigilancia_app/views/shared/button/AppButton.dart';
+import 'package:vigilancia_app/controllers/user/userDAO.dart';
+import 'package:vigilancia_app/models/user/user.dart';
+import 'package:vigilancia_app/views/shared/components/appTextFormField/appTextFormField.dart';
+import 'package:vigilancia_app/views/shared/components/button/AppButton.dart';
+import 'package:vigilancia_app/views/shared/components/header/InternalHeaderWithTabBar.dart';
 import 'package:vigilancia_app/views/shared/constants/appColors.dart';
-import 'package:vigilancia_app/views/shared/header/InternalHeaderWithTabBar.dart';
-import 'package:vigilancia_app/views/shared/header/internalHeader.dart';
+import 'package:vigilancia_app/views/shared/constants/masks.dart';
+
 
 String name = "";
 String cpf = "";
@@ -36,9 +41,11 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
       },
       widget1: UserRegistrationSubPage(
         isUserUpdate: widget.isUserUpdate,
+        index: 0,
       ),
       widget2: UserRegistrationSubPage(
         isUserUpdate: widget.isUserUpdate,
+        index: 1,
       ),
     );
   }
@@ -47,8 +54,9 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
 class UserRegistrationSubPage extends StatefulWidget {
   bool isUserUpdate;
   final _formKey = GlobalKey<FormState>();
+  int index;
 
-  UserRegistrationSubPage({Key key, this.isUserUpdate}) : super(key: key);
+  UserRegistrationSubPage({Key key, this.isUserUpdate, this.index}) : super(key: key);
 
   @override
   _UserRegistrationSubPageState createState() =>
@@ -74,6 +82,7 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
             },
           ),
           AppTextFormField(
+            inputFormatterField: AppMasks.cpfMask,
             initialValue: cpf,
             labelText: "CPF",
             externalPadding: EdgeInsets.only(top: 15, left: 10, right: 10),
@@ -104,7 +113,15 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
           ),
           AppButton(
             labelText: widget.isUserUpdate == false ? "Cadastrar" : "Atualizar",
-            onPressedFunction: () {},
+            onPressedFunction: () {
+              if(widget._formKey.currentState.validate()){
+                var bytes = utf8.encode(senha); // data being hashed
+                var digest = sha1.convert(bytes);
+
+                User newUser = User(id: 0, name: name, cpf: cpf, type: widget.index, senha: digest.toString());
+                addUser(newUser, context);
+              }
+            },
           ),
         ],
       ),

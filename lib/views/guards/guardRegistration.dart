@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:vigilancia_app/controllers/guard/guardDAO.dart';
 import 'package:vigilancia_app/models/guard/guard.dart';
-import 'package:vigilancia_app/views/shared/appTextFormField/appTextFormField.dart';
-import 'package:vigilancia_app/views/shared/button/AppButton.dart';
-import 'package:vigilancia_app/views/shared/comboBox/comboBox.dart';
+import 'package:vigilancia_app/views/shared/components/appTextFormField/appTextFormField.dart';
+import 'package:vigilancia_app/views/shared/components/button/AppButton.dart';
+import 'package:vigilancia_app/views/shared/components/comboBox/comboBox.dart';
 import 'package:vigilancia_app/views/shared/constants/masks.dart';
-import 'package:vigilancia_app/views/shared/header/InternalHeaderWithTabBar.dart';
+import 'package:vigilancia_app/views/shared/components/header/InternalHeaderWithTabBar.dart';
 
 String name = "";
 String cpf = "";

@@ -2,11 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:vigilancia_app/models/guard/guard.dart';
 import 'package:vigilancia_app/views/schedule/singletonSchedule.dart';
-import 'package:vigilancia_app/views/shared/button/AppButton.dart';
-import 'package:vigilancia_app/views/shared/cards/guardCard.dart';
-import 'package:vigilancia_app/views/shared/header/internalHeader.dart';
-import 'package:vigilancia_app/views/shared/header/internalHeaderWithTabBarx5.dart';
-import 'package:vigilancia_app/views/shared/titleOrRowBuilder/TitleOrRowBuilder.dart';
+import 'package:vigilancia_app/views/shared/components/button/AppButton.dart';
+import 'package:vigilancia_app/views/shared/components/cards/guardCard.dart';
+import 'package:vigilancia_app/views/shared/components/header/internalHeader.dart';
+import 'package:vigilancia_app/views/shared/components/header/internalHeaderWithTabBarx5.dart';
+import 'package:vigilancia_app/views/shared/components/titleOrRowBuilder/TitleOrRowBuilder.dart';
 
 List<Guard> guardList = List();
 List<Guard> doormanList = List();
@@ -402,7 +402,7 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
     return Padding(
       padding: EdgeInsets.only(bottom: 30),
       child: AppButton(
-        labelText: "PROSSEGUIR",
+        labelText: "Prosseguir",
         onPressedFunction: () {
           print(selectedGuards.toString());
           List<Guard> singletonSelectedGuards = new List();

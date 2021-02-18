@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:vigilancia_app/models/guard/guard.dart';
 import 'package:vigilancia_app/views/schedule/singletonSchedule.dart';
 import 'package:vigilancia_app/views/schedule/sort/sortAlgorithm.dart';
-import 'package:vigilancia_app/views/shared/button/AppButton.dart';
-import 'package:vigilancia_app/views/shared/header/internalHeader.dart';
-import 'package:vigilancia_app/views/shared/titleOrRowBuilder/TitleOrRowBuilder.dart';
+import 'package:vigilancia_app/views/shared/components/button/AppButton.dart';
+import 'package:vigilancia_app/views/shared/components/header/internalHeader.dart';
+import 'package:vigilancia_app/views/shared/components/titleOrRowBuilder/TitleOrRowBuilder.dart';
 
 class SortResultsPage extends StatefulWidget {
   @override

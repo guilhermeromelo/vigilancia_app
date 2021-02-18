@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:vigilancia_app/views/schedule/singletonSchedule.dart';
-import 'package:vigilancia_app/views/shared/appTextFormField/appTextFormField.dart';
-import 'package:vigilancia_app/views/shared/cards/workplaceCard.dart';
+import 'package:vigilancia_app/views/shared/components/appTextFormField/appTextFormField.dart';
+import 'package:vigilancia_app/views/shared/components/cards/workplaceCard.dart';
 import 'package:vigilancia_app/views/shared/constants/appColors.dart';
-import 'package:vigilancia_app/views/shared/header/internalHeader.dart';
-import 'package:vigilancia_app/views/shared/titleOrRowBuilder/TitleOrRowBuilder.dart';
+import 'package:vigilancia_app/views/shared/components/header/internalHeader.dart';
+import 'package:vigilancia_app/views/shared/components/titleOrRowBuilder/TitleOrRowBuilder.dart';
 
 class SchedulePage extends StatefulWidget {
   @override

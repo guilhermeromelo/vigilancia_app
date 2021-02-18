@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vigilancia_app/views/shared/constants/appColors.dart';
-import 'package:vigilancia_app/views/shared/titleOrRowBuilder/TitleOrRowBuilder.dart';
+import 'package:vigilancia_app/views/shared/components/titleOrRowBuilder/TitleOrRowBuilder.dart';
 
 /*
 Arquivo referente ao componente de comboBox sem o modo de pesquisa integrado.

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:vigilancia_app/controllers/workplace/workplaceDAO.dart';
 import 'package:vigilancia_app/models/workplace/workplace.dart';
-import 'package:vigilancia_app/views/shared/appTextFormField/appTextFormField.dart';
-import 'package:vigilancia_app/views/shared/button/AppButton.dart';
-import 'package:vigilancia_app/views/shared/contSpinner/cont_spinner.dart';
-import 'package:vigilancia_app/views/shared/header/InternalHeaderWithTabBar.dart';
-import 'package:vigilancia_app/views/shared/titleOrRowBuilder/TitleOrRowBuilder.dart';
+import 'package:vigilancia_app/views/shared/components//appTextFormField/appTextFormField.dart';
+import 'package:vigilancia_app/views/shared/components//button/AppButton.dart';
+import 'package:vigilancia_app/views/shared/components//contSpinner/cont_spinner.dart';
+import 'package:vigilancia_app/views/shared/components//header/InternalHeaderWithTabBar.dart';
+import 'package:vigilancia_app/views/shared/components//titleOrRowBuilder/TitleOrRowBuilder.dart';
 
 String placeName = "";
 int doormanQt = 0;

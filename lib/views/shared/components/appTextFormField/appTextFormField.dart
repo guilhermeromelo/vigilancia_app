@@ -33,7 +33,7 @@ class AppTextFormField extends StatelessWidget {
     this.suffixIconOnPressed,
     this.externalPadding,
     this.autoFocus,
-    this.obscureText
+    this.obscureText,
   }) : super(key: key);
 
   @override

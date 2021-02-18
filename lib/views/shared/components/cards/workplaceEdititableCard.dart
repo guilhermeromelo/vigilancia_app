@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vigilancia_app/views/shared/constants/appColors.dart';
-import 'package:vigilancia_app/views/shared/contSpinner/cont_spinner.dart';
+import 'package:vigilancia_app/views/shared/components/contSpinner/cont_spinner.dart';
 
 /*
 Ex:
