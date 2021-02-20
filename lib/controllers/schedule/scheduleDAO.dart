@@ -10,7 +10,7 @@ Future<String> whoIsNextSchedule() async {
       .get());
   String nextID;
   if (snapshot.docs.isEmpty) {
-    nextID = "1";
+    nextID = '1';
   } else {
     snapshot.docs.forEach((element) {
       nextID = ((element['id']) + 1).toString();
@@ -28,16 +28,20 @@ Future<String> whoIsNextSchedule() async {
  */
 
 void addSchedule(Schedule newSchedule, BuildContext context) async {
-  String id = await whoIsNextSchedule();
-  await FirebaseFirestore.instance.collection("schedule").doc(id).set({
-    "id": int.parse(id),
+  String idNextSchedule = await whoIsNextSchedule();
+  await FirebaseFirestore.instance.collection("schedule").doc(idNextSchedule).set({
+    "id": int.parse(idNextSchedule),
     "creatorUser": newSchedule.creatorUser,
     "workPlacesWithGuards": newSchedule.workPlacesWithGuards,
     "creationDateTime": DateTime.now(),
+    "scheduleDateTime": newSchedule.scheduleDateTime,
+    "note": newSchedule.note,
+    "type": newSchedule.type,
     "visible": true
   });
 }
 
+/*
 void updateSchedule(Schedule updateSchedule, BuildContext context) async {
   await FirebaseFirestore.instance
       .collection("schedule")
@@ -45,7 +49,7 @@ void updateSchedule(Schedule updateSchedule, BuildContext context) async {
       .update({
     "workPlacesWithGuards": updateSchedule.workPlacesWithGuards,
   });
-}
+}*/
 
 Future<List<Schedule>> listSchedule() async {
   List<Schedule> scheduleList = List();

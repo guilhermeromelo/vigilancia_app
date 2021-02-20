@@ -12,7 +12,7 @@ class PopUpSchedule extends StatefulWidget {
   Function formTextFieldValidator;
   final _formKey = GlobalKey<FormState>();
 
-  String selectedDate;
+  DateTime selectedDate;
 
   PopUpSchedule(
       {Key key,
@@ -30,7 +30,7 @@ class _PopUpScheduleState extends State<PopUpSchedule> {
   @override
   void initState() {
     // TODO: implement initState
-    widget.selectedDate = DateFormat("dd/MM/yy").format(DateTime.now()).toString();
+    widget.selectedDate = DateTime.now();
     super.initState();
   }
 
@@ -42,14 +42,15 @@ class _PopUpScheduleState extends State<PopUpSchedule> {
       content: Form(
         key: widget._formKey,
         child: AppTextFormField(
+          readOnly: true,
           labelText: "Data",
           inputFormatterField: AppMasks.dataMask,
-          initialValue: widget.selectedDate,
+          initialValue: DateFormat("dd/MM/yy").format(widget.selectedDate).toString(),
           keyboardInputType: TextInputType.number,
           validatorFunction: widget.formTextFieldValidator,
           onChangedFunction: (text){
-            widget.selectedDate = text;
-            widget.onFormTextFieldChange(text);
+            //widget.selectedDate = text;
+            //widget.onFormTextFieldChange(text);
           },
           suffixIcon: Icons.calendar_today,
           suffixIconOnPressed: (){
@@ -83,15 +84,12 @@ class _PopUpScheduleState extends State<PopUpSchedule> {
     final DateTime picked = await showDatePicker(
 
         context: context,
-        //locale: Locale('pt-BR'),
         initialDate: DateTime.now(),
         firstDate: DateTime.now(),
         lastDate: DateTime(2101));
     if (picked != null && picked != widget.selectedDate)
       setState(() {
-        widget.selectedDate = DateFormat("dd/MM/yy")
-            .format(picked)
-            .toString();
+        widget.selectedDate = picked;
         widget.onFormTextFieldChange(widget.selectedDate);
         FocusScope.of(context).requestFocus(new FocusNode());
       });

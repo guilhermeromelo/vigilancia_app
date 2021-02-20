@@ -17,6 +17,7 @@ class AppTextFormField extends StatelessWidget {
   EdgeInsets externalPadding;
   bool autoFocus;
   bool obscureText;
+  bool readOnly;
 
   TextEditingController controller = TextEditingController();
 
@@ -34,6 +35,7 @@ class AppTextFormField extends StatelessWidget {
     this.externalPadding,
     this.autoFocus,
     this.obscureText,
+    this.readOnly
   }) : super(key: key);
 
   @override
@@ -42,6 +44,7 @@ class AppTextFormField extends StatelessWidget {
     return Padding(
       padding: externalPadding ?? EdgeInsets.zero,
       child: TextFormField(
+        readOnly: readOnly ?? false,
         obscureText: obscureText ?? false,
         autofocus: autoFocus ?? false,
         onChanged: onChangedFunction,

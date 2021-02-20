@@ -16,12 +16,11 @@ import 'package:vigilancia_app/views/shared/components/popup/popup.dart';
 import 'package:vigilancia_app/views/workplaces/workplaceRegistration.dart';
 
 Size size;
-//Map<dynamic, dynamic> map2 = new Map();
-List<Map<dynamic, dynamic>> list = List();
+List<Map<String, dynamic>> list = List();
 int isAllSelected = 0;
 List<int> idSelected = new List();
 List<TempModification> tempModification = new List();
-String selectedDate = DateFormat("dd/MM/yy").format(DateTime.now()).toString();
+DateTime selectedDate = DateTime.now();
 
 class SelectWorkplacePage extends StatefulWidget {
   List<int> selectedIndex = List();
@@ -46,6 +45,18 @@ class _SelectWorkplacePageState extends State<SelectWorkplacePage> {
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
 
+    workplaceQuery = SingletonSchedule().isDaytime
+        ? FirebaseFirestore.instance
+        .collection("workplaces")
+        .where('visible', isEqualTo: true)
+        .where('type', isEqualTo: 0)
+        .get()
+        : FirebaseFirestore.instance
+        .collection("workplaces")
+        .where('visible', isEqualTo: true)
+        .where('type', isEqualTo: 1)
+        .get();
+
     return InternalHeader(
       title: "Sortear - " + (isDaytime ? "Diurno" : "Noturno"),
       rightIcon1: Icons.refresh,
@@ -67,6 +78,8 @@ class _SelectWorkplacePageState extends State<SelectWorkplacePage> {
 
 class SelectWorkplaceSubPage extends StatefulWidget {
   List<int> selectedIndex = List();
+
+  String creatorName = "1- Mudar Nome Usuário";
 
   bool isChecked = false;
   int doormanQt = 1;
@@ -93,6 +106,7 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
           return ContainerWithErrorMessage(snapshot.error.toString());
         } else if (snapshot.hasData) {
           list = List();
+          int i=0;
           snapshot.data.docs.forEach((element) {
             list.add({
               'name': element['name'],
@@ -104,6 +118,7 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
               'type': element['type'],
               'isChecked': idSelected.contains(element['id']) ? true : false
             });
+            i++;
           });
           //map2 = list.asMap();
           //print(map2);
@@ -172,7 +187,7 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
                   builder: (context){
                     return PopUpSchedule(
                       onButtonPressed: () async {
-                        List<Map<dynamic, dynamic>> selectedWorkplaces = new List();
+                        List<Map<String, dynamic>> selectedWorkplaces = new List();
                         list.forEach((element) {
                           if (element['isChecked'] == true) {
                             selectedWorkplaces.add(element);
@@ -180,7 +195,7 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
                         });
                         print(selectedWorkplaces);
                         SingletonSchedule().selectedWorkplaces = selectedWorkplaces;
-                        sortGuards();
+                        sortGuards(creator: widget.creatorName, date: selectedDate, context: context, type: SingletonSchedule().isDaytime ? 0 : 1);
 
                         await Navigator.popUntil(context,
                             ModalRoute.withName('schedule/schedulePage'));
@@ -188,7 +203,7 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
                       },
                       onFormTextFieldChange: getItem,
                       formTextFieldValidator: (text){
-                        if(selectedDate.isEmpty) return "Campo Vazio";
+                        if(text.isEmpty) return "Campo Vazio";
                       },
                     );
                   },
@@ -288,9 +303,9 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
       ),
     );
   }
-
-  void getItem(text){
-    selectedDate = text;
+  
+  void getItem(DateTime date){
+    selectedDate = date;
     print(selectedDate);
   }
 }
@@ -298,12 +313,13 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
 //FUTURE
 var workplaceQuery = SingletonSchedule().isDaytime
     ? FirebaseFirestore.instance
-        .collection("workplaces")
-        .where('visible', isEqualTo: true)
-        .where('type', isEqualTo: 0)
-        .get()
+    .collection("workplaces")
+    .where('visible', isEqualTo: true)
+    .where('type', isEqualTo: 0)
+    .get()
     : FirebaseFirestore.instance
-        .collection("workplaces")
-        .where('visible', isEqualTo: true)
-        .where('type', isEqualTo: 1)
-        .get();
+    .collection("workplaces")
+    .where('visible', isEqualTo: true)
+    .where('type', isEqualTo: 1)
+    .get();
+

@@ -52,7 +52,7 @@ class _SortResultsSubPageState extends State<SortResultsSubPage> {
 
     return Container(
       child: ListView.builder(
-        itemCount: SingletonSchedule().selectedWorkplacesWithGuards.length,
+        itemCount: SingletonSchedule().schedule.workPlacesWithGuards.length,
         itemBuilder: itemBuilder,
       ),
     );
@@ -61,8 +61,11 @@ class _SortResultsSubPageState extends State<SortResultsSubPage> {
 
 Widget itemBuilder(BuildContext context, int index) {
 
+  print("nãosei rapaz");
+  print(SingletonSchedule().schedule.workPlacesWithGuards);
+
   Map<dynamic,dynamic> tempMap = new Map();
-  tempMap = SingletonSchedule().selectedWorkplacesWithGuards.elementAt(index)['guards'];
+  tempMap = SingletonSchedule().schedule.workPlacesWithGuards[index.toString()]['guards'];
   List<Guard> guardList = List();
   tempMap.forEach((key, value) {
     Map<dynamic, dynamic> tempMap2 = value;
@@ -84,7 +87,7 @@ Widget itemBuilder(BuildContext context, int index) {
     guardList.add(newGuard);
   });
 
-  tempMap = SingletonSchedule().selectedWorkplacesWithGuards.elementAt(index)['doormans'];
+  tempMap = SingletonSchedule().schedule.workPlacesWithGuards[index.toString()]['doormans'];
   List<Guard> doormansList = List();
   tempMap.forEach((key, value) {
     Map<dynamic, dynamic> tempMap2 = value;
@@ -110,7 +113,7 @@ Widget itemBuilder(BuildContext context, int index) {
     children: [
       TitleBuilder(padding: EdgeInsets.only(top: index == 0 ? 10 : 25, bottom: 5),
           title:
-              SingletonSchedule().selectedWorkplacesWithGuards.elementAt(index)['name']),
+              SingletonSchedule().schedule.workPlacesWithGuards[index.toString()]['name']),
       ...doormansList.map((e) => RowBuilder(subject:"Porteiro: ", text: e.name, padding: EdgeInsets.only(left: 8))).toList(),
       ...guardList.map((e) => RowBuilder(subject:"Vigilante: ", text: e.name, padding: EdgeInsets.only(left: 8))).toList(),
       //Text(SingletonSchedule().selectedWorkplacesWithGuards.toString(), style: TextStyle(fontSize: 19),)
