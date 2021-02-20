@@ -35,7 +35,8 @@ dependencies:
   cloud_firestore: ^0.14.4
 
   crypto: ^2.1.5
-  toast: ^0.1.5
+  #toast: ^0.1.5
+  fluttertoast: ^7.1.6
 
   # The following adds the DateFormat permissions
   intl: ^0.16.1

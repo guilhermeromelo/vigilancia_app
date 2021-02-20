@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:vigilancia_app/controllers/guard/guardDAO.dart';
 import 'package:vigilancia_app/models/guard/guard.dart';
 import 'package:vigilancia_app/views/shared/constants/appColors.dart';
@@ -58,6 +59,14 @@ class _MenuState extends State<Menu> {
           colorButton: Colors.white,
           textButton: "Escala",
           fncOnPressed: () async {
+            Fluttertoast.showToast(
+                msg: "Observações Salvas",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.CENTER,
+                textColor: Colors.white,
+                fontSize: 20.0,
+                backgroundColor: AppColors.mainBlue,
+                timeInSecForIosWeb: 1);
             Navigator.pushNamed(context, 'schedule/schedulePage');
 
             //Guard guard = Guard(cpf: "111.111.111-11", type: 1, name: "Nome111", id: 2);

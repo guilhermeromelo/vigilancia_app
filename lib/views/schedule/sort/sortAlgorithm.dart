@@ -127,8 +127,14 @@ void sortGuards(
       note: "123",
       creationDateTime: DateTime.now(),
   type: type);
-  SingletonSchedule().schedule = newSchedule;
-  addSchedule(newSchedule, context);
+
+  saveDataInFirebase(context: context, schedule: newSchedule);
+}
+
+void saveDataInFirebase({Key key, Schedule schedule, BuildContext context}) async {
+  SingletonSchedule().schedule = schedule;
+  String id = await addSchedule(schedule, context);
+  SingletonSchedule().schedule.id = int.parse(id);
   print("RESULTADO... " +
       SingletonSchedule().schedule.workPlacesWithGuards.toString());
 }

@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:vigilancia_app/models/schedule/scheldule.dart';
+import 'package:vigilancia_app/views/shared/constants/appColors.dart';
 
 Future<String> whoIsNextSchedule() async {
   var snapshot = (await FirebaseFirestore.instance
@@ -27,7 +29,7 @@ Future<String> whoIsNextSchedule() async {
   String creatorUser;
  */
 
-void addSchedule(Schedule newSchedule, BuildContext context) async {
+Future<String> addSchedule(Schedule newSchedule, BuildContext context) async {
   String idNextSchedule = await whoIsNextSchedule();
   await FirebaseFirestore.instance.collection("schedule").doc(idNextSchedule).set({
     "id": int.parse(idNextSchedule),
@@ -39,6 +41,7 @@ void addSchedule(Schedule newSchedule, BuildContext context) async {
     "type": newSchedule.type,
     "visible": true
   });
+  return idNextSchedule;
 }
 
 /*
@@ -50,6 +53,25 @@ void updateSchedule(Schedule updateSchedule, BuildContext context) async {
     "workPlacesWithGuards": updateSchedule.workPlacesWithGuards,
   });
 }*/
+
+
+void updateNoteSchedule({Key key, int id, String note, BuildContext context}) async {
+  await FirebaseFirestore.instance
+      .collection("schedule")
+      .doc(id.toString())
+      .update({
+    "note": note,
+  }).then((value) {
+    Fluttertoast.showToast(
+        msg: "Observações Salvas",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        textColor: Colors.white,
+        fontSize: 20,
+        backgroundColor: AppColors.mainBlue,
+        timeInSecForIosWeb: 3);
+  });
+}
 
 Future<List<Schedule>> listSchedule() async {
   List<Schedule> scheduleList = List();

@@ -34,3 +34,43 @@ Padding RowBuilder({Key key, EdgeInsets padding, String subject, String text}) {
     ),
   );
 }
+
+Padding RowBuilderx2({Key key, EdgeInsets padding, String subject1, String text1,
+  String subject2, String text2, int flex1, int flex2}) {
+  return Padding(
+    padding: padding,
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+            flex: flex1,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  subject1,
+                  style: TextStyle(fontSize: 18, color: AppColors.mainBlue),
+                ),
+                Text(text1,
+                    style: TextStyle(fontSize: 18, color: Colors.black))
+              ],
+            )),
+        Expanded(
+          flex: flex2,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                subject2,
+                style: TextStyle(fontSize: 18, color: AppColors.mainBlue),
+              ),
+              Expanded(
+                  child: Text(text2,
+                      style: TextStyle(fontSize: 18, color: Colors.black)))
+            ],
+          ),
+        )
+      ],
+    ),
+  );
+}

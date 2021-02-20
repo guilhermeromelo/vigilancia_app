@@ -18,6 +18,8 @@ class AppTextFormField extends StatelessWidget {
   bool autoFocus;
   bool obscureText;
   bool readOnly;
+  int minLines;
+  int maxLines;
 
   TextEditingController controller = TextEditingController();
 
@@ -35,7 +37,9 @@ class AppTextFormField extends StatelessWidget {
     this.externalPadding,
     this.autoFocus,
     this.obscureText,
-    this.readOnly
+    this.readOnly,
+    this.minLines,
+    this.maxLines
   }) : super(key: key);
 
   @override
@@ -44,6 +48,8 @@ class AppTextFormField extends StatelessWidget {
     return Padding(
       padding: externalPadding ?? EdgeInsets.zero,
       child: TextFormField(
+        minLines: minLines ?? 1,
+        maxLines: maxLines ?? 2,
         readOnly: readOnly ?? false,
         obscureText: obscureText ?? false,
         autofocus: autoFocus ?? false,
