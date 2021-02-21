@@ -7,6 +7,7 @@ import 'package:vigilancia_app/views/shared/components/cards/guardCard.dart';
 import 'package:vigilancia_app/views/shared/components/header/internalHeader.dart';
 import 'package:vigilancia_app/views/shared/components/header/internalHeaderWithTabBarx5.dart';
 import 'package:vigilancia_app/views/shared/components/titleOrRowBuilder/TitleOrRowBuilder.dart';
+import 'package:vigilancia_app/views/shared/components/widgetStreamOrFutureBuilder/widgetStreamOrFutureBuilder.dart';
 
 List<Guard> guardList = List();
 List<Guard> doormanList = List();
@@ -40,18 +41,18 @@ class _SelectGuardsPageState extends State<SelectGuardsPage> {
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return selectGuardsPageHeader(
-              widget1: ContainerWithCircularProgress(),
-              widget2: ContainerWithCircularProgress(),
-              widget3: ContainerWithCircularProgress(),
-              widget4: ContainerWithCircularProgress(),
-              widget5: ContainerWithCircularProgress());
+              widget1: containerWithCircularProgress(),
+              widget2: containerWithCircularProgress(),
+              widget3: containerWithCircularProgress(),
+              widget4: containerWithCircularProgress(),
+              widget5: containerWithCircularProgress());
         } else if (snapshot.hasError) {
           return selectGuardsPageHeader(
-              widget1: ContainerWithErrorMessage(snapshot.error.toString()),
-              widget2: ContainerWithErrorMessage(snapshot.error.toString()),
-              widget3: ContainerWithErrorMessage(snapshot.error.toString()),
-              widget4: ContainerWithErrorMessage(snapshot.error.toString()),
-              widget5: ContainerWithErrorMessage(snapshot.error.toString()));
+              widget1: containerWithErrorMessage(snapshot.error.toString()),
+              widget2: containerWithErrorMessage(snapshot.error.toString()),
+              widget3: containerWithErrorMessage(snapshot.error.toString()),
+              widget4: containerWithErrorMessage(snapshot.error.toString()),
+              widget5: containerWithErrorMessage(snapshot.error.toString()));
         } else if (snapshot.hasData) {
           doormanList.clear();
           guardList.clear();
@@ -81,11 +82,11 @@ class _SelectGuardsPageState extends State<SelectGuardsPage> {
           );
         } else {
           return selectGuardsPageHeader(
-              widget1: ContainerWithErrorMessage(""),
-              widget2: ContainerWithErrorMessage(""),
-              widget3: ContainerWithErrorMessage(""),
-              widget4: ContainerWithErrorMessage(""),
-              widget5: ContainerWithErrorMessage(""));
+              widget1: containerWithErrorMessage(""),
+              widget2: containerWithErrorMessage(""),
+              widget3: containerWithErrorMessage(""),
+              widget4: containerWithErrorMessage(""),
+              widget5: containerWithErrorMessage(""));
         }
       },
     );
@@ -202,13 +203,7 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
     updateSelectAllCheckBoxStatus();
 
     if (widget.doormanListLocal.length + widget.guardListLocal.length == 0) {
-      return Container(
-          alignment: Alignment.center,
-          child: Text(
-            "Desculpe! Não encontrei ninguém cadastrado neste time :(",
-            style: TextStyle(fontSize: 20),
-            textAlign: TextAlign.center,
-          ));
+      return containerWithNotFoundMessage("Desculpe! Não encontrei ninguém cadastrado neste time :(");
     } else {
       return ListView.builder(
         padding: EdgeInsets.only(top: 10),
@@ -323,7 +318,7 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
             .elementAt(index - widget.doormanListLocal.length));
       }
     } else {
-      return ContainerWithErrorMessage("");
+      return containerWithErrorMessage("");
     }
   }
 
@@ -491,23 +486,6 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
       ],
     );
   }
-}
-
-Widget ContainerWithCircularProgress() {
-  return Container(
-    alignment: Alignment.center,
-    child: CircularProgressIndicator(),
-  );
-}
-
-Widget ContainerWithErrorMessage(String erro) {
-  return Container(
-      alignment: Alignment.center,
-      child: Text(
-        "Erro Encontrado :( \n" + erro,
-        style: TextStyle(fontSize: 20),
-        textAlign: TextAlign.center,
-      ));
 }
 
 //Future

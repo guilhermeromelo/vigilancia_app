@@ -15,7 +15,7 @@ Ex:
  */
 
 
-class WorkplaceCard extends StatelessWidget {
+class WorkplaceAndScheduleCard extends StatelessWidget {
   String title;
   String line1;
   String line2;
@@ -24,7 +24,7 @@ class WorkplaceCard extends StatelessWidget {
   IconData icon2;
   IconData icon3;
 
-  WorkplaceCard(
+  WorkplaceAndScheduleCard(
       {Key key,
       this.title,
       this.line1,

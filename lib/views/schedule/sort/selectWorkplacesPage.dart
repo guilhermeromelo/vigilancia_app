@@ -13,6 +13,7 @@ import 'package:vigilancia_app/views/shared/components/button/AppButton.dart';
 import 'package:vigilancia_app/views/shared/components/cards/workplaceEdititableCard.dart';
 import 'package:vigilancia_app/views/shared/components/header/internalHeader.dart';
 import 'package:vigilancia_app/views/shared/components/popup/popup.dart';
+import 'package:vigilancia_app/views/shared/components/widgetStreamOrFutureBuilder/widgetStreamOrFutureBuilder.dart';
 import 'package:vigilancia_app/views/workplaces/workplaceRegistration.dart';
 
 Size size;
@@ -47,15 +48,15 @@ class _SelectWorkplacePageState extends State<SelectWorkplacePage> {
 
     workplaceQuery = SingletonSchedule().isDaytime
         ? FirebaseFirestore.instance
-        .collection("workplaces")
-        .where('visible', isEqualTo: true)
-        .where('type', isEqualTo: 0)
-        .get()
+            .collection("workplaces")
+            .where('visible', isEqualTo: true)
+            .where('type', isEqualTo: 0)
+            .get()
         : FirebaseFirestore.instance
-        .collection("workplaces")
-        .where('visible', isEqualTo: true)
-        .where('type', isEqualTo: 1)
-        .get();
+            .collection("workplaces")
+            .where('visible', isEqualTo: true)
+            .where('type', isEqualTo: 1)
+            .get();
 
     return InternalHeader(
       title: "Sortear - " + (isDaytime ? "Diurno" : "Noturno"),
@@ -103,31 +104,36 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
             child: CircularProgressIndicator(),
           );
         } else if (snapshot.hasError) {
-          return ContainerWithErrorMessage(snapshot.error.toString());
+          return containerWithErrorMessage(snapshot.error.toString());
         } else if (snapshot.hasData) {
-          list = List();
-          int i=0;
-          snapshot.data.docs.forEach((element) {
-            list.add({
-              'name': element['name'],
-              'guardQt': element['guardQt'],
-              'doormanQt': element['doormanQt'],
-              'initialGuardQt': element['guardQt'],
-              'initialDoormanQt': element['doormanQt'],
-              'id': element['id'],
-              'type': element['type'],
-              'isChecked': idSelected.contains(element['id']) ? true : false
+          if (snapshot.data.docs.length == 0) {
+            return containerWithNotFoundMessage(
+                "Desculpe! Não encontrei nenhum posto de trabalho cadastrado :(");
+          } else {
+            list = List();
+            int i = 0;
+            snapshot.data.docs.forEach((element) {
+              list.add({
+                'name': element['name'],
+                'guardQt': element['guardQt'],
+                'doormanQt': element['doormanQt'],
+                'initialGuardQt': element['guardQt'],
+                'initialDoormanQt': element['doormanQt'],
+                'id': element['id'],
+                'type': element['type'],
+                'isChecked': idSelected.contains(element['id']) ? true : false
+              });
+              i++;
             });
-            i++;
-          });
-          //map2 = list.asMap();
-          //print(map2);
-          return ListView.builder(
-            itemCount: list.length,
-            itemBuilder: ItemBuilder,
-          );
+            //map2 = list.asMap();
+            //print(map2);
+            return ListView.builder(
+              itemCount: list.length,
+              itemBuilder: ItemBuilder,
+            );
+          }
         } else {
-          return ContainerWithErrorMessage("");
+          return containerWithErrorMessage("");
         }
       },
     );
@@ -184,26 +190,32 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
 
                 showDialog(
                   context: context,
-                  builder: (context){
+                  builder: (context) {
                     return PopUpSchedule(
                       onButtonPressed: () async {
-                        List<Map<String, dynamic>> selectedWorkplaces = new List();
+                        List<Map<String, dynamic>> selectedWorkplaces =
+                            new List();
                         list.forEach((element) {
                           if (element['isChecked'] == true) {
                             selectedWorkplaces.add(element);
                           }
                         });
                         print(selectedWorkplaces);
-                        SingletonSchedule().selectedWorkplaces = selectedWorkplaces;
-                        sortGuards(creator: widget.creatorName, date: selectedDate, context: context, type: SingletonSchedule().isDaytime ? 0 : 1);
+                        SingletonSchedule().selectedWorkplaces =
+                            selectedWorkplaces;
+                        sortGuards(
+                            creator: widget.creatorName,
+                            date: selectedDate,
+                            context: context,
+                            type: SingletonSchedule().isDaytime ? 0 : 1);
 
                         await Navigator.popUntil(context,
                             ModalRoute.withName('schedule/schedulePage'));
                         Navigator.pushNamed(context, 'schedule/resultsPage');
                       },
                       onFormTextFieldChange: getItem,
-                      formTextFieldValidator: (text){
-                        if(text.isEmpty) return "Campo Vazio";
+                      formTextFieldValidator: (text) {
+                        if (text.isEmpty) return "Campo Vazio";
                       },
                     );
                   },
@@ -222,7 +234,7 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
 
   Widget WorkplaceCardBuilder(int index) {
     tempModification.forEach((element) {
-      if(element.id == list[index]['id']){
+      if (element.id == list[index]['id']) {
         list[index]['guardQt'] = element.guardQt;
         list[index]['doormanQt'] = element.doormanQt;
       }
@@ -234,21 +246,23 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
         name: list[index]['name'],
         guardQt: list[index]['guardQt'],
         doormanQt: list[index]['doormanQt'],
-        initialDoormanQt:  list[index]['initialDoormanQt'],
+        initialDoormanQt: list[index]['initialDoormanQt'],
         isChecked: list[index]['isChecked'],
         initialGuardQt: list[index]['initialGuardQt'],
-
         doormanFunction: (newValue) {
           list[index]['doormanQt'] = int.parse(newValue);
           bool achou = false;
           tempModification.forEach((element) {
-            if(element.id == list[index]['id']){
+            if (element.id == list[index]['id']) {
               element.doormanQt = int.parse(newValue);
               achou = true;
             }
           });
-          if(achou == false){
-            TempModification newMod = TempModification(id: list[index]['id'],doormanQt: int.parse(newValue), guardQt: list[index]['initialGuardQt'] );
+          if (achou == false) {
+            TempModification newMod = TempModification(
+                id: list[index]['id'],
+                doormanQt: int.parse(newValue),
+                guardQt: list[index]['initialGuardQt']);
             tempModification.add(newMod);
           }
         },
@@ -256,13 +270,16 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
           list[index]['guardQt'] = int.parse(newValue);
           bool achou = false;
           tempModification.forEach((element) {
-            if(element.id == list[index]['id']){
+            if (element.id == list[index]['id']) {
               element.guardQt = int.parse(newValue);
               achou = true;
             }
           });
-          if(achou == false){
-            TempModification newMod = TempModification(id: list[index]['id'],doormanQt: list[index]['initialDoormanQt'], guardQt: int.parse(newValue));
+          if (achou == false) {
+            TempModification newMod = TempModification(
+                id: list[index]['id'],
+                doormanQt: list[index]['initialDoormanQt'],
+                guardQt: int.parse(newValue));
             tempModification.add(newMod);
           }
         },
@@ -304,7 +321,7 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
     );
   }
 
-  void getItem(DateTime date){
+  void getItem(DateTime date) {
     selectedDate = date;
     print(selectedDate);
   }
@@ -313,13 +330,12 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
 //FUTURE
 var workplaceQuery = SingletonSchedule().isDaytime
     ? FirebaseFirestore.instance
-    .collection("workplaces")
-    .where('visible', isEqualTo: true)
-    .where('type', isEqualTo: 0)
-    .get()
+        .collection("workplaces")
+        .where('visible', isEqualTo: true)
+        .where('type', isEqualTo: 0)
+        .get()
     : FirebaseFirestore.instance
-    .collection("workplaces")
-    .where('visible', isEqualTo: true)
-    .where('type', isEqualTo: 1)
-    .get();
-
+        .collection("workplaces")
+        .where('visible', isEqualTo: true)
+        .where('type', isEqualTo: 1)
+        .get();
