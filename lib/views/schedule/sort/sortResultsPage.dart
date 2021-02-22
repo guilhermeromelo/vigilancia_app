@@ -15,7 +15,7 @@ import 'package:vigilancia_app/views/shared/components/titleOrRowBuilder/TitleOr
 import 'package:vigilancia_app/views/shared/constants/appColors.dart';
 
 class SortResultsPage extends StatefulWidget {
-  Schedule scheduleToShow;
+  Schedule _scheduleToShow;
 
   @override
   _SortResultsPageState createState() => _SortResultsPageState();
@@ -25,7 +25,7 @@ class _SortResultsPageState extends State<SortResultsPage> {
   bool isDaytime = SingletonSchedule().isDaytime;
   @override
   Widget build(BuildContext context) {
-    widget.scheduleToShow = SingletonSchedule().schedule;
+    widget._scheduleToShow = SingletonSchedule().schedule;
 
     return InternalHeader(
       title: "Resultado",
@@ -44,7 +44,7 @@ class _SortResultsPageState extends State<SortResultsPage> {
         });
       },
       body: SortResultsSubPage(
-        scheduleToShow: widget.scheduleToShow,
+        scheduleToShow: widget._scheduleToShow,
       ),
     );
   }

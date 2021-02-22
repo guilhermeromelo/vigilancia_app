@@ -3,7 +3,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:vigilancia_app/views/shared/constants/appColors.dart';
 
 class AppTextFormField extends StatelessWidget {
-  var defaultMask = new MaskTextInputFormatter(mask: null, filter: null);
+  var _defaultMask = new MaskTextInputFormatter(mask: null, filter: null);
 
   String initialValue;
   Function onChangedFunction;
@@ -21,7 +21,7 @@ class AppTextFormField extends StatelessWidget {
   int minLines;
   int maxLines;
 
-  TextEditingController controller = TextEditingController();
+  TextEditingController _controller = TextEditingController();
 
   AppTextFormField({
     Key key,
@@ -44,7 +44,7 @@ class AppTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    controller.text = initialValue;
+    _controller.text = initialValue;
     return Padding(
       padding: externalPadding ?? EdgeInsets.zero,
       child: TextFormField(
@@ -55,7 +55,7 @@ class AppTextFormField extends StatelessWidget {
         autofocus: autoFocus ?? false,
         onChanged: onChangedFunction,
         validator: validatorFunction,
-        controller: controller,
+        controller: _controller,
         keyboardType: keyboardInputType ?? TextInputType.text,
         style: TextStyle(fontSize: 18),
         decoration: InputDecoration(
@@ -90,7 +90,7 @@ class AppTextFormField extends StatelessWidget {
             errorStyle: TextStyle(
               fontSize: 16,
             )),
-        inputFormatters: [inputFormatterField ?? defaultMask],
+        inputFormatters: [inputFormatterField ?? _defaultMask],
       ),
     );
   }

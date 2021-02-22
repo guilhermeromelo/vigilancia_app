@@ -10,11 +10,10 @@ class Menu extends StatefulWidget {
 }
 
 class _MenuState extends State<Menu> {
-  Size get size => MediaQuery.of(context).size;
+  Size get _size => MediaQuery.of(context).size;
 
   @override
   Widget build(BuildContext context) {
-    bool boolMobile = size.width < size.height;
 
     return Scaffold(
       appBar: AppBar(
@@ -27,7 +26,7 @@ class _MenuState extends State<Menu> {
           children: [
             Container(
               color: AppColors.menuGrey,
-              width: size.width,
+              width: _size.width,
             ),
             SingleChildScrollView(
               child: Column(
@@ -46,12 +45,12 @@ class _MenuState extends State<Menu> {
 
   //LISTA DE ICONES DA HOME.
   Widget widgetBotoesInicio() {
-    bool boolMobile = size.width < size.height;
+    bool boolMobile = _size.width < _size.height;
     return Wrap(
       direction: Axis.horizontal,
       crossAxisAlignment: WrapCrossAlignment.center,
-      runSpacing: boolMobile ? size.width * .1 : size.width * .05,
-      spacing: boolMobile ? size.width * .1 : size.width * .1,
+      runSpacing: boolMobile ? _size.width * .1 : _size.width * .05,
+      spacing: boolMobile ? _size.width * .1 : _size.width * .1,
       // runSpacing: size.height * 0.02,
       // spacing: 20,
       children: <Widget>[
@@ -102,11 +101,11 @@ class _MenuState extends State<Menu> {
     @required Function fncOnPressed,
     @required IconData iconButton,
   }) {
-    bool boolMobile = size.width < size.height;
+    bool boolMobile = _size.width < _size.height;
     return AnimatedContainer(
       duration: Duration(milliseconds: 400),
-      width: boolMobile ? size.width * .35 : size.width * .15,
-      height: boolMobile ? size.width * .35 : size.width * .15,
+      width: boolMobile ? _size.width * .35 : _size.width * .15,
+      height: boolMobile ? _size.width * .35 : _size.width * .15,
       decoration: BoxDecoration(
         color: colorButton,
         borderRadius: BorderRadius.circular(5),
@@ -120,7 +119,7 @@ class _MenuState extends State<Menu> {
               alignment: Alignment.center,
               child: Icon(
                 iconButton,
-                size: boolMobile ? size.width * .12 : size.width * .05,
+                size: boolMobile ? _size.width * .12 : _size.width * .05,
                 color: AppColors.mainBlue,
               ),
             ),
@@ -129,7 +128,7 @@ class _MenuState extends State<Menu> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: AppColors.mainBlue,
-                fontSize: boolMobile ? size.width * .046 : size.width * .019,
+                fontSize: boolMobile ? _size.width * .046 : _size.width * .019,
               ),
             )
           ],

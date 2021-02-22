@@ -9,10 +9,10 @@ import 'package:vigilancia_app/views/shared/components/header/internalHeaderWith
 import 'package:vigilancia_app/views/shared/components/titleOrRowBuilder/TitleOrRowBuilder.dart';
 import 'package:vigilancia_app/views/shared/components/widgetStreamOrFutureBuilder/widgetStreamOrFutureBuilder.dart';
 
-List<Guard> guardList = List();
-List<Guard> doormanList = List();
+List<Guard> _guardList = List();
+List<Guard> _doormanList = List();
 
-List<Guard> selectedGuards = List();
+List<Guard> _selectedGuards = List();
 
 class SelectGuardsPage extends StatefulWidget {
   @override
@@ -20,24 +20,24 @@ class SelectGuardsPage extends StatefulWidget {
 }
 
 class _SelectGuardsPageState extends State<SelectGuardsPage> {
-  bool isDaytime = SingletonSchedule().isDaytime;
+  bool _isDaytime = SingletonSchedule().isDaytime;
 
   @override
   void initState() {
     // TODO: implement initState
-    selectedGuards = List();
+    _selectedGuards = List();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    GuardStream = FirebaseFirestore.instance
+    _GuardStream = FirebaseFirestore.instance
         .collection("guards")
         .where('visible', isEqualTo: true)
         .orderBy('name')
         .get();
     return FutureBuilder(
-      future: GuardStream,
+      future: _GuardStream,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return selectGuardsPageHeader(
@@ -54,13 +54,13 @@ class _SelectGuardsPageState extends State<SelectGuardsPage> {
               widget4: containerWithErrorMessage(snapshot.error.toString()),
               widget5: containerWithErrorMessage(snapshot.error.toString()));
         } else if (snapshot.hasData) {
-          doormanList.clear();
-          guardList.clear();
+          _doormanList.clear();
+          _guardList.clear();
           snapshot.data.docs.forEach((element) {
             if (element['type'] == 0) {
-              guardList.add(docToGuard(element));
+              _guardList.add(docToGuard(element));
             } else {
-              doormanList.add(docToGuard(element));
+              _doormanList.add(docToGuard(element));
             }
           });
           return selectGuardsPageHeader(
@@ -100,7 +100,7 @@ class _SelectGuardsPageState extends State<SelectGuardsPage> {
       Widget widget4,
       Widget widget5}) {
     return InternalHeaderWithTabBarx5(
-      title: "Sortear - " + (isDaytime ? "Diurno" : "Noturno"),
+      title: "Sortear - " + (_isDaytime ? "Diurno" : "Noturno"),
       rightIcon1: Icons.refresh,
       rightIcon1Function: () {
         setState(() {});
@@ -124,8 +124,8 @@ class _SelectGuardsPageState extends State<SelectGuardsPage> {
 }
 
 class SelectGuardsSubPage extends StatefulWidget {
-  List<Guard> doormanListLocal = List();
-  List<Guard> guardListLocal = List();
+  List<Guard> _doormanListLocal = List();
+  List<Guard> _guardListLocal = List();
 
   int tabBarIndex;
 
@@ -140,75 +140,75 @@ class SelectGuardsSubPage extends StatefulWidget {
 }
 
 class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
-  Size get size => MediaQuery.of(context).size;
-  String team;
-  bool hasSelectAllOptionOnDoormans = false;
-  bool hasSelectAllOptionOnGuards = false;
-  int isAllSelected = 0;
+  Size get _size => MediaQuery.of(context).size;
+  String _team;
+  bool _hasSelectAllOptionOnDoormans = false;
+  bool _hasSelectAllOptionOnGuards = false;
+  int _isAllSelected = 0;
 
   @override
   Widget build(BuildContext context) {
     switch (widget.tabBarIndex) {
       case 0:
         {
-          team = "";
+          _team = "";
           break;
         }
       case 1:
         {
-          team = "A";
+          _team = "A";
           break;
         }
       case 2:
         {
-          team = "B";
+          _team = "B";
           break;
         }
       case 3:
         {
-          team = "C";
+          _team = "C";
           break;
         }
       case 4:
         {
-          team = "D";
+          _team = "D";
           break;
         }
     }
 
-    widget.doormanListLocal.clear();
-    widget.guardListLocal.clear();
-    if (team.isEmpty) {
-      widget.doormanListLocal.addAll(doormanList);
-      widget.guardListLocal.addAll(guardList);
+    widget._doormanListLocal.clear();
+    widget._guardListLocal.clear();
+    if (_team.isEmpty) {
+      widget._doormanListLocal.addAll(_doormanList);
+      widget._guardListLocal.addAll(_guardList);
     } else {
-      doormanList.forEach((element) {
-        if (element.team == team) {
-          widget.doormanListLocal.add(element);
+      _doormanList.forEach((element) {
+        if (element.team == _team) {
+          widget._doormanListLocal.add(element);
         }
       });
-      guardList.forEach((element) {
-        if (element.team == team) {
-          widget.guardListLocal.add(element);
+      _guardList.forEach((element) {
+        if (element.team == _team) {
+          widget._guardListLocal.add(element);
         }
       });
     }
 
-    if (widget.doormanListLocal.isNotEmpty) {
-      hasSelectAllOptionOnDoormans = true;
-    } else if (widget.guardListLocal.isNotEmpty) {
-      hasSelectAllOptionOnGuards = true;
+    if (widget._doormanListLocal.isNotEmpty) {
+      _hasSelectAllOptionOnDoormans = true;
+    } else if (widget._guardListLocal.isNotEmpty) {
+      _hasSelectAllOptionOnGuards = true;
     }
 
     updateSelectAllCheckBoxStatus();
 
-    if (widget.doormanListLocal.length + widget.guardListLocal.length == 0) {
+    if (widget._doormanListLocal.length + widget._guardListLocal.length == 0) {
       return containerWithNotFoundMessage("Desculpe! Não encontrei ninguém cadastrado neste time :(");
     } else {
       return ListView.builder(
         padding: EdgeInsets.only(top: 10),
         itemCount:
-            widget.doormanListLocal.length + widget.guardListLocal.length,
+            widget._doormanListLocal.length + widget._guardListLocal.length,
         itemBuilder: guardItemBuiler,
       );
     }
@@ -216,22 +216,22 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
 
   //ItemBuilder
   Widget guardItemBuiler(BuildContext context, int index) {
-    if (widget.doormanListLocal.length != 0 &&
-        index <= (widget.doormanListLocal.length - 1)) {
+    if (widget._doormanListLocal.length != 0 &&
+        index <= (widget._doormanListLocal.length - 1)) {
       if (index == 0) {
-        if (widget.guardListLocal.length == 0 &&
-            widget.doormanListLocal.length == 1) {
+        if (widget._guardListLocal.length == 0 &&
+            widget._doormanListLocal.length == 1) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Visibility(
-                  visible: hasSelectAllOptionOnDoormans,
+                  visible: _hasSelectAllOptionOnDoormans,
                   child: selectAllOption()),
               TitleBuilder(
                   title: "PORTEIROS", padding: EdgeInsets.only(bottom: 5)),
-              guardCardBuilder(widget.doormanListLocal.elementAt(index)),
+              guardCardBuilder(widget._doormanListLocal.elementAt(index)),
               Container(
-                width: size.width,
+                width: _size.width,
                 child: buttonBuilder(),
               )
             ],
@@ -241,46 +241,46 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Visibility(
-                  visible: hasSelectAllOptionOnDoormans,
+                  visible: _hasSelectAllOptionOnDoormans,
                   child: selectAllOption()),
               TitleBuilder(
                   title: "PORTEIROS", padding: EdgeInsets.only(bottom: 5)),
-              guardCardBuilder(widget.doormanListLocal.elementAt(index))
+              guardCardBuilder(widget._doormanListLocal.elementAt(index))
             ],
           );
         }
-      } else if (widget.guardListLocal.length == 0 &&
-          index == (widget.doormanListLocal.length - 1)) {
+      } else if (widget._guardListLocal.length == 0 &&
+          index == (widget._doormanListLocal.length - 1)) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            guardCardBuilder(widget.doormanListLocal.elementAt(index)),
+            guardCardBuilder(widget._doormanListLocal.elementAt(index)),
             Container(
-              width: size.width,
+              width: _size.width,
               child: buttonBuilder(),
             ),
           ],
         );
       } else {
-        return guardCardBuilder(widget.doormanListLocal.elementAt(index));
+        return guardCardBuilder(widget._doormanListLocal.elementAt(index));
       }
-    } else if (widget.guardListLocal.length != 0 &&
-        index > (widget.doormanListLocal.length - 1)) {
-      if (index == widget.doormanListLocal.length) {
-        if (widget.guardListLocal.length == 1) {
+    } else if (widget._guardListLocal.length != 0 &&
+        index > (widget._doormanListLocal.length - 1)) {
+      if (index == widget._doormanListLocal.length) {
+        if (widget._guardListLocal.length == 1) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Visibility(
-                  visible: hasSelectAllOptionOnGuards,
+                  visible: _hasSelectAllOptionOnGuards,
                   child: selectAllOption()),
               TitleBuilder(
                   title: "VIGILANTES",
                   padding: EdgeInsets.only(bottom: 5, top: 20)),
-              guardCardBuilder(widget.guardListLocal
-                  .elementAt(index - widget.doormanListLocal.length)),
+              guardCardBuilder(widget._guardListLocal
+                  .elementAt(index - widget._doormanListLocal.length)),
               Container(
-                width: size.width,
+                width: _size.width,
                 child: buttonBuilder(),
               )
             ],
@@ -290,32 +290,32 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Visibility(
-                  visible: hasSelectAllOptionOnGuards,
+                  visible: _hasSelectAllOptionOnGuards,
                   child: selectAllOption()),
               TitleBuilder(
                   title: "VIGILANTES",
                   padding: EdgeInsets.only(bottom: 5, top: 20)),
-              guardCardBuilder(widget.guardListLocal
-                  .elementAt(index - widget.doormanListLocal.length))
+              guardCardBuilder(widget._guardListLocal
+                  .elementAt(index - widget._doormanListLocal.length))
             ],
           );
         }
       } else if (index ==
-          widget.guardListLocal.length + widget.doormanListLocal.length - 1) {
+          widget._guardListLocal.length + widget._doormanListLocal.length - 1) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            guardCardBuilder(widget.guardListLocal
-                .elementAt(index - widget.doormanListLocal.length)),
+            guardCardBuilder(widget._guardListLocal
+                .elementAt(index - widget._doormanListLocal.length)),
             Container(
-              width: size.width,
+              width: _size.width,
               child: buttonBuilder(),
             )
           ],
         );
       } else {
-        return guardCardBuilder(widget.guardListLocal
-            .elementAt(index - widget.doormanListLocal.length));
+        return guardCardBuilder(widget._guardListLocal
+            .elementAt(index - widget._doormanListLocal.length));
       }
     } else {
       return containerWithErrorMessage("");
@@ -324,43 +324,43 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
 
   void updateSelectAllCheckBoxStatus(){
     //LOAD ISALLSELECTED INFO
-    bool isAtLeastOneSelectedInList = false;
-    bool isAllCheckedInList = true;
+    bool _isAtLeastOneSelectedInList = false;
+    bool _isAllCheckedInList = true;
 
-    widget.guardListLocal.forEach((element) {
+    widget._guardListLocal.forEach((element) {
       bool contains = false;
-      selectedGuards.forEach((elementSelected) {
+      _selectedGuards.forEach((elementSelected) {
         if (elementSelected.id == element.id) contains = true;
       });
 
       if (contains) {
-        isAtLeastOneSelectedInList = true;
+        _isAtLeastOneSelectedInList = true;
       } else {
-        isAllCheckedInList = false;
+        _isAllCheckedInList = false;
       }
     });
 
-    widget.doormanListLocal.forEach((element) {
+    widget._doormanListLocal.forEach((element) {
       bool contains = false;
-      selectedGuards.forEach((elementSelected) {
+      _selectedGuards.forEach((elementSelected) {
         if (elementSelected.id == element.id) contains = true;
       });
 
       if (contains) {
-        isAtLeastOneSelectedInList = true;
+        _isAtLeastOneSelectedInList = true;
       } else {
-        isAllCheckedInList = false;
+        _isAllCheckedInList = false;
       }
     });
 
-    if (isAtLeastOneSelectedInList) isAllSelected = 1;
+    if (_isAtLeastOneSelectedInList) _isAllSelected = 1;
 
-    if (isAllCheckedInList) isAllSelected = 2;
+    if (_isAllCheckedInList) _isAllSelected = 2;
   }
 
   Widget guardCardBuilder(Guard guard) {
     bool isChecked = false;
-    selectedGuards.forEach((element) {
+    _selectedGuards.forEach((element) {
       if (element.id == guard.id) {
         isChecked = true;
       }
@@ -380,12 +380,12 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
                 (int id, bool isChecked, String name, int type, String cpf) {
               Guard guard = new Guard(id: id, name: name, type: type, cpf: cpf);
               if (isChecked) {
-                selectedGuards.add(guard);
+                _selectedGuards.add(guard);
               } else {
-                selectedGuards.removeWhere((element) => element.id == guard.id);
+                _selectedGuards.removeWhere((element) => element.id == guard.id);
               }
               setState(() {
-                isAllSelected = 0;
+                _isAllSelected = 0;
                 updateSelectAllCheckBoxStatus();
               });
             },
@@ -399,10 +399,10 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
       child: AppButton(
         labelText: "Prosseguir",
         onPressedFunction: () {
-          print(selectedGuards.toString());
+          print(_selectedGuards.toString());
           List<Guard> singletonSelectedGuards = new List();
           List<Guard> singletonSelectedDoormans = new List();
-          selectedGuards.forEach((element) {
+          _selectedGuards.forEach((element) {
             if (element.type == 1) {
               singletonSelectedDoormans.add(element);
             } else {
@@ -423,58 +423,58 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         IconButton(
-            icon: Icon(isAllSelected == 0
+            icon: Icon(_isAllSelected == 0
                 ? Icons.check_box_outline_blank
-                : isAllSelected == 1
+                : _isAllSelected == 1
                     ? Icons.indeterminate_check_box_outlined
                     : Icons.check_box_outlined),
             onPressed: () {
               setState(() {
-                if (isAllSelected == 2) {
-                  isAllSelected = 0;
+                if (_isAllSelected == 2) {
+                  _isAllSelected = 0;
                 } else {
-                  isAllSelected = 2;
+                  _isAllSelected = 2;
                 }
-                if (isAllSelected == 2) {
-                  widget.guardListLocal.forEach((element) {
+                if (_isAllSelected == 2) {
+                  widget._guardListLocal.forEach((element) {
                     bool flag = false;
-                    selectedGuards.forEach((elementSelected) {
+                    _selectedGuards.forEach((elementSelected) {
                       if (elementSelected.id == element.id) {
                         flag = true;
                       }
                     });
                     if (flag == false) {
-                      selectedGuards.add(element);
+                      _selectedGuards.add(element);
                     }
                   });
-                  widget.doormanListLocal.forEach((element) {
+                  widget._doormanListLocal.forEach((element) {
                     bool flag = false;
-                    selectedGuards.forEach((elementSelected) {
+                    _selectedGuards.forEach((elementSelected) {
                       if (elementSelected.id == element.id) {
                         flag = true;
                       }
                     });
                     if (flag == false) {
-                      selectedGuards.add(element);
+                      _selectedGuards.add(element);
                     }
                   });
                 } else {
-                  widget.guardListLocal.forEach((element) {
+                  widget._guardListLocal.forEach((element) {
                     Guard guardToDelete = new Guard();
-                    selectedGuards.forEach((elementSelected) {
+                    _selectedGuards.forEach((elementSelected) {
                       if (elementSelected.id == element.id)
                         guardToDelete = elementSelected;
                     });
-                    selectedGuards.remove(guardToDelete);
+                    _selectedGuards.remove(guardToDelete);
                   });
 
-                  widget.doormanListLocal.forEach((element) {
+                  widget._doormanListLocal.forEach((element) {
                     Guard guardToDelete = new Guard();
-                    selectedGuards.forEach((elementSelected) {
+                    _selectedGuards.forEach((elementSelected) {
                       if (elementSelected.id == element.id)
                         guardToDelete = elementSelected;
                     });
-                    selectedGuards.remove(guardToDelete);
+                    _selectedGuards.remove(guardToDelete);
                   });
                 }
               });
@@ -489,7 +489,7 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
 }
 
 //Future
-var GuardStream = FirebaseFirestore.instance
+var _GuardStream = FirebaseFirestore.instance
     .collection("guards")
     .where('visible', isEqualTo: true)
     .orderBy('name')

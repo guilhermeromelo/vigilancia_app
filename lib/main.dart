@@ -4,18 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:vigilancia_app/controllers/guard/guardDAO.dart';
-import 'package:vigilancia_app/views/guards/guardRegistration.dart';
+import 'package:vigilancia_app/views/guard/guardListPage.dart';
+import 'package:vigilancia_app/views/guard/guardRegistration.dart';
 import 'package:vigilancia_app/views/login/login_page.dart';
 import 'package:vigilancia_app/views/menu/menu.dart';
-import 'package:vigilancia_app/views/schedule/schedulePage.dart';
+import 'package:vigilancia_app/views/schedule/scheduleListPage.dart';
 import 'package:vigilancia_app/views/schedule/singletonSchedule.dart';
 import 'package:vigilancia_app/views/schedule/sort/selectGuardsPage.dart';
 import 'package:vigilancia_app/views/schedule/sort/selectWorkplacesPage.dart';
 import 'package:vigilancia_app/views/schedule/sort/sortResultsPage.dart';
 import 'package:vigilancia_app/views/shared/constants/appColors.dart';
-import 'package:vigilancia_app/views/users/userRegistration.dart';
-import 'package:vigilancia_app/views/workplaces/workplaceRegistration.dart';
+import 'package:vigilancia_app/views/user/userListPage.dart';
+import 'package:vigilancia_app/views/user/userRegistration.dart';
 import 'package:intl/intl.dart';
+import 'package:vigilancia_app/views/workplace/workplaceListPage.dart';
+import 'package:vigilancia_app/views/workplace/workplaceRegistration.dart';
 
 import 'models/guard/guard.dart';
 
@@ -53,16 +56,19 @@ void main() async {
       //Menu
       'menu': (context) => Menu(),
       //Schedule
-      'schedule/schedulePage': (context) => SchedulePage(),
+      'schedule/schedulePage': (context) => ScheduleListPage(),
       'schedule/selectGuardsPage': (context) => SelectGuardsPage(),
       'schedule/selectWorkplacesPage': (context) => SelectWorkplacePage(),
       'schedule/resultsPage': (context) => SortResultsPage(),
       //Users
       'users/registration': (context) => UserRegistrationPage(),
+      'users/list': (context) => UserListPage(),
       //Guards
       'guards/registration': (context) => GuardRegistrationPage(),
+      'guards/list': (context) => GuardListPage(),
       //WorkPlaces
       'workplaces/registration': (context) => WorkplaceRegistrationPage(),
+      'workplaces/list': (context) => WorkplaceListPage(),
     },
   ));
 }

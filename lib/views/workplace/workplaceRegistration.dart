@@ -7,12 +7,12 @@ import 'package:vigilancia_app/views/shared/components//contSpinner/cont_spinner
 import 'package:vigilancia_app/views/shared/components//header/InternalHeaderWithTabBar.dart';
 import 'package:vigilancia_app/views/shared/components//titleOrRowBuilder/TitleOrRowBuilder.dart';
 
-String placeName = "";
-int doormanQt = 0;
-int guardQt = 0;
+String _placeName = "";
+int _doormanQt = 0;
+int _guardQt = 0;
 
 class WorkplaceRegistrationPage extends StatefulWidget {
-  bool isWorkplaceUpdate = false;
+  bool _isWorkplaceUpdate = false;
 
   @override
   _WorkplaceRegistrationPageState createState() =>
@@ -26,21 +26,21 @@ class _WorkplaceRegistrationPageState extends State<WorkplaceRegistrationPage> {
       tabQuantity_x2_or_x3: 2,
       text1: "Diurno",
       text2: "Noturno",
-      title: widget.isWorkplaceUpdate
+      title: widget._isWorkplaceUpdate
           ? "Atualizar Posto Trabalho"
           : "Novo Posto Trabalho",
       leftIcon: Icons.arrow_back_ios,
       leftIconFunction: () {},
-      rightIcon1: widget.isWorkplaceUpdate == false ? Icons.delete : null,
+      rightIcon1: widget._isWorkplaceUpdate == false ? Icons.delete : null,
       rightIcon1Function: () {
-        if (widget.isWorkplaceUpdate == false) {}
+        if (widget._isWorkplaceUpdate == false) {}
       },
       widget1: WorkplaceRegistrationSubPage(
-        isUserUpdate: widget.isWorkplaceUpdate,
+        isUserUpdate: widget._isWorkplaceUpdate,
         index: 0,
       ),
       widget2: WorkplaceRegistrationSubPage(
-        isUserUpdate: widget.isWorkplaceUpdate,
+        isUserUpdate: widget._isWorkplaceUpdate,
         index: 1,
       ),
     );
@@ -69,14 +69,14 @@ class _WorkplaceRegistrationSubPageState
       child: ListView(
         children: [
           AppTextFormField(
-            initialValue: placeName,
+            initialValue: _placeName,
             labelText: "Nome",
             externalPadding: EdgeInsets.only(top: 15, left: 10, right: 10),
             validatorFunction: (text) {
               if (text.isEmpty) return "Campo Vazio";
             },
             onChangedFunction: (text) {
-              placeName = text;
+              _placeName = text;
             },
           ),
           TitleBuilder(
@@ -86,9 +86,9 @@ class _WorkplaceRegistrationSubPageState
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ContSpinner(
-                initialValue: doormanQt,
+                initialValue: _doormanQt,
                 onChangeFunction: (text) {
-                  doormanQt = int.parse(text);
+                  _doormanQt = int.parse(text);
                 },
               )
             ],
@@ -101,9 +101,9 @@ class _WorkplaceRegistrationSubPageState
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ContSpinner(
-                initialValue: guardQt,
+                initialValue: _guardQt,
                 onChangeFunction: (text) {
-                  guardQt = int.parse(text);
+                  _guardQt = int.parse(text);
                 },
               )
             ],
@@ -114,9 +114,9 @@ class _WorkplaceRegistrationSubPageState
               if (widget._formKey.currentState.validate()) {
                 Workplace newWorkplace = Workplace(
                     id: 0,
-                    guardQt: guardQt,
-                    name: placeName,
-                    doormanQt: doormanQt,
+                    guardQt: _guardQt,
+                    name: _placeName,
+                    doormanQt: _doormanQt,
                     type: widget.index);
                 addWorkplace(newWorkplace, context);
               }

@@ -11,12 +11,12 @@ import 'package:vigilancia_app/views/shared/constants/appColors.dart';
 import 'package:vigilancia_app/views/shared/components/header/internalHeader.dart';
 import 'package:vigilancia_app/views/shared/components/titleOrRowBuilder/TitleOrRowBuilder.dart';
 
-class SchedulePage extends StatefulWidget {
+class ScheduleListPage extends StatefulWidget {
   @override
-  _SchedulePageState createState() => _SchedulePageState();
+  _ScheduleListPageState createState() => _ScheduleListPageState();
 }
 
-class _SchedulePageState extends State<SchedulePage> {
+class _ScheduleListPageState extends State<ScheduleListPage> {
   @override
   Widget build(BuildContext context) {
     scheduleStream =

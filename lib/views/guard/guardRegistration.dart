@@ -7,9 +7,9 @@ import 'package:vigilancia_app/views/shared/components/comboBox/comboBox.dart';
 import 'package:vigilancia_app/views/shared/constants/masks.dart';
 import 'package:vigilancia_app/views/shared/components/header/InternalHeaderWithTabBar.dart';
 
-String name = "";
-String cpf = "";
-String team = "";
+String _name = "";
+String _cpf = "";
+String _team = "";
 
 class GuardRegistrationPage extends StatefulWidget {
   bool isDoormanAndGuardUpdate = false;
@@ -21,9 +21,9 @@ class GuardRegistrationPage extends StatefulWidget {
 class _GuardRegistrationPageState extends State<GuardRegistrationPage> {
   @override
   Widget build(BuildContext context) {
-    name = "";
-    cpf = "";
-    team = "";
+    _name = "";
+    _cpf = "";
+    _team = "";
     return InternalHeaderWithTabBar(
       tabQuantity_x2_or_x3: 2,
       text1: "Vigilante",
@@ -72,9 +72,9 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
         children: [
           AppTextFormField(
             onChangedFunction: (text) {
-              name = text;
+              _name = text;
             },
-            initialValue: name,
+            initialValue: _name,
             labelText: "Nome",
             externalPadding: EdgeInsets.only(top: 15, left: 10, right: 10),
             validatorFunction: (text) {
@@ -83,9 +83,9 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
           ),
           AppTextFormField(
             onChangedFunction: (text) {
-              cpf = text;
+              _cpf = text;
             },
-            initialValue: cpf,
+            initialValue: _cpf,
             labelText: "CPF",
             inputFormatterField: AppMasks.cpfMask,
             externalPadding: EdgeInsets.only(top: 15, left: 10, right: 10),
@@ -97,7 +97,7 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
             padding: EdgeInsets.only(
                 top: 15, left: (width - 150)/2 , right: (width - 150)/2),
             child: ComboBox(
-              currentObject: team.isNotEmpty ? team : null,
+              currentObject: _team.isNotEmpty ? _team : null,
               title: "Time",
               objects: [
                 "A",
@@ -107,7 +107,7 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
               ],
               onTapFunction: getComboBoxItem,
               validatorFunction: (text){
-                if(team.isEmpty) return "Campo Vazio";
+                if(_team.isEmpty) return "Campo Vazio";
               },
             ),
           ),
@@ -118,7 +118,7 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
             onPressedFunction: () {
               if (widget._formKey.currentState.validate()) {
                 Guard guard =
-                    Guard(id: 0, name: name, cpf: cpf, type: widget.index, team: team);
+                    Guard(id: 0, name: _name, cpf: _cpf, type: widget.index, team: _team);
                 addGuard(guard, context);
               }
             },
@@ -129,6 +129,6 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
   }
 
   void getComboBoxItem(String text) {
-    team = text;
+    _team = text;
   }
 }

@@ -8,51 +8,51 @@ import 'package:vigilancia_app/views/schedule/singletonSchedule.dart';
 
 void sortGuards(
     {Key key, String creator, DateTime date, BuildContext context, int type}) {
-  List<Guard> singletonDoormans = new List();
-  singletonDoormans.clear();
-  singletonDoormans.addAll(SingletonSchedule().selectedDoormans);
-  List<Guard> singletonGuards = new List();
-  singletonGuards.clear();
-  singletonGuards.addAll(SingletonSchedule().selectedGuards);
+  List<Guard> _singletonDoormans = new List();
+  _singletonDoormans.clear();
+  _singletonDoormans.addAll(SingletonSchedule().selectedDoormans);
+  List<Guard> _singletonGuards = new List();
+  _singletonGuards.clear();
+  _singletonGuards.addAll(SingletonSchedule().selectedGuards);
 
-  List<Map<String, dynamic>> selectedWorkplacesWithGuards =
+  List<Map<String, dynamic>> _selectedWorkplacesWithGuards =
       SingletonSchedule().selectedWorkplaces;
 
-  selectedWorkplacesWithGuards.forEach((element) {
-    Map<String, dynamic> map = element;
-    int doormanQt = map['doormanQt'];
-    int guardQt = map['guardQt'];
+  _selectedWorkplacesWithGuards.forEach((element) {
+    Map<String, dynamic> _map = element;
+    int doormanQt = _map['doormanQt'];
+    int guardQt = _map['guardQt'];
 
-    Map<String, dynamic> sortedDoormans = new Map();
-    Map<String, dynamic> sortedGuards = new Map();
+    Map<String, dynamic> _sortedDoormans = new Map();
+    Map<String, dynamic> _sortedGuards = new Map();
 
     //SORT AND WRITE DOORMANS -----------------------------------------------------------------------------------------------------------------
     for (int i = 0; i < doormanQt; i++) {
-      print("\nDOORMANS--------------------------");
+      //print("\nDOORMANS--------------------------");
 
       //SORT THE INDEX OF DOORMANS LIST
-      print('tamanho' + singletonDoormans.length.toString());
+      //print('tamanho' + _singletonDoormans.length.toString());
 
       int sortIndex;
-      if (singletonDoormans.length - 1 == 0) {
+      if (_singletonDoormans.length - 1 == 0) {
         sortIndex = 0;
       } else {
-        sortIndex = randomNumber(singletonDoormans.length);
+        sortIndex = randomNumber(_singletonDoormans.length);
       }
 
-      print('Numero Sorteado: ' + sortIndex.toString());
-      print('LISTA PORTEIROS ANTES REMOVER: ' + singletonDoormans.toString());
+      //print('Numero Sorteado: ' + sortIndex.toString());
+      //print('LISTA PORTEIROS ANTES REMOVER: ' + _singletonDoormans.toString());
 
       //GET THE SORTED DOORMAN AND REMOVE HIM FROM THE DOORMANS LIST
-      Guard selectedDoorman = singletonDoormans.elementAt(sortIndex);
-      singletonDoormans
+      Guard selectedDoorman = _singletonDoormans.elementAt(sortIndex);
+      _singletonDoormans
           .removeWhere((element) => element.id == selectedDoorman.id);
 
-      print('ELEMENTO RETIRADO: ' + selectedDoorman.toString());
-      print('LISTA PORTEIROS DEPOIS REMOVER: ' + singletonDoormans.toString());
+      //print('ELEMENTO RETIRADO: ' + selectedDoorman.toString());
+      //print('LISTA PORTEIROS DEPOIS REMOVER: ' + _singletonDoormans.toString());
 
       //WRITE THE SORTED DOORMAN INTO SCHEDULE SINGLETON
-      sortedDoormans.addAll({
+      _sortedDoormans.addAll({
         i.toString(): {
           'id': selectedDoorman.id,
           'name': selectedDoorman.name,
@@ -61,52 +61,52 @@ void sortGuards(
         }
       });
 
-      print("\nDOORMANS--------------------------");
+      //print("\nDOORMANS--------------------------");
     }
 
     //SORT AND WRITE GUARDS ------------------------------------------------------------------------------------------------------------------------
     for (int i = 0; i < guardQt; i++) {
-      print("\nGUARDS--------------------------");
+      //print("\nGUARDS--------------------------");
 
       //SORT THE INDEX OF DOORMANS LIST
-      print('tamanho' + singletonGuards.length.toString());
+      //print('tamanho' + _singletonGuards.length.toString());
 
       int sortIndex;
-      if (singletonGuards.length - 1 == 0) {
+      if (_singletonGuards.length - 1 == 0) {
         sortIndex = 0;
       } else {
-        sortIndex = randomNumber(singletonGuards.length);
+        sortIndex = randomNumber(_singletonGuards.length);
       }
 
-      print('Numero Sorteado: ' + sortIndex.toString());
-      print('LISTA VIGILANTES ANTES REMOVER: ' + singletonGuards.toString());
+      //print('Numero Sorteado: ' + sortIndex.toString());
+      //print('LISTA VIGILANTES ANTES REMOVER: ' + _singletonGuards.toString());
 
       //GET THE SORTED DOORMAN AND REMOVE HIM FROM THE DOORMANS LIST
-      Guard selectedGuard = singletonGuards.elementAt(sortIndex);
-      singletonGuards.removeWhere((element) => element.id == selectedGuard.id);
+      Guard _selectedGuard = _singletonGuards.elementAt(sortIndex);
+      _singletonGuards.removeWhere((element) => element.id == _selectedGuard.id);
 
-      print('ELEMENTO RETIRADO: ' + selectedGuard.toString());
-      print('LISTA VIGILANTES DEPOIS REMOVER: ' + singletonGuards.toString());
+      //print('ELEMENTO RETIRADO: ' + _selectedGuard.toString());
+      //print('LISTA VIGILANTES DEPOIS REMOVER: ' + _singletonGuards.toString());
 
       //WRITE THE SORTED DOORMAN INTO SCHEDULE SINGLETON
-      sortedGuards.addAll({
+      _sortedGuards.addAll({
         i.toString(): {
-          'id': selectedGuard.id,
-          'name': selectedGuard.name,
-          'cpf': selectedGuard.cpf,
-          'type': selectedGuard.type
+          'id': _selectedGuard.id,
+          'name': _selectedGuard.name,
+          'cpf': _selectedGuard.cpf,
+          'type': _selectedGuard.type
         }
       });
 
-      print("\nGUARDS--------------------------");
+      //print("\nGUARDS--------------------------");
     }
-    element.addAll({'guards': sortedGuards});
-    element.addAll({'doormans': sortedDoormans});
+    element.addAll({'guards': _sortedGuards});
+    element.addAll({'doormans': _sortedDoormans});
   });
 
   Map<String, dynamic> scheduleData = {};
-  int i = 0;
-  selectedWorkplacesWithGuards.forEach((element) {
+  int _i = 0;
+  _selectedWorkplacesWithGuards.forEach((element) {
     Map<String, dynamic> workplace = {};
     workplace['id'] = element['id'];
     workplace['name'] = element['name'];
@@ -115,8 +115,8 @@ void sortGuards(
     workplace['doormanQt'] = element['doormanQt'];
     workplace['guards'] = element['guards'];
     workplace['doormans'] = element['doormans'];
-    scheduleData[i.toString()] = workplace;
-    i++;
+    scheduleData[_i.toString()] = workplace;
+    _i++;
   });
 
   Schedule newSchedule = Schedule(

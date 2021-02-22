@@ -36,7 +36,7 @@ class ComboBox extends StatefulWidget {
   EdgeInsets paddingExterno;
   Function validatorFunction;
 
-  TextEditingController controller = TextEditingController();
+  TextEditingController _controller = TextEditingController();
 
   ComboBox(
       {Key key,
@@ -95,7 +95,7 @@ class _ComboBoxState extends State<ComboBox> {
             padding: EdgeInsets.only(bottom: 5), title: widget.title),
       TextFormField(
       validator: widget.validatorFunction,
-      controller: widget.controller,
+      controller: widget._controller,
       style: TextStyle(fontSize: 18),
       decoration: InputDecoration(
 

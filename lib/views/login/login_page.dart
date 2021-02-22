@@ -7,12 +7,11 @@ import 'package:vigilancia_app/models/user/user.dart';
 import 'package:vigilancia_app/views/shared/components/appTextFormField/appTextFormField.dart';
 import 'package:vigilancia_app/views/shared/components/button/AppButton.dart';
 import 'package:vigilancia_app/views/shared/constants/masks.dart';
-import 'package:vigilancia_app/views/users/userRegistration.dart';
 
 class LoginPage extends StatefulWidget {
   String _cpf = "";
   String _senha = "";
-  bool obscureText = true;
+  bool _obscureText = true;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -45,13 +44,13 @@ class _LoginPageState extends State<LoginPage> {
               },
             ),
             AppTextFormField(
-              suffixIcon: widget.obscureText ? Icons.visibility : Icons.visibility_off,
+              suffixIcon: widget._obscureText ? Icons.visibility : Icons.visibility_off,
               suffixIconOnPressed: (){
                 setState(() {
-                  widget.obscureText = !widget.obscureText;
+                  widget._obscureText = !widget._obscureText;
                 });
               },
-              obscureText: widget.obscureText,
+              obscureText: widget._obscureText,
               initialValue: widget._senha,
               labelText: "Senha",
               externalPadding: EdgeInsets.only(top: 15, left: 10, right: 10),
@@ -68,13 +67,13 @@ class _LoginPageState extends State<LoginPage> {
                 labelText: "Entrar",
                 onPressedFunction: () async {
 
-                  var bytes = utf8.encode(senha); // data being hashed
+                  var bytes = utf8.encode(widget._senha); // data being hashed
                   var digest = sha1.convert(bytes);
 
                   if(widget._formKey.currentState.validate()){
                     QuerySnapshot snapshot;
                     snapshot = await FirebaseFirestore.instance.collection("user")
-                        .where("cpf", isEqualTo: cpf)
+                        .where("cpf", isEqualTo: widget._cpf)
                         .where("senha", isEqualTo: digest.toString())
                         .get();
                     if(snapshot!=null && snapshot.docs.isNotEmpty){
