@@ -9,7 +9,6 @@ import 'package:vigilancia_app/views/shared/components/header/InternalHeaderWith
 import 'package:vigilancia_app/views/shared/constants/appColors.dart';
 import 'package:vigilancia_app/views/shared/constants/masks.dart';
 
-
 String _name = "";
 String _cpf = "";
 String _senha = "";
@@ -34,10 +33,8 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
       text2: "Líder Equipe",
       title: widget._isUserUpdate ? "Atualizar Usuário" : "Novo Usuário",
       leftIcon: Icons.arrow_back_ios,
-      leftIconFunction: () {},
-      rightIcon1: widget._isUserUpdate == false ? Icons.delete : null,
-      rightIcon1Function: () {
-        if (widget._isUserUpdate == false) {}
+      leftIconFunction: () {
+        Navigator.pop(context);
       },
       widget1: UserRegistrationSubPage(
         isUserUpdate: widget._isUserUpdate,
@@ -56,7 +53,8 @@ class UserRegistrationSubPage extends StatefulWidget {
   final _formKey = GlobalKey<FormState>();
   int index;
 
-  UserRegistrationSubPage({Key key, this.isUserUpdate, this.index}) : super(key: key);
+  UserRegistrationSubPage({Key key, this.isUserUpdate, this.index})
+      : super(key: key);
 
   @override
   _UserRegistrationSubPageState createState() =>
@@ -77,7 +75,7 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
             validatorFunction: (text) {
               if (text.isEmpty) return "Campo Vazio";
             },
-            onChangedFunction: (text){
+            onChangedFunction: (text) {
               _name = text;
             },
           ),
@@ -89,13 +87,13 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
             validatorFunction: (text) {
               if (text.isEmpty) return "Campo Vazio";
             },
-            onChangedFunction: (text){
+            onChangedFunction: (text) {
               _cpf = text;
             },
           ),
           AppTextFormField(
             suffixIcon: _obscureText ? Icons.visibility : Icons.visibility_off,
-            suffixIconOnPressed: (){
+            suffixIconOnPressed: () {
               setState(() {
                 _obscureText = !_obscureText;
               });
@@ -107,18 +105,23 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
             validatorFunction: (text) {
               if (text.isEmpty) return "Campo Vazio";
             },
-            onChangedFunction: (text){
+            onChangedFunction: (text) {
               _senha = text;
             },
           ),
           AppButton(
             labelText: widget.isUserUpdate == false ? "Cadastrar" : "Atualizar",
             onPressedFunction: () {
-              if(widget._formKey.currentState.validate()){
+              if (widget._formKey.currentState.validate()) {
                 var bytes = utf8.encode(_senha); // data being hashed
                 var digest = sha1.convert(bytes);
 
-                User newUser = User(id: 0, name: _name, cpf: _cpf, type: widget.index, senha: digest.toString());
+                User newUser = User(
+                    id: 0,
+                    name: _name,
+                    cpf: _cpf,
+                    type: widget.index,
+                    senha: digest.toString());
                 addUser(newUser, context);
               }
             },

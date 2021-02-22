@@ -60,15 +60,15 @@ void main() async {
       'schedule/selectGuardsPage': (context) => SelectGuardsPage(),
       'schedule/selectWorkplacesPage': (context) => SelectWorkplacePage(),
       'schedule/resultsPage': (context) => SortResultsPage(),
-      //Users
-      'users/registration': (context) => UserRegistrationPage(),
-      'users/list': (context) => UserListPage(),
-      //Guards
-      'guards/registration': (context) => GuardRegistrationPage(),
-      'guards/list': (context) => GuardListPage(),
-      //WorkPlaces
-      'workplaces/registration': (context) => WorkplaceRegistrationPage(),
-      'workplaces/list': (context) => WorkplaceListPage(),
+      //User
+      'user/registration': (context) => UserRegistrationPage(),
+      'user/list': (context) => UserListPage(),
+      //Guard
+      'guard/registration': (context) => GuardRegistrationPage(),
+      'guard/list': (context) => GuardListPage(),
+      //WorkPlace
+      'workplace/registration': (context) => WorkplaceRegistrationPage(),
+      'workplace/list': (context) => WorkplaceListPage(),
     },
   ));
 }

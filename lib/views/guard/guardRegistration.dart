@@ -32,10 +32,8 @@ class _GuardRegistrationPageState extends State<GuardRegistrationPage> {
           ? "Atualizar Colaborador"
           : "Novo Colaborador",
       leftIcon: Icons.arrow_back_ios,
-      leftIconFunction: () {},
-      rightIcon1: widget.isDoormanAndGuardUpdate == false ? Icons.delete : null,
-      rightIcon1Function: () {
-        if (widget.isDoormanAndGuardUpdate == false) {}
+      leftIconFunction: () {
+        Navigator.pop(context);
       },
       widget1: UserRegistrationSubPage(
         isDoormanAndGuardUpdate: widget.isDoormanAndGuardUpdate,
@@ -95,7 +93,7 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
           ),
           Padding(
             padding: EdgeInsets.only(
-                top: 15, left: (width - 150)/2 , right: (width - 150)/2),
+                top: 15, left: (width - 150) / 2, right: (width - 150) / 2),
             child: ComboBox(
               currentObject: _team.isNotEmpty ? _team : null,
               title: "Time",
@@ -106,8 +104,8 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
                 "D",
               ],
               onTapFunction: getComboBoxItem,
-              validatorFunction: (text){
-                if(_team.isEmpty) return "Campo Vazio";
+              validatorFunction: (text) {
+                if (_team.isEmpty) return "Campo Vazio";
               },
             ),
           ),
@@ -117,8 +115,12 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
                 : "Atualizar",
             onPressedFunction: () {
               if (widget._formKey.currentState.validate()) {
-                Guard guard =
-                    Guard(id: 0, name: _name, cpf: _cpf, type: widget.index, team: _team);
+                Guard guard = Guard(
+                    id: 0,
+                    name: _name,
+                    cpf: _cpf,
+                    type: widget.index,
+                    team: _team);
                 addGuard(guard, context);
               }
             },

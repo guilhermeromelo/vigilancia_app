@@ -25,7 +25,7 @@ class _ScheduleListPageState extends State<ScheduleListPage> {
     return InternalHeader(
       title: "Escala Trabalho",
       leftIcon: Icons.arrow_back_ios,
-      leftIconFunction: () {},
+      leftIconFunction: (){Navigator.pop(context);},
       rightIcon2: Icons.wb_sunny,
       rightIcon2Function: () {
         SingletonSchedule().isDaytime = true;

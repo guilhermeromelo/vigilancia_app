@@ -30,10 +30,8 @@ class _WorkplaceRegistrationPageState extends State<WorkplaceRegistrationPage> {
           ? "Atualizar Posto Trabalho"
           : "Novo Posto Trabalho",
       leftIcon: Icons.arrow_back_ios,
-      leftIconFunction: () {},
-      rightIcon1: widget._isWorkplaceUpdate == false ? Icons.delete : null,
-      rightIcon1Function: () {
-        if (widget._isWorkplaceUpdate == false) {}
+      leftIconFunction: () {
+        Navigator.pop(context);
       },
       widget1: WorkplaceRegistrationSubPage(
         isUserUpdate: widget._isWorkplaceUpdate,

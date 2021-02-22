@@ -14,7 +14,6 @@ class _MenuState extends State<Menu> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Inicio"),
@@ -22,7 +21,8 @@ class _MenuState extends State<Menu> {
         backgroundColor: AppColors.mainBlue,
       ),
       body: Container(
-        child: Stack(alignment: Alignment.center,
+        child: Stack(
+          alignment: Alignment.center,
           children: [
             Container(
               color: AppColors.menuGrey,
@@ -62,7 +62,6 @@ class _MenuState extends State<Menu> {
 
             //Guard guard = Guard(cpf: "111.111.111-11", type: 1, name: "Nome111", id: 2);
             //deleteGuard(guard, context);
-
           },
           iconButton: Icons.pending_actions,
         ),
@@ -70,7 +69,7 @@ class _MenuState extends State<Menu> {
           colorButton: Colors.white,
           textButton: "Usuários",
           fncOnPressed: () {
-            Navigator.pushNamed(context, 'users/registration');
+            Navigator.pushNamed(context, 'user/list');
           },
           iconButton: Icons.person,
         ),
@@ -78,7 +77,7 @@ class _MenuState extends State<Menu> {
           colorButton: Colors.white,
           textButton: "Postos de Trabalho",
           fncOnPressed: () {
-            Navigator.pushNamed(context, 'workplaces/registration');
+            Navigator.pushNamed(context, 'workplace/list');
           },
           iconButton: Icons.wb_shade,
         ),
@@ -86,7 +85,7 @@ class _MenuState extends State<Menu> {
           colorButton: Colors.white,
           textButton: "Porteiros e Vigilantes",
           fncOnPressed: () {
-            Navigator.pushNamed(context, 'guards/registration');
+            Navigator.pushNamed(context, 'guard/list');
           },
           iconButton: Icons.admin_panel_settings,
         ),

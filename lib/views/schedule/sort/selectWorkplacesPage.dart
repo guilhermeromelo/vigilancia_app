@@ -15,7 +15,6 @@ import 'package:vigilancia_app/views/shared/components/header/internalHeader.dar
 import 'package:vigilancia_app/views/shared/components/popup/popup.dart';
 import 'package:vigilancia_app/views/shared/components/widgetStreamOrFutureBuilder/widgetStreamOrFutureBuilder.dart';
 
-
 List<Map<String, dynamic>> _list = List();
 int _isAllSelected = 0;
 List<int> _idSelected = new List();
@@ -43,8 +42,6 @@ class _SelectWorkplacePageState extends State<SelectWorkplacePage> {
 
   @override
   Widget build(BuildContext context) {
-
-
     _workplaceQuery = SingletonSchedule().isDaytime
         ? FirebaseFirestore.instance
             .collection("workplaces")
@@ -196,7 +193,7 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
                             selectedWorkplaces.add(element);
                           }
                         });
-                        print(selectedWorkplaces);
+                        //print(selectedWorkplaces);
                         SingletonSchedule().selectedWorkplaces =
                             selectedWorkplaces;
                         sortGuards(
