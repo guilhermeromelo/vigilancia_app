@@ -19,15 +19,6 @@ Future<String> whoIsNextUser() async {
   return nextID;
 }
 
-/*
-  User Model
-  int id;
-  String matricula;
-  String cpf;
-  String senha;
-  int type;
- */
-
 void addUser(User newUser, BuildContext context) async {
   String id = await whoIsNextUser();
   await FirebaseFirestore.instance.collection("users").doc(id).set({

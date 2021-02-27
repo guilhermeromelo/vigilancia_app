@@ -86,8 +86,8 @@ class _SortResultsSubPageState extends State<SortResultsSubPage> {
         if (key == 'type') {
           newGuard.type = value;
         }
-        if (key == 'cpf') {
-          newGuard.cpf = value;
+        if (key == 'matricula') {
+          newGuard.matricula = value;
         }
         if (key == 'id') {
           newGuard.id = value;
@@ -109,8 +109,8 @@ class _SortResultsSubPageState extends State<SortResultsSubPage> {
         if (key == 'type') {
           newGuard.type = value;
         }
-        if (key == 'cpf') {
-          newGuard.cpf = value;
+        if (key == 'matricula') {
+          newGuard.matricula = value;
         }
         if (key == 'id') {
           newGuard.id = value;

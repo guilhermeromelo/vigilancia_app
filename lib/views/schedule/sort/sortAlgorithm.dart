@@ -56,7 +56,7 @@ void sortGuards(
         i.toString(): {
           'id': selectedDoorman.id,
           'name': selectedDoorman.name,
-          'cpf': selectedDoorman.cpf,
+          'matricula': selectedDoorman.matricula,
           'type': selectedDoorman.type
         }
       });
@@ -93,7 +93,7 @@ void sortGuards(
         i.toString(): {
           'id': _selectedGuard.id,
           'name': _selectedGuard.name,
-          'cpf': _selectedGuard.cpf,
+          'matricula': _selectedGuard.matricula,
           'type': _selectedGuard.type
         }
       });

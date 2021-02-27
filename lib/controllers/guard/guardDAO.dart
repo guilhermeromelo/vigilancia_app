@@ -19,20 +19,12 @@ Future<String> whoIsNextGuard() async {
   return nextID;
 }
 
-/*
-  Guard Model
-  int id;
-  String name;
-  String cpf;
-  int type;
- */
-
 void addGuard(Guard newGuard, BuildContext context) async {
   String id = await whoIsNextGuard();
   await FirebaseFirestore.instance.collection("guards").doc(id).set({
     "id": int.parse(id),
     "name": newGuard.name,
-    "cpf": newGuard.cpf,
+    "matricula": newGuard.matricula,
     "type": newGuard.type,
     "team": newGuard.team,
     "visible": true
@@ -45,7 +37,7 @@ void updateGuard(Guard updateGuard, BuildContext context) async {
       .doc(updateGuard.id.toString())
       .update({
     "name": updateGuard.name,
-    "cpf": updateGuard.cpf,
+    "matricula": updateGuard.matricula,
     "type": updateGuard.type,
     "team": updateGuard.team,
   });

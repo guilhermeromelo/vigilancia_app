@@ -374,11 +374,11 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
             name: guard.name,
             id: guard.id,
             type: guard.type,
-            cpf: guard.cpf,
+            cpf: guard.matricula,
             isChecked: isChecked,
             checkFunction:
-                (int id, bool isChecked, String name, int type, String cpf) {
-              Guard guard = new Guard(id: id, name: name, type: type, cpf: cpf);
+                (int id, bool isChecked, String name, int type, String matricula) {
+              Guard guard = new Guard(id: id, name: name, type: type, matricula: matricula);
               if (isChecked) {
                 _selectedGuards.add(guard);
               } else {

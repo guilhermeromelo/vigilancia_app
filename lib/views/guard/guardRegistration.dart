@@ -10,7 +10,7 @@ import 'package:vigilancia_app/views/shared/constants/masks.dart';
 import 'package:vigilancia_app/views/shared/components/header/InternalHeaderWithTabBar.dart';
 
 String _name = "";
-String _cpf = "";
+String _matricula = "";
 String _team = "";
 int _initialIndex = 0;
 
@@ -25,12 +25,12 @@ class _GuardRegistrationPageState extends State<GuardRegistrationPage> {
     // TODO: implement initState
     if (SingletonGuard().isUpdate) {
       _name = SingletonGuard().guard.name;
-      _cpf = SingletonGuard().guard.cpf;
+      _matricula = SingletonGuard().guard.matricula;
       _team = SingletonGuard().guard.team;
       _initialIndex = SingletonGuard().guard.type;
     } else {
       _name = "";
-      _cpf = "";
+      _matricula = "";
       _team = "";
       _initialIndex = 0;
     }
@@ -147,11 +147,10 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
           ),
           AppTextFormField(
             onChangedFunction: (text) {
-              _cpf = text;
+              _matricula = text;
             },
-            initialValue: _cpf,
-            labelText: "CPF",
-            inputFormatterField: AppMasks.cpfMask,
+            initialValue: _matricula,
+            labelText: "Matrícula",
             externalPadding: EdgeInsets.only(top: 15, left: 10, right: 10),
             validatorFunction: (text) {
               if (text.isEmpty) return "Campo Vazio";
@@ -185,7 +184,7 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
                         ? SingletonGuard().guard.id
                         : 0,
                     name: _name,
-                    cpf: _cpf,
+                    matricula: _matricula,
                     type: widget.index,
                     team: _team);
                 if (SingletonGuard().isUpdate) {

@@ -298,7 +298,7 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
             name: guard.name,
             id: guard.id,
             type: guard.type,
-            cpf: guard.cpf,
+            cpf: guard.matricula,
             hasCkeckBox: false,
           ),
         ));
