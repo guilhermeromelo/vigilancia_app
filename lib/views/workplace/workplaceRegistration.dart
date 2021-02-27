@@ -6,14 +6,15 @@ import 'package:vigilancia_app/views/shared/components//button/AppButton.dart';
 import 'package:vigilancia_app/views/shared/components//contSpinner/cont_spinner.dart';
 import 'package:vigilancia_app/views/shared/components//header/InternalHeaderWithTabBar.dart';
 import 'package:vigilancia_app/views/shared/components//titleOrRowBuilder/TitleOrRowBuilder.dart';
+import 'package:vigilancia_app/views/shared/components/popup/popup.dart';
+import 'package:vigilancia_app/views/workplace/singletonWorkplace.dart';
 
 String _placeName = "";
 int _doormanQt = 0;
 int _guardQt = 0;
+int _initialIndex = 0;
 
 class WorkplaceRegistrationPage extends StatefulWidget {
-  bool _isWorkplaceUpdate = false;
-
   @override
   _WorkplaceRegistrationPageState createState() =>
       _WorkplaceRegistrationPageState();
@@ -21,24 +22,64 @@ class WorkplaceRegistrationPage extends StatefulWidget {
 
 class _WorkplaceRegistrationPageState extends State<WorkplaceRegistrationPage> {
   @override
+  void initState() {
+    // TODO: implement initState
+
+    if (SingletonWorkplace().isUpdate) {
+      _placeName = SingletonWorkplace().workplace.name;
+      _doormanQt = SingletonWorkplace().workplace.doormanQt;
+      _guardQt = SingletonWorkplace().workplace.guardQt;
+      _initialIndex = SingletonWorkplace().workplace.type;
+    } else {
+      _placeName = "";
+      _doormanQt = 0;
+      _guardQt = 0;
+      _initialIndex = 0;
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return InternalHeaderWithTabBar(
+      initialIndex: _initialIndex,
       tabQuantity_x2_or_x3: 2,
       text1: "Diurno",
       text2: "Noturno",
-      title: widget._isWorkplaceUpdate
-          ? "Atualizar Posto Trabalho"
-          : "Novo Posto Trabalho",
+      title: SingletonWorkplace().isUpdate ? "Editar Posto" : "Novo Posto",
       leftIcon: Icons.arrow_back_ios,
       leftIconFunction: () {
         Navigator.pop(context);
       },
+      rightIcon1: SingletonWorkplace().isUpdate ? Icons.delete : null,
+      rightIcon1Function: () {
+        if (SingletonWorkplace().isUpdate) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return PopUpYesOrNo(
+                title: 'Deletar Pacote',
+                text: 'Deseja realmente deletar este posto de trabalho?',
+                onYesPressed: () async {
+                  await deleteWorkplace(
+                      idDeleteWorkplace: SingletonWorkplace().workplace.id,
+                      context: context);
+                  await Navigator.popUntil(
+                      context, ModalRoute.withName('menu'));
+                  Navigator.pushNamed(context, 'workplace/list');
+                },
+                onNoPressed: () {
+                  Navigator.of(context).pop();
+                },
+              );
+            },
+          );
+        }
+      },
       widget1: WorkplaceRegistrationSubPage(
-        isUserUpdate: widget._isWorkplaceUpdate,
         index: 0,
       ),
       widget2: WorkplaceRegistrationSubPage(
-        isUserUpdate: widget._isWorkplaceUpdate,
         index: 1,
       ),
     );
@@ -46,12 +87,10 @@ class _WorkplaceRegistrationPageState extends State<WorkplaceRegistrationPage> {
 }
 
 class WorkplaceRegistrationSubPage extends StatefulWidget {
-  bool isUserUpdate;
   final _formKey = GlobalKey<FormState>();
   int index;
 
-  WorkplaceRegistrationSubPage({Key key, this.isUserUpdate, this.index})
-      : super(key: key);
+  WorkplaceRegistrationSubPage({Key key, this.index}) : super(key: key);
 
   @override
   _WorkplaceRegistrationSubPageState createState() =>
@@ -107,16 +146,22 @@ class _WorkplaceRegistrationSubPageState
             ],
           ),
           AppButton(
-            labelText: widget.isUserUpdate == false ? "Cadastrar" : "Atualizar",
+            labelText: SingletonWorkplace().isUpdate == false
+                ? "Cadastrar"
+                : "Atualizar",
             onPressedFunction: () {
               if (widget._formKey.currentState.validate()) {
                 Workplace newWorkplace = Workplace(
-                    id: 0,
+                    id: SingletonWorkplace().isUpdate
+                        ? SingletonWorkplace().workplace.id
+                        : 0,
                     guardQt: _guardQt,
                     name: _placeName,
                     doormanQt: _doormanQt,
                     type: widget.index);
-                addWorkplace(newWorkplace, context);
+                SingletonWorkplace().isUpdate
+                    ? updateWorkplace(newWorkplace, context)
+                    : addWorkplace(newWorkplace, context);
               }
             },
           ),

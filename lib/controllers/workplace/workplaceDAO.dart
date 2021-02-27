@@ -65,11 +65,13 @@ Future<List<Workplace>> listWorkplace() async {
   return userList;
 }
 
-void deleteWorkplace(Workplace deleteWorkplace, BuildContext context) async {
+void deleteWorkplace({Key key, int idDeleteWorkplace, BuildContext context}) async {
   await FirebaseFirestore.instance
       .collection("workplaces")
-      .doc(deleteWorkplace.id.toString())
-      .delete();
+      .doc(idDeleteWorkplace.toString())
+      .update({
+    "visible": false,
+  });
 }
 
 void updateWorkplaceVisibility(int id, bool visible) async {

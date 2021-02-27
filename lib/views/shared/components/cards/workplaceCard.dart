@@ -14,7 +14,6 @@ Ex:
         )
  */
 
-
 class WorkplaceAndScheduleCard extends StatelessWidget {
   String title;
   String line1;
@@ -23,6 +22,7 @@ class WorkplaceAndScheduleCard extends StatelessWidget {
   IconData icon1;
   IconData icon2;
   IconData icon3;
+  Function onTapFunction;
 
   WorkplaceAndScheduleCard(
       {Key key,
@@ -32,120 +32,125 @@ class WorkplaceAndScheduleCard extends StatelessWidget {
       this.line3,
       this.icon1,
       this.icon2,
-      this.icon3})
+      this.icon3,
+      this.onTapFunction})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Size screen = MediaQuery.of(context).size;
     double widthCard = screen.width * 0.9;
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(
-          width: 2,
-          color: Colors.black,
+    return GestureDetector(
+      onTap: onTapFunction,
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 2,
+            color: Colors.black,
+          ),
+          borderRadius: BorderRadius.circular(0),
         ),
-        borderRadius: BorderRadius.circular(0),
-      ),
-      width: widthCard,
-      height: 120,
-      child: Column(
-        children: [
-          Expanded(
-            flex: 33,
-            child: Container(
-              padding: EdgeInsets.only(left: 10),
-              width: widthCard,
-              alignment: Alignment.centerLeft,
-              color: AppColors.mainBlue,
-              child: Text(
-                title ?? "",
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: Colors.white, fontSize: 20),
+        width: widthCard,
+        height: 120,
+        child: Column(
+          children: [
+            Expanded(
+              flex: 33,
+              child: Container(
+                padding: EdgeInsets.only(left: 10),
+                width: widthCard,
+                alignment: Alignment.centerLeft,
+                color: AppColors.mainBlue,
+                child: Text(
+                  title ?? "",
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
               ),
             ),
-          ),
-          Expanded(
-            flex: 67,
-            child: Container(
-              alignment: Alignment.topLeft,
-              width: widthCard,
-              color: AppColors.lightBlue,
-              padding: EdgeInsets.only(left: 10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Visibility(
-                    visible: line1 != null,
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(right: 7),
-                          child: Icon(
-                            icon1 ?? Icons.schedule,
-                            size: 21,
-                            color: AppColors.mainBlue,
-                          ),
-                        ),
-                        Expanded(
-                            child: Text(
-                          line1 ?? "",
-                          maxLines: 1,
-                          style: TextStyle(color: Colors.black, fontSize: 19),
-                          overflow: TextOverflow.ellipsis,
-                        )),
-                      ],
-                    ),
-                  ),
-                  Visibility(
-                    visible: line2 != null,
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(right: 7),
-                          child: Icon(
-                            icon2 ?? Icons.record_voice_over,
-                            size: 21,
-                            color: AppColors.mainBlue,
-                          ),
-                        ),
-                        Expanded(
-                            child: Text(
-                          line2 ?? "",
-                          maxLines: 1,
-                          style: TextStyle(color: Colors.black, fontSize: 19),
-                          overflow: TextOverflow.ellipsis,
-                        )),
-                      ],
-                    ),
-                  ),
-                  Visibility(
-                      visible: line3 != null,
+            Expanded(
+              flex: 67,
+              child: Container(
+                alignment: Alignment.topLeft,
+                width: widthCard,
+                color: AppColors.lightBlue,
+                padding: EdgeInsets.only(left: 10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Visibility(
+                      visible: line1 != null,
                       child: Row(
                         children: [
                           Padding(
                             padding: EdgeInsets.only(right: 7),
                             child: Icon(
-                              icon3 ?? Icons.admin_panel_settings,
+                              icon1 ?? Icons.schedule,
                               size: 21,
                               color: AppColors.mainBlue,
                             ),
                           ),
                           Expanded(
                               child: Text(
-                            line3 ?? "",
+                            line1 ?? "",
                             maxLines: 1,
                             style: TextStyle(color: Colors.black, fontSize: 19),
                             overflow: TextOverflow.ellipsis,
-                          ))
+                          )),
                         ],
-                      )),
-                ],
+                      ),
+                    ),
+                    Visibility(
+                      visible: line2 != null,
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(right: 7),
+                            child: Icon(
+                              icon2 ?? Icons.record_voice_over,
+                              size: 21,
+                              color: AppColors.mainBlue,
+                            ),
+                          ),
+                          Expanded(
+                              child: Text(
+                            line2 ?? "",
+                            maxLines: 1,
+                            style: TextStyle(color: Colors.black, fontSize: 19),
+                            overflow: TextOverflow.ellipsis,
+                          )),
+                        ],
+                      ),
+                    ),
+                    Visibility(
+                        visible: line3 != null,
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(right: 7),
+                              child: Icon(
+                                icon3 ?? Icons.admin_panel_settings,
+                                size: 21,
+                                color: AppColors.mainBlue,
+                              ),
+                            ),
+                            Expanded(
+                                child: Text(
+                              line3 ?? "",
+                              maxLines: 1,
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 19),
+                              overflow: TextOverflow.ellipsis,
+                            ))
+                          ],
+                        )),
+                  ],
+                ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

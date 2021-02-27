@@ -17,6 +17,7 @@ import 'package:vigilancia_app/views/shared/constants/appColors.dart';
 import 'package:vigilancia_app/views/user/userListPage.dart';
 import 'package:vigilancia_app/views/user/userRegistration.dart';
 import 'package:intl/intl.dart';
+import 'package:vigilancia_app/views/workplace/workplaceInfoPage.dart';
 import 'package:vigilancia_app/views/workplace/workplaceListPage.dart';
 import 'package:vigilancia_app/views/workplace/workplaceRegistration.dart';
 
@@ -69,6 +70,7 @@ void main() async {
       //WorkPlace
       'workplace/registration': (context) => WorkplaceRegistrationPage(),
       'workplace/list': (context) => WorkplaceListPage(),
+      //'workplace/info': (context) => WorkplaceInfoPage(),
     },
   ));
 }

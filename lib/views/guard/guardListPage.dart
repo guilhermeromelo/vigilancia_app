@@ -25,23 +25,23 @@ class _GuardListPageState extends State<GuardListPage> {
 
   @override
   Widget build(BuildContext context) {
-    _GuardStream = FirebaseFirestore.instance
+    _GuardFuture = FirebaseFirestore.instance
         .collection("guards")
         .where('visible', isEqualTo: true)
         .orderBy('name')
         .get();
     return FutureBuilder(
-      future: _GuardStream,
+      future: _GuardFuture,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return selectGuardsPageHeader(
+          return guardListPageHeader(
               widget1: containerWithCircularProgress(),
               widget2: containerWithCircularProgress(),
               widget3: containerWithCircularProgress(),
               widget4: containerWithCircularProgress(),
               widget5: containerWithCircularProgress());
         } else if (snapshot.hasError) {
-          return selectGuardsPageHeader(
+          return guardListPageHeader(
               widget1: containerWithErrorMessage(snapshot.error.toString()),
               widget2: containerWithErrorMessage(snapshot.error.toString()),
               widget3: containerWithErrorMessage(snapshot.error.toString()),
@@ -57,7 +57,7 @@ class _GuardListPageState extends State<GuardListPage> {
               _doormanList.add(docToGuard(element));
             }
           });
-          return selectGuardsPageHeader(
+          return guardListPageHeader(
             widget1: SelectGuardsSubPage(
               tabBarIndex: 0,
             ),
@@ -75,7 +75,7 @@ class _GuardListPageState extends State<GuardListPage> {
             ),
           );
         } else {
-          return selectGuardsPageHeader(
+          return guardListPageHeader(
               widget1: containerWithErrorMessage(""),
               widget2: containerWithErrorMessage(""),
               widget3: containerWithErrorMessage(""),
@@ -86,7 +86,7 @@ class _GuardListPageState extends State<GuardListPage> {
     );
   }
 
-  Widget selectGuardsPageHeader(
+  Widget guardListPageHeader(
       {Key key,
       Widget widget1,
       Widget widget2,
@@ -300,7 +300,7 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
 }
 
 //Future
-var _GuardStream = FirebaseFirestore.instance
+var _GuardFuture = FirebaseFirestore.instance
     .collection("guards")
     .where('visible', isEqualTo: true)
     .orderBy('name')

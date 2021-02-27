@@ -4,8 +4,9 @@ import 'package:vigilancia_app/views/shared/constants/appColors.dart';
 class AppButton extends StatelessWidget {
   String labelText;
   Function onPressedFunction;
+  Color backgroundColor;
 
-  AppButton({Key key, this.labelText, this.onPressedFunction})
+  AppButton({Key key, this.labelText, this.onPressedFunction, this.backgroundColor})
       : super(key: key);
 
   @override
@@ -20,7 +21,7 @@ class AppButton extends StatelessWidget {
               fontSize: 22, color: Colors.white, fontWeight: FontWeight.bold),
           overflow: TextOverflow.ellipsis,
         ),
-        color: AppColors.mainBlue,
+        color: backgroundColor ?? AppColors.mainBlue,
         shape: RoundedRectangleBorder(
           borderRadius: new BorderRadius.circular(12.0),
         ),
