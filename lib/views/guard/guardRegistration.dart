@@ -1,46 +1,114 @@
 import 'package:flutter/material.dart';
 import 'package:vigilancia_app/controllers/guard/guardDAO.dart';
 import 'package:vigilancia_app/models/guard/guard.dart';
+import 'package:vigilancia_app/views/guard/singletonGuard.dart';
 import 'package:vigilancia_app/views/shared/components/appTextFormField/appTextFormField.dart';
 import 'package:vigilancia_app/views/shared/components/button/AppButton.dart';
 import 'package:vigilancia_app/views/shared/components/comboBox/comboBox.dart';
+import 'package:vigilancia_app/views/shared/components/popup/popup.dart';
 import 'package:vigilancia_app/views/shared/constants/masks.dart';
 import 'package:vigilancia_app/views/shared/components/header/InternalHeaderWithTabBar.dart';
 
 String _name = "";
 String _cpf = "";
 String _team = "";
+int _initialIndex = 0;
 
 class GuardRegistrationPage extends StatefulWidget {
-  bool isDoormanAndGuardUpdate = false;
-
   @override
   _GuardRegistrationPageState createState() => _GuardRegistrationPageState();
 }
 
 class _GuardRegistrationPageState extends State<GuardRegistrationPage> {
   @override
+  void initState() {
+    // TODO: implement initState
+    if (SingletonGuard().isUpdate) {
+      _name = SingletonGuard().guard.name;
+      _cpf = SingletonGuard().guard.cpf;
+      _team = SingletonGuard().guard.team;
+      _initialIndex = SingletonGuard().guard.type;
+    } else {
+      _name = "";
+      _cpf = "";
+      _team = "";
+      _initialIndex = 0;
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    _name = "";
-    _cpf = "";
-    _team = "";
     return InternalHeaderWithTabBar(
+      initialIndex: _initialIndex,
       tabQuantity_x2_or_x3: 2,
       text1: "Vigilante",
       text2: "Porteiro",
-      title: widget.isDoormanAndGuardUpdate
-          ? "Atualizar Colaborador"
-          : "Novo Colaborador",
+      title:
+          SingletonGuard().isUpdate ? "Editar Colaborador" : "Novo Colaborador",
       leftIcon: Icons.arrow_back_ios,
       leftIconFunction: () {
         Navigator.pop(context);
       },
+      rightIcon1: SingletonGuard().isUpdate ? Icons.delete : null,
+      rightIcon1Function: SingletonGuard().isUpdate
+          ? () {
+              if (SingletonGuard().isUpdate) {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return PopUpYesOrNo(
+                      title: 'Deletar ' +
+                          (SingletonGuard().guard.type == 0
+                              ? "Vigilante"
+                              : "Porteiro"),
+                      text: 'Deseja realmente deletar este ' +
+                          (SingletonGuard().guard.type == 0
+                              ? "Vigilante ?"
+                              : "Porteiro ?"),
+                      onYesPressed: () async {
+                        await deleteGuard(SingletonGuard().guard.id, context);
+                        await Navigator.popUntil(
+                            context, ModalRoute.withName('menu'));
+
+                        switch (SingletonGuard().guard.team) {
+                          case "A":
+                            {
+                              SingletonGuard().currentIndexForGuardListPage = 1;
+                              break;
+                            }
+                          case "B":
+                            {
+                              SingletonGuard().currentIndexForGuardListPage = 2;
+                              break;
+                            }
+                          case "C":
+                            {
+                              SingletonGuard().currentIndexForGuardListPage = 3;
+                              break;
+                            }
+                          case "D":
+                            {
+                              SingletonGuard().currentIndexForGuardListPage = 4;
+                              break;
+                            }
+                        }
+
+                        Navigator.pushNamed(context, 'guard/list');
+                      },
+                      onNoPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    );
+                  },
+                );
+              }
+            }
+          : null,
       widget1: UserRegistrationSubPage(
-        isDoormanAndGuardUpdate: widget.isDoormanAndGuardUpdate,
         index: 0,
       ),
       widget2: UserRegistrationSubPage(
-        isDoormanAndGuardUpdate: widget.isDoormanAndGuardUpdate,
         index: 1,
       ),
     );
@@ -50,10 +118,8 @@ class _GuardRegistrationPageState extends State<GuardRegistrationPage> {
 class UserRegistrationSubPage extends StatefulWidget {
   final _formKey = GlobalKey<FormState>();
   int index;
-  bool isDoormanAndGuardUpdate;
 
-  UserRegistrationSubPage({Key key, this.isDoormanAndGuardUpdate, this.index})
-      : super(key: key);
+  UserRegistrationSubPage({Key key, this.index}) : super(key: key);
 
   @override
   _UserRegistrationSubPageState createState() =>
@@ -110,18 +176,49 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
             ),
           ),
           AppButton(
-            labelText: widget.isDoormanAndGuardUpdate == false
-                ? "Cadastrar"
-                : "Atualizar",
-            onPressedFunction: () {
+            labelText:
+                SingletonGuard().isUpdate == false ? "Cadastrar" : "Atualizar",
+            onPressedFunction: () async {
               if (widget._formKey.currentState.validate()) {
                 Guard guard = Guard(
-                    id: 0,
+                    id: SingletonGuard().isUpdate
+                        ? SingletonGuard().guard.id
+                        : 0,
                     name: _name,
                     cpf: _cpf,
                     type: widget.index,
                     team: _team);
-                addGuard(guard, context);
+                if (SingletonGuard().isUpdate) {
+                  await updateGuard(guard, context);
+                } else {
+                  await addGuard(guard, context);
+                }
+
+                switch (_team) {
+                  case "A":
+                    {
+                      SingletonGuard().currentIndexForGuardListPage = 1;
+                      break;
+                    }
+                  case "B":
+                    {
+                      SingletonGuard().currentIndexForGuardListPage = 2;
+                      break;
+                    }
+                  case "C":
+                    {
+                      SingletonGuard().currentIndexForGuardListPage = 3;
+                      break;
+                    }
+                  case "D":
+                    {
+                      SingletonGuard().currentIndexForGuardListPage = 4;
+                      break;
+                    }
+                }
+
+                await Navigator.popUntil(context, ModalRoute.withName('menu'));
+                Navigator.pushNamed(context, 'guard/list');
               }
             },
           ),

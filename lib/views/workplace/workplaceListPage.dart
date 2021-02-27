@@ -51,6 +51,7 @@ class _WorkplaceListPageState extends State<WorkplaceListPage> {
 
   Widget workplaceListHeader({Key key, Widget widget1, Widget widget2}) {
     return InternalHeaderWithTabBar(
+      initialIndex: SingletonWorkplace().currentIndexForWorkplaceListPage ?? 0,
       tabQuantity_x2_or_x3: 2,
       title: "Postos de Trabalho",
       leftIcon: Icons.arrow_back_ios,
@@ -87,6 +88,7 @@ class WorkplaceListSubPage extends StatefulWidget {
 class _WorkplaceListSubPageState extends State<WorkplaceListSubPage> {
   @override
   Widget build(BuildContext context) {
+
     if (widget.snapshot.data.docs.length == 0) {
       return containerWithNotFoundMessage(
           "Desculpe! Não encontrei ninguém cadastrado neste time :(");

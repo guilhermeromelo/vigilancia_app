@@ -64,11 +64,13 @@ Future<List<Guard>> listGuards() async {
   return guardList;
 }
 
-void deleteGuard(Guard deleteGuard, BuildContext context) async {
+void deleteGuard(int id, BuildContext context) async {
   await FirebaseFirestore.instance
       .collection("guards")
-      .doc(deleteGuard.id.toString())
-      .delete();
+      .doc(id.toString())
+      .update({
+    "visible": false,
+  });
 }
 
 void updateGuardVisibility(int id, bool visible) async {

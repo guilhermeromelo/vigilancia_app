@@ -24,7 +24,6 @@ class _WorkplaceRegistrationPageState extends State<WorkplaceRegistrationPage> {
   @override
   void initState() {
     // TODO: implement initState
-
     if (SingletonWorkplace().isUpdate) {
       _placeName = SingletonWorkplace().workplace.name;
       _doormanQt = SingletonWorkplace().workplace.doormanQt;
@@ -52,15 +51,16 @@ class _WorkplaceRegistrationPageState extends State<WorkplaceRegistrationPage> {
         Navigator.pop(context);
       },
       rightIcon1: SingletonWorkplace().isUpdate ? Icons.delete : null,
-      rightIcon1Function: () {
+      rightIcon1Function: SingletonWorkplace().isUpdate ?() {
         if (SingletonWorkplace().isUpdate) {
           showDialog(
             context: context,
             builder: (context) {
               return PopUpYesOrNo(
-                title: 'Deletar Pacote',
+                title: 'Deletar Posto de Trabalho',
                 text: 'Deseja realmente deletar este posto de trabalho?',
                 onYesPressed: () async {
+                  SingletonWorkplace().currentIndexForWorkplaceListPage =  SingletonWorkplace().workplace.type;
                   await deleteWorkplace(
                       idDeleteWorkplace: SingletonWorkplace().workplace.id,
                       context: context);
@@ -75,7 +75,7 @@ class _WorkplaceRegistrationPageState extends State<WorkplaceRegistrationPage> {
             },
           );
         }
-      },
+      } : null,
       widget1: WorkplaceRegistrationSubPage(
         index: 0,
       ),
@@ -149,7 +149,7 @@ class _WorkplaceRegistrationSubPageState
             labelText: SingletonWorkplace().isUpdate == false
                 ? "Cadastrar"
                 : "Atualizar",
-            onPressedFunction: () {
+            onPressedFunction: () async {
               if (widget._formKey.currentState.validate()) {
                 Workplace newWorkplace = Workplace(
                     id: SingletonWorkplace().isUpdate
@@ -159,9 +159,14 @@ class _WorkplaceRegistrationSubPageState
                     name: _placeName,
                     doormanQt: _doormanQt,
                     type: widget.index);
+                SingletonWorkplace().currentIndexForWorkplaceListPage =  widget.index;
                 SingletonWorkplace().isUpdate
-                    ? updateWorkplace(newWorkplace, context)
-                    : addWorkplace(newWorkplace, context);
+                    ? await updateWorkplace(newWorkplace, context)
+                    : await addWorkplace(newWorkplace, context);
+
+                await Navigator.popUntil(
+                    context, ModalRoute.withName('menu'));
+                Navigator.pushNamed(context, 'workplace/list');
               }
             },
           ),

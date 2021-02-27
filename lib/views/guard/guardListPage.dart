@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:vigilancia_app/models/guard/guard.dart';
+import 'package:vigilancia_app/views/guard/singletonGuard.dart';
 import 'package:vigilancia_app/views/schedule/singletonSchedule.dart';
 import 'package:vigilancia_app/views/shared/components/cards/guardCard.dart';
 import 'package:vigilancia_app/views/shared/components/header/internalHeader.dart';
@@ -20,6 +21,7 @@ class _GuardListPageState extends State<GuardListPage> {
   @override
   void initState() {
     // TODO: implement initState
+
     super.initState();
   }
 
@@ -94,6 +96,7 @@ class _GuardListPageState extends State<GuardListPage> {
       Widget widget4,
       Widget widget5}) {
     return InternalHeaderWithTabBarx5(
+      initialIndex: SingletonGuard().currentIndexForGuardListPage ?? 0,
       title: "Colaboradores",
       rightIcon1: Icons.refresh,
       rightIcon1Function: () {
@@ -101,6 +104,7 @@ class _GuardListPageState extends State<GuardListPage> {
       },
       rightIcon2: Icons.add,
       rightIcon2Function: () {
+        SingletonGuard().isUpdate = false;
         Navigator.pushNamed(context, 'guard/registration');
       },
       leftIconFunction: () {
@@ -192,7 +196,7 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
           "Desculpe! Não encontrei ninguém cadastrado neste time :(");
     } else {
       return ListView.builder(
-        padding: EdgeInsets.only(top: 10),
+        padding: EdgeInsets.only(),
         itemCount:
             widget._doormanListLocal.length + widget._guardListLocal.length,
         itemBuilder: guardItemBuiler,
@@ -211,7 +215,7 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TitleBuilder(
-                  title: "PORTEIROS", padding: EdgeInsets.only(bottom: 5)),
+                  title: "PORTEIROS", padding: EdgeInsets.only(bottom: 5, top: 20)),
               guardCardBuilder(widget._doormanListLocal.elementAt(index)),
             ],
           );
@@ -220,7 +224,7 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TitleBuilder(
-                  title: "PORTEIROS", padding: EdgeInsets.only(bottom: 5)),
+                  title: "PORTEIROS", padding: EdgeInsets.only(bottom: 5, top: 20)),
               guardCardBuilder(widget._doormanListLocal.elementAt(index))
             ],
           );
@@ -287,7 +291,9 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
           padding: EdgeInsets.only(top: 4, bottom: 4),
           child: GuardCard(
             onCardTap: () {
-              print("tela de info guard: " + guard.id.toString());
+              SingletonGuard().guard = guard;
+              SingletonGuard().isUpdate = true;
+              Navigator.pushNamed(context, 'guard/registration');
             },
             name: guard.name,
             id: guard.id,
