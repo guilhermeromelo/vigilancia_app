@@ -7,7 +7,7 @@ import 'package:vigilancia_app/views/shared/components/widgetStreamOrFutureBuild
 import 'package:vigilancia_app/views/workplace/singletonWorkplace.dart';
 
 var _workplaceFuture =
-    FirebaseFirestore.instance.collection("workplaces").where("visible", isEqualTo: true).get();
+    FirebaseFirestore.instance.collection("workplaces").where("visible", isEqualTo: true).orderBy("name").get();
 
 class WorkplaceListPage extends StatefulWidget {
   @override
@@ -18,7 +18,7 @@ class _WorkplaceListPageState extends State<WorkplaceListPage> {
   @override
   Widget build(BuildContext context) {
     _workplaceFuture =
-        FirebaseFirestore.instance.collection("workplaces").where("visible", isEqualTo: true).get();
+        FirebaseFirestore.instance.collection("workplaces").where("visible", isEqualTo: true).orderBy("name").get();
     return FutureBuilder(
       future: _workplaceFuture,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {

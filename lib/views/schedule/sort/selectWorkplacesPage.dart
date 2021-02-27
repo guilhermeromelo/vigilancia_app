@@ -21,6 +21,20 @@ List<int> _idSelected = new List();
 List<TempModification> _tempModification = new List();
 DateTime _selectedDate = DateTime.now();
 
+
+//FUTURE
+var _workplaceQuery = SingletonSchedule().isDaytime
+    ? FirebaseFirestore.instance
+    .collection("workplaces")
+    .where('visible', isEqualTo: true)
+    .where('type', isEqualTo: 0).orderBy("name")
+    .get()
+    : FirebaseFirestore.instance
+    .collection("workplaces")
+    .where('visible', isEqualTo: true)
+    .where('type', isEqualTo: 1).orderBy("name")
+    .get();
+
 class SelectWorkplacePage extends StatefulWidget {
   List<int> _selectedIndex = List();
   @override
@@ -46,12 +60,12 @@ class _SelectWorkplacePageState extends State<SelectWorkplacePage> {
         ? FirebaseFirestore.instance
             .collection("workplaces")
             .where('visible', isEqualTo: true)
-            .where('type', isEqualTo: 0)
+            .where('type', isEqualTo: 0).orderBy("name")
             .get()
         : FirebaseFirestore.instance
             .collection("workplaces")
             .where('visible', isEqualTo: true)
-            .where('type', isEqualTo: 1)
+            .where('type', isEqualTo: 1).orderBy("name")
             .get();
 
     return InternalHeader(
@@ -319,16 +333,3 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
     print(_selectedDate);
   }
 }
-
-//FUTURE
-var _workplaceQuery = SingletonSchedule().isDaytime
-    ? FirebaseFirestore.instance
-        .collection("workplaces")
-        .where('visible', isEqualTo: true)
-        .where('type', isEqualTo: 0)
-        .get()
-    : FirebaseFirestore.instance
-        .collection("workplaces")
-        .where('visible', isEqualTo: true)
-        .where('type', isEqualTo: 1)
-        .get();
