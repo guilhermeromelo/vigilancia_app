@@ -121,11 +121,11 @@ class _WorkplaceListSubPageState extends State<WorkplaceListSubPage> {
             title: workplaceToShow.name,
             line1: workplaceToShow.type == 0 ? "Diurno" : "Noturno",
             line2: workplaceToShow.doormanQt.toString() +
-                (workplaceToShow.doormanQt > 1
+                (workplaceToShow.doormanQt != 1
                     ? " Porteiros"
                     : (workplaceToShow.doormanQt == 1 ? " Porteiro" : "")),
             line3: workplaceToShow.guardQt.toString() +
-                (workplaceToShow.guardQt > 1
+                (workplaceToShow.guardQt != 1
                     ? " Vigilantes"
                     : (workplaceToShow.guardQt == 1 ? " Vigilante" : "")),
             onTapFunction: () {

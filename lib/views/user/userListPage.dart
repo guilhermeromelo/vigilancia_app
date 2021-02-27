@@ -4,6 +4,7 @@ import 'package:vigilancia_app/models/user/user.dart';
 import 'package:vigilancia_app/views/shared/components/cards/guardCard.dart';
 import 'package:vigilancia_app/views/shared/components/header/InternalHeaderWithTabBar.dart';
 import 'package:vigilancia_app/views/shared/components/widgetStreamOrFutureBuilder/widgetStreamOrFutureBuilder.dart';
+import 'package:vigilancia_app/views/user/singletonUser.dart';
 
 class UserListPage extends StatefulWidget {
   @override
@@ -65,10 +66,17 @@ class _UserListPageState extends State<UserListPage> {
       leftIconFunction: () {
         Navigator.pop(context);
       },
-      rightIcon1: Icons.add,
-      rightIcon1Function: () {
+      rightIcon2: Icons.add,
+      rightIcon2Function: () {
+        SingletonUser().isUpdate = false;
         Navigator.pushNamed(context, 'user/registration');
       },
+      rightIcon1Function: (){
+        setState(() {
+
+        });
+      },
+      rightIcon1: Icons.sync,
       text1: "Todos",
       text2: "Adm",
       text3: "Líder",
@@ -127,9 +135,9 @@ class _UserListSubPageState extends State<UserListSubPage> {
           padding: EdgeInsets.only(top: 4, bottom: 4),
           child: GuardCard(
             onCardTap: () {
-/*              SingletonGuard().guard = guard;
-              SingletonGuard().isUpdate = true;
-              Navigator.pushNamed(context, 'guard/registration');*/
+              SingletonUser().isUpdate = true;
+            SingletonUser().user = userToShow;
+              Navigator.pushNamed(context, 'user/registration');
             },
             name: userToShow.name,
             id: userToShow.id,

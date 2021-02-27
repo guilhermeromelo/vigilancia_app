@@ -31,7 +31,7 @@ void addUser(User newUser, BuildContext context) async {
   });
 }
 
-void updateUser(User updateUser, BuildContext context) async {
+void updateUserWithPassword(User updateUser, BuildContext context) async {
   await FirebaseFirestore.instance
       .collection("users")
       .doc(updateUser.id.toString())
@@ -40,6 +40,17 @@ void updateUser(User updateUser, BuildContext context) async {
     "matricula": updateUser.matricula,
     "type": updateUser.type,
     "senha": updateUser.senha
+  });
+}
+
+void updateUserWithoutPassword(User updateUser, BuildContext context) async {
+  await FirebaseFirestore.instance
+      .collection("users")
+      .doc(updateUser.id.toString())
+      .update({
+    "name": updateUser.name,
+    "matricula": updateUser.matricula,
+    "type": updateUser.type,
   });
 }
 
