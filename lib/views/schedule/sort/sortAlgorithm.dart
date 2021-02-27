@@ -124,7 +124,7 @@ void sortGuards(
       scheduleDateTime: date,
       creatorUser: creator,
       workPlacesWithGuards: scheduleData,
-      note: "123",
+      note: "",
       creationDateTime: DateTime.now(),
   type: type);
 

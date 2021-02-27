@@ -34,6 +34,8 @@ dependencies:
   firebase_core: ^0.5.3
   cloud_firestore: ^0.14.4
   shared_preferences: ^0.5.12+4
+  screenshot: ^0.3.0
+  esys_flutter_share: ^1.0.2
 
   crypto: ^2.1.5
   #toast: ^0.1.5

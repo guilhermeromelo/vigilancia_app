@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:vigilancia_app/models/workplace/workplace.dart';
+import 'package:vigilancia_app/views/login/singletonLogin.dart';
 import 'package:vigilancia_app/views/schedule/singletonSchedule.dart';
 import 'package:vigilancia_app/views/schedule/sort/selectGuardsPage.dart';
 import 'package:vigilancia_app/views/schedule/sort/sortAlgorithm.dart';
@@ -21,19 +22,20 @@ List<int> _idSelected = new List();
 List<TempModification> _tempModification = new List();
 DateTime _selectedDate = DateTime.now();
 
-
 //FUTURE
 var _workplaceQuery = SingletonSchedule().isDaytime
     ? FirebaseFirestore.instance
-    .collection("workplaces")
-    .where('visible', isEqualTo: true)
-    .where('type', isEqualTo: 0).orderBy("name")
-    .get()
+        .collection("workplaces")
+        .where('visible', isEqualTo: true)
+        .where('type', isEqualTo: 0)
+        .orderBy("name")
+        .get()
     : FirebaseFirestore.instance
-    .collection("workplaces")
-    .where('visible', isEqualTo: true)
-    .where('type', isEqualTo: 1).orderBy("name")
-    .get();
+        .collection("workplaces")
+        .where('visible', isEqualTo: true)
+        .where('type', isEqualTo: 1)
+        .orderBy("name")
+        .get();
 
 class SelectWorkplacePage extends StatefulWidget {
   List<int> _selectedIndex = List();
@@ -60,12 +62,14 @@ class _SelectWorkplacePageState extends State<SelectWorkplacePage> {
         ? FirebaseFirestore.instance
             .collection("workplaces")
             .where('visible', isEqualTo: true)
-            .where('type', isEqualTo: 0).orderBy("name")
+            .where('type', isEqualTo: 0)
+            .orderBy("name")
             .get()
         : FirebaseFirestore.instance
             .collection("workplaces")
             .where('visible', isEqualTo: true)
-            .where('type', isEqualTo: 1).orderBy("name")
+            .where('type', isEqualTo: 1)
+            .orderBy("name")
             .get();
 
     return InternalHeader(
@@ -90,7 +94,9 @@ class _SelectWorkplacePageState extends State<SelectWorkplacePage> {
 class SelectWorkplaceSubPage extends StatefulWidget {
   List<int> selectedIndex = List();
 
-  String _creatorName = "1- Mudar Nome Usuário";
+  String _creatorName = SingletonLogin().loggedUser.id.toString() +
+      "- " +
+      SingletonLogin().loggedUser.name;
 
   SelectWorkplaceSubPage({Key key, this.selectedIndex}) : super(key: key);
 
