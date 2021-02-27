@@ -29,20 +29,10 @@ class _SortResultsPageState extends State<SortResultsPage> {
 
     return InternalHeader(
       title: "Resultado",
-      rightIcon1: Icons.copy,
-      rightIcon1Function: () {
-        setState(() {});
-      },
       leftIconFunction: () {
         Navigator.of(context).pop();
       },
       leftIcon: Icons.arrow_back_ios,
-      rightIcon2: Icons.sync,
-      rightIcon2Function: () {
-        setState(() {
-          sortGuards();
-        });
-      },
       body: SortResultsSubPage(
         scheduleToShow: widget._scheduleToShow,
       ),
@@ -176,13 +166,24 @@ class _SortResultsSubPageState extends State<SortResultsSubPage> {
             initialValue: widget.note,
           ),
         ),
-        Container(padding: EdgeInsets.only(bottom: 30),
+        Container(padding: EdgeInsets.only(bottom: 20),
           width: size.width,
           child: AppButton(
+            backgroundColor: Colors.black,
             labelText: "Atualizar Observações",
             onPressedFunction: () async {
               FocusScope.of(context).requestFocus(new FocusNode());
               await updateNoteSchedule(context: context, note: widget.note, id: schedule.id);
+            },
+          ),
+        ),
+        Container(padding: EdgeInsets.only(bottom: 30),
+          width: size.width,
+          child: AppButton(
+
+            labelText: "Compartilhar Escala",
+            onPressedFunction: () async {
+
             },
           ),
         )

@@ -19,13 +19,18 @@ class ScheduleListPage extends StatefulWidget {
 class _ScheduleListPageState extends State<ScheduleListPage> {
   @override
   Widget build(BuildContext context) {
-    scheduleStream =
-        FirebaseFirestore.instance.collection("schedule").orderBy("id", descending: true).limit(30).snapshots();
+    scheduleStream = FirebaseFirestore.instance
+        .collection("schedule")
+        .orderBy("id", descending: true)
+        .limit(30)
+        .snapshots();
 
     return InternalHeader(
       title: "Escala Trabalho",
       leftIcon: Icons.arrow_back_ios,
-      leftIconFunction: (){Navigator.pop(context);},
+      leftIconFunction: () {
+        Navigator.pop(context);
+      },
       rightIcon2: Icons.wb_sunny,
       rightIcon2Function: () {
         SingletonSchedule().isDaytime = true;
@@ -100,21 +105,39 @@ class _ScheduleSubPageState extends State<ScheduleSubPage> {
   }
 
   Widget scheduleItemBuilder(BuildContext context, int index) {
-    Schedule scheduleToShow = docToSchedule(widget.snapshotGlobal.data.docs.elementAt(index));
-    return Column(children: [
-      Padding(padding: EdgeInsets.only(bottom: 12),child: WorkplaceAndScheduleCard(
-        title: DateFormat("dd/MM/yy")
-            .format(scheduleToShow.scheduleDateTime)
-            .toString() + " - " +dayOfWeekIntToString(scheduleToShow.scheduleDateTime.weekday),
-        line1: scheduleToShow.type == 0 ? "Diurno" : "Noturno",
-        line2: scheduleToShow.workPlacesWithGuards.length.toString() + (scheduleToShow.workPlacesWithGuards.length == 1 ? " Posto de Trabalho" : " Postos de Trabalho"),
-        line3: scheduleToShow.creatorUser,
-        icon2: Icons.wb_shade,
-        icon3: Icons.person,
-      ),)
-    ],);
+    Schedule scheduleToShow =
+        docToSchedule(widget.snapshotGlobal.data.docs.elementAt(index));
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.only(bottom: 12),
+          child: WorkplaceAndScheduleCard(
+            onTapFunction: (){
+              SingletonSchedule().schedule = scheduleToShow;
+              Navigator.pushNamed(context, 'schedule/resultsPage');
+            },
+            title: DateFormat("dd/MM/yy")
+                    .format(scheduleToShow.scheduleDateTime)
+                    .toString() +
+                " - " +
+                dayOfWeekIntToString(scheduleToShow.scheduleDateTime.weekday),
+            line1: scheduleToShow.type == 0 ? "Diurno" : "Noturno",
+            line2: scheduleToShow.workPlacesWithGuards.length.toString() +
+                (scheduleToShow.workPlacesWithGuards.length == 1
+                    ? " Posto de Trabalho"
+                    : " Postos de Trabalho"),
+            line3: scheduleToShow.creatorUser,
+            icon2: Icons.wb_shade,
+            icon3: Icons.person,
+          ),
+        )
+      ],
+    );
   }
 }
 
-var scheduleStream =
-    FirebaseFirestore.instance.collection("schedule").orderBy("id", descending: true).limit(30).snapshots();
+var scheduleStream = FirebaseFirestore.instance
+    .collection("schedule")
+    .orderBy("id", descending: true)
+    .limit(30)
+    .snapshots();

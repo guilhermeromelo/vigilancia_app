@@ -12,7 +12,6 @@ class AppColors {
   //Azul claro
   static const Color lightBlue = Color(0X333B70A2);
 
-
 /*
   //Verde claro - menu lateral
   static const Color verdeClaro = Color(0XFFBEE2C7);
