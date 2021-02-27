@@ -22,7 +22,7 @@ Future<String> whoIsNextUser() async {
 /*
   User Model
   int id;
-  String name;
+  String matricula;
   String cpf;
   String senha;
   int type;
@@ -33,7 +33,7 @@ void addUser(User newUser, BuildContext context) async {
   await FirebaseFirestore.instance.collection("users").doc(id).set({
     "id": int.parse(id),
     "name": newUser.name,
-    "cpf": newUser.cpf,
+    "matricula": newUser.matricula,
     "type": newUser.type,
     "senha": newUser.senha,
     "visible": true
@@ -46,7 +46,7 @@ void updateUser(User updateUser, BuildContext context) async {
       .doc(updateUser.id.toString())
       .update({
     "name": updateUser.name,
-    "cpf": updateUser.cpf,
+    "matricula": updateUser.matricula,
     "type": updateUser.type,
     "senha": updateUser.senha
   });
@@ -65,16 +65,9 @@ Future<List<User>> listUser() async {
   return userList;
 }
 
-void deleteUser(User deleteUser, BuildContext context) async {
-  await FirebaseFirestore.instance
-      .collection("users")
-      .doc(deleteUser.id.toString())
-      .delete();
-}
-
-void updateUserVisibility(int id, bool visible) async {
+void deleteUser(int id, BuildContext context) async {
   await FirebaseFirestore.instance
       .collection("users")
       .doc(id.toString())
-      .update({"visible": visible});
+      .update({"visible": false});
 }

@@ -10,7 +10,7 @@ import 'package:vigilancia_app/views/shared/constants/appColors.dart';
 import 'package:vigilancia_app/views/shared/constants/masks.dart';
 
 String _name = "";
-String _cpf = "";
+String _matricula = "";
 String _senha = "";
 bool _obscureText = true;
 
@@ -25,7 +25,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
   @override
   Widget build(BuildContext context) {
     _name = "";
-    _cpf = "";
+    _matricula = "";
     _senha = "";
     return InternalHeaderWithTabBar(
       tabQuantity_x2_or_x3: 2,
@@ -80,15 +80,14 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
             },
           ),
           AppTextFormField(
-            inputFormatterField: AppMasks.cpfMask,
-            initialValue: _cpf,
-            labelText: "CPF",
+            initialValue: _matricula,
+            labelText: "Matrícula",
             externalPadding: EdgeInsets.only(top: 15, left: 10, right: 10),
             validatorFunction: (text) {
               if (text.isEmpty) return "Campo Vazio";
             },
             onChangedFunction: (text) {
-              _cpf = text;
+              _matricula = text;
             },
           ),
           AppTextFormField(
@@ -119,7 +118,7 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
                 User newUser = User(
                     id: 0,
                     name: _name,
-                    cpf: _cpf,
+                    matricula: _matricula,
                     type: widget.index,
                     senha: digest.toString());
                 addUser(newUser, context);
