@@ -14,6 +14,7 @@ import 'package:vigilancia_app/views/schedule/sort/selectGuardsPage.dart';
 import 'package:vigilancia_app/views/schedule/sort/selectWorkplacesPage.dart';
 import 'package:vigilancia_app/views/schedule/sort/sortResultsPage.dart';
 import 'package:vigilancia_app/views/shared/constants/appColors.dart';
+import 'package:vigilancia_app/views/splash/splashPage.dart';
 import 'package:vigilancia_app/views/user/userListPage.dart';
 import 'package:vigilancia_app/views/user/userRegistration.dart';
 import 'package:intl/intl.dart';
@@ -49,9 +50,11 @@ void main() async {
       GlobalWidgetsLocalizations.delegate
     ],
     supportedLocales: [const Locale('pt', 'BR')],
-    initialRoute: 'menu',
+    initialRoute: 'splash',
     debugShowCheckedModeBanner: false,
     routes: {
+      //Splash
+      'splash': (context) => SplashPage(),
       //Login
       'login': (context) => LoginPage(),
       //Menu

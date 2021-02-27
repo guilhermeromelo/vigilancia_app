@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vigilancia_app/controllers/guard/guardDAO.dart';
 import 'package:vigilancia_app/models/guard/guard.dart';
+import 'package:vigilancia_app/views/login/singletonLogin.dart';
+import 'package:vigilancia_app/views/shared/components/header/internalHeader.dart';
 import 'package:vigilancia_app/views/shared/constants/appColors.dart';
 
 class Menu extends StatefulWidget {
@@ -11,15 +14,19 @@ class Menu extends StatefulWidget {
 
 class _MenuState extends State<Menu> {
   Size get _size => MediaQuery.of(context).size;
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Inicio"),
-        centerTitle: true,
-        backgroundColor: AppColors.mainBlue,
-      ),
+    return InternalHeader(
+      title: "Inicio",
+      leftIcon: null,
+      leftIconFunction: null,
+      rightIcon1: Icons.logout,
+      rightIcon1Function: (){
+        _clearSharedPreferences();
+        Navigator.pushReplacementNamed(context, 'login');
+      },
       body: Container(
         child: Stack(
           alignment: Alignment.center,
@@ -43,25 +50,30 @@ class _MenuState extends State<Menu> {
     );
   }
 
+  Future<void> _clearSharedPreferences() async {
+    final SharedPreferences prefs = await _prefs;
+    setState(() {
+      prefs.setString("matricula", "0");
+      prefs.setString("senha", "0");
+    });
+  }
+
   //LISTA DE ICONES DA HOME.
   Widget widgetBotoesInicio() {
     bool boolMobile = _size.width < _size.height;
     return Wrap(
-      direction: Axis.horizontal,
+      direction: SingletonLogin().loggedUser.type == 0 ? Axis.horizontal : Axis.vertical,
       crossAxisAlignment: WrapCrossAlignment.center,
       runSpacing: boolMobile ? _size.width * .1 : _size.width * .05,
       spacing: boolMobile ? _size.width * .1 : _size.width * .1,
       // runSpacing: size.height * 0.02,
       // spacing: 20,
-      children: <Widget>[
+      children: SingletonLogin().loggedUser.type == 0 ? <Widget>[
         botaoInicio(
           colorButton: Colors.white,
           textButton: "Escala",
           fncOnPressed: () async {
             Navigator.pushNamed(context, 'schedule/schedulePage');
-
-            //Guard guard = Guard(cpf: "111.111.111-11", type: 1, name: "Nome111", id: 2);
-            //deleteGuard(guard, context);
           },
           iconButton: Icons.pending_actions,
         ),
@@ -72,6 +84,31 @@ class _MenuState extends State<Menu> {
             Navigator.pushNamed(context, 'user/list');
           },
           iconButton: Icons.person,
+        ),
+        botaoInicio(
+          colorButton: Colors.white,
+          textButton: "Postos de Trabalho",
+          fncOnPressed: () {
+            Navigator.pushNamed(context, 'workplace/list');
+          },
+          iconButton: Icons.wb_shade,
+        ),
+        botaoInicio(
+          colorButton: Colors.white,
+          textButton: "Porteiros e Vigilantes",
+          fncOnPressed: () {
+            Navigator.pushNamed(context, 'guard/list');
+          },
+          iconButton: Icons.admin_panel_settings,
+        ),
+      ] : <Widget>[
+        botaoInicio(
+          colorButton: Colors.white,
+          textButton: "Escala",
+          fncOnPressed: () async {
+            Navigator.pushNamed(context, 'schedule/schedulePage');
+          },
+          iconButton: Icons.pending_actions,
         ),
         botaoInicio(
           colorButton: Colors.white,
