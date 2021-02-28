@@ -51,8 +51,13 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Container(
       color: AppColors.mainBlue,
+      child: Center(child: Image.asset(
+        "assets/logo_nome_branco.png",
+        width: size.width*0.85,
+      ),),
     );
   }
 }

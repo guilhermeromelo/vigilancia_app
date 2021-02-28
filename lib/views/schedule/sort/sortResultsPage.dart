@@ -1,8 +1,9 @@
+import 'dart:io';
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:vigilancia_app/controllers/schedule/scheduleDAO.dart';
 import 'package:vigilancia_app/models/guard/guard.dart';
 import 'package:vigilancia_app/models/schedule/scheldule.dart';
@@ -13,6 +14,12 @@ import 'package:vigilancia_app/views/shared/components/button/AppButton.dart';
 import 'package:vigilancia_app/views/shared/components/header/internalHeader.dart';
 import 'package:vigilancia_app/views/shared/components/titleOrRowBuilder/TitleOrRowBuilder.dart';
 import 'package:vigilancia_app/views/shared/constants/appColors.dart';
+
+
+import 'dart:typed_data';
+import 'package:esys_flutter_share/esys_flutter_share.dart';
+import 'package:flutter/rendering.dart';
+import 'package:path_provider/path_provider.dart';
 
 class SortResultsPage extends StatefulWidget {
   Schedule _scheduleToShow;
@@ -51,6 +58,8 @@ class SortResultsSubPage extends StatefulWidget {
 
 class _SortResultsSubPageState extends State<SortResultsSubPage> {
   Size get size => MediaQuery.of(context).size;
+  ScreenshotController screenshotController = ScreenshotController();
+  File _imageFile;
 
   @override
   void initState() {
@@ -62,12 +71,14 @@ class _SortResultsSubPageState extends State<SortResultsSubPage> {
   @override
   Widget build(BuildContext context) {
     //print(SingletonSchedule().selectedWorkplacesWithGuards);
-
-    return Container(
-      child: ListView.builder(
-        itemCount: widget.scheduleToShow.workPlacesWithGuards.length,
-        itemBuilder: itemBuilder,
+    return Screenshot(
+      child: Container(color: Colors.white,
+        child: ListView.builder(
+          itemCount: widget.scheduleToShow.workPlacesWithGuards.length,
+          itemBuilder: itemBuilder,
+        ),
       ),
+      controller: screenshotController,
     );
   }
 
@@ -166,30 +177,51 @@ class _SortResultsSubPageState extends State<SortResultsSubPage> {
             initialValue: widget.note,
           ),
         ),
-        Container(padding: EdgeInsets.only(bottom: 20),
+        Container(
+          padding: EdgeInsets.only(bottom: 20),
           width: size.width,
           child: AppButton(
             backgroundColor: Colors.black,
             labelText: "Atualizar Observações",
             onPressedFunction: () async {
               FocusScope.of(context).requestFocus(new FocusNode());
-              await updateNoteSchedule(context: context, note: widget.note, id: schedule.id);
+              await updateNoteSchedule(
+                  context: context, note: widget.note, id: schedule.id);
             },
           ),
         ),
-        Container(padding: EdgeInsets.only(bottom: 30),
+        Container(
+          padding: EdgeInsets.only(bottom: 30),
           width: size.width,
           child: AppButton(
-
             labelText: "Compartilhar Escala",
             onPressedFunction: () async {
-
+              //_takeScreenshotandShare();
             },
           ),
         )
       ],
     );
   }
+/*
+  _takeScreenshotandShare() async {
+    _imageFile = null;
+    screenshotController
+        .capture(delay: Duration(milliseconds: 10), pixelRatio: 2.0)
+        .then((File image) async {
+      setState(() {
+        _imageFile = image;
+      });
+      final directory = (await getApplicationDocumentsDirectory()).path;
+      Uint8List pngBytes = _imageFile.readAsBytesSync();
+      File imgFile = new File('$directory/screenshot.png');
+      imgFile.writeAsBytes(pngBytes);
+      print("File Saved to Gallery");
+      await Share.file('Anupam', 'screenshot.png', pngBytes, 'image/png');
+    }).catchError((onError) {
+      print(onError);
+    });
+  }*/
 }
 
 Widget scheduleHeader({Key key, Schedule schedule}) {

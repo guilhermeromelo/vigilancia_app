@@ -18,8 +18,23 @@ class _MenuState extends State<Menu> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return InternalHeader(
-      title: "Inicio",
+      bottomSheet: Container(
+        color: AppColors.menuGrey,
+        height: 75,
+        child: Column(
+          children: [
+            Image.asset(
+              "assets/logo_nome_azul.png",
+              width: 120,
+            ),
+            Padding(padding: EdgeInsets.only(top:5), child: Text("By Guilherme R. Melo", style: TextStyle(fontSize: 16,color: AppColors.mainBlue),),)
+          ],
+        ),
+        alignment: Alignment.center,
+      ),
+      title: "Vigilância App",
       leftIcon: null,
       leftIconFunction: null,
       rightIcon1: Icons.logout,
@@ -126,6 +141,7 @@ class _MenuState extends State<Menu> {
           },
           iconButton: Icons.admin_panel_settings,
         ),
+
       ],
     );
   }

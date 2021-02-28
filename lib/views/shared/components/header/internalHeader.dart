@@ -51,23 +51,25 @@ class InternalHeader extends StatelessWidget {
   @required
   final String title;
   final Widget body;
+  final Widget bottomSheet;
   @required
-
   const InternalHeader(
       {Key key,
-        this.leftIcon,
-        this.leftIconFunction,
-        this.rightIcon1,
-        this.rightIcon1Function,
-        this.rightIcon2,
-        this.rightIcon2Function,
-        this.title,
-        this.body})
+      this.leftIcon,
+      this.leftIconFunction,
+      this.rightIcon1,
+      this.rightIcon1Function,
+      this.rightIcon2,
+      this.rightIcon2Function,
+      this.title,
+      this.body,
+      this.bottomSheet})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomSheet: bottomSheet,
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(

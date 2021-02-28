@@ -8,6 +8,7 @@ import 'package:vigilancia_app/models/user/user.dart';
 import 'package:vigilancia_app/views/login/singletonLogin.dart';
 import 'package:vigilancia_app/views/shared/components/appTextFormField/appTextFormField.dart';
 import 'package:vigilancia_app/views/shared/components/button/AppButton.dart';
+import 'package:vigilancia_app/views/shared/constants/appColors.dart';
 import 'package:vigilancia_app/views/shared/constants/masks.dart';
 
 class LoginPage extends StatefulWidget {
@@ -35,10 +36,29 @@ class _LoginPageState extends State<LoginPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Padding(
+              padding: EdgeInsets.only(bottom: size.height*0.01),
+              child: Image.asset(
+                "assets/logo_nome_azul.png",
+                height: size.height*0.10,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.zero,
+              child: Center(
+                child: Text(
+                  "Realize o Login Para Continuar",
+                  style: TextStyle(
+                    color: AppColors.mainBlue,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+            ),
             AppTextFormField(
               initialValue: widget._matricula,
               labelText: "Matrícula",
-              externalPadding: EdgeInsets.only(top: 15, left: 10, right: 10),
+              externalPadding: EdgeInsets.only(top: size.height*0.015, left: 10, right: 10),
               validatorFunction: (text) {
                 if (text.isEmpty) return "Campo Vazio";
               },
@@ -56,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
               obscureText: widget._obscureText,
               initialValue: widget._senha,
               labelText: "Senha",
-              externalPadding: EdgeInsets.only(top: 15, left: 10, right: 10),
+              externalPadding: EdgeInsets.only(top: size.height*0.015, left: 10, right: 10),
               validatorFunction: (text) {
                 if (text.isEmpty) return "Campo Vazio";
               },

@@ -34,7 +34,7 @@ dependencies:
   firebase_core: ^0.5.3
   cloud_firestore: ^0.14.4
   shared_preferences: ^0.5.12+4
-  screenshot: ^0.3.0
+  screenshot: ^0.1.1
   esys_flutter_share: ^1.0.2
 
   crypto: ^2.1.5
@@ -61,6 +61,9 @@ flutter:
   uses-material-design: true
   assets:
     - assets/guarita.png
+    - assets/logo_sem_nome.png
+    - assets/logo_nome_branco.png
+    - assets/logo_nome_azul.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
