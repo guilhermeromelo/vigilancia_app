@@ -100,7 +100,7 @@ class _SelectGuardsPageState extends State<SelectGuardsPage> {
       Widget widget4,
       Widget widget5}) {
     return InternalHeaderWithTabBarx5(
-      title: "Sortear - " + (_isDaytime ? "Diurno" : "Noturno"),
+      title: "Sortear - " + (_isDaytime ? "Diurna" : "Noturna"),
       rightIcon1: Icons.refresh,
       rightIcon1Function: () {
         setState(() {});

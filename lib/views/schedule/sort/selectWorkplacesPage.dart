@@ -80,7 +80,7 @@ class _SelectWorkplacePageState extends State<SelectWorkplacePage> {
             .get();
 
     return InternalHeader(
-      title: "Sortear - " + (_isDaytime ? "Diurno" : "Noturno"),
+      title: "Sortear - " + (_isDaytime ? "Diurna" : "Noturna"),
       rightIcon1: Icons.refresh,
       rightIcon1Function: () {
         setState(() {

@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:vigilancia_app/models/schedule/scheldule.dart';
 import 'package:vigilancia_app/views/schedule/singletonSchedule.dart';
 import 'package:vigilancia_app/views/shared/components/appTextFormField/appTextFormField.dart';
+import 'package:vigilancia_app/views/shared/components/button/AppButton.dart';
 import 'package:vigilancia_app/views/shared/components/cards/workplaceCard.dart';
 import 'package:vigilancia_app/views/shared/components/dateFormat/dateFormat.dart';
 import 'package:vigilancia_app/views/shared/components/widgetStreamOrFutureBuilder/widgetStreamOrFutureBuilder.dart';
@@ -31,16 +33,6 @@ class _ScheduleListPageState extends State<ScheduleListPage> {
       leftIconFunction: () {
         Navigator.pop(context);
       },
-      rightIcon2: Icons.wb_sunny,
-      rightIcon2Function: () {
-        SingletonSchedule().isDaytime = true;
-        Navigator.pushNamed(context, 'schedule/selectGuardsPage');
-      },
-      rightIcon1: Icons.nightlight_round,
-      rightIcon1Function: () {
-        SingletonSchedule().isDaytime = false;
-        Navigator.pushNamed(context, 'schedule/selectGuardsPage');
-      },
       body: ScheduleSubPage(),
     );
   }
@@ -57,20 +49,62 @@ class ScheduleSubPage extends StatefulWidget {
 class _ScheduleSubPageState extends State<ScheduleSubPage> {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Column(
       children: [
         Stack(
           children: [
             Container(
-              height: 78,
+              height: 155,
               color: AppColors.lightBlue,
             ),
-            AppTextFormField(
-              labelText: "Pesquisar",
-              externalPadding: EdgeInsets.only(top: 15, left: 10, right: 10),
-              validatorFunction: (text) {
-                if (text.isEmpty) return "Campo Vazio";
-              },
+            Column(
+              children: [
+                AppTextFormField(
+                  labelText: "Pesquisar",
+                  externalPadding:
+                      EdgeInsets.only(top: 15, left: 10, right: 10),
+                  validatorFunction: (text) {
+                    if (text.isEmpty) return "Campo Vazio";
+                  },
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 5, bottom: 5),
+                  child: Text(
+                    "Sortear Escala:",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      child: AppButton(
+                        externalPadding: EdgeInsets.only(right: 5),
+                        backgroundColor: AppColors.secondBlue,
+                        labelText: "Diurna",
+                        onPressedFunction: () {
+                          SingletonSchedule().isDaytime = true;
+                          Navigator.pushNamed(context, 'schedule/selectGuardsPage');
+                        },
+                      ),
+                      width: (size.width * 0.70) / 2,
+                    ),
+                    Container(
+                      child: AppButton(
+                        externalPadding: EdgeInsets.only(left: 5),
+                        backgroundColor: AppColors.green,
+                        labelText: "Noturna",
+                        onPressedFunction: () {
+                          SingletonSchedule().isDaytime = false;
+                          Navigator.pushNamed(context, 'schedule/selectGuardsPage');
+                        },
+                      ),
+                      width: (size.width * 0.70) / 2,
+                    )
+                  ],
+                )
+              ],
             )
           ],
         ),
@@ -112,7 +146,7 @@ class _ScheduleSubPageState extends State<ScheduleSubPage> {
         Padding(
           padding: EdgeInsets.only(bottom: 12),
           child: WorkplaceAndScheduleCard(
-            onTapFunction: (){
+            onTapFunction: () {
               SingletonSchedule().schedule = scheduleToShow;
               Navigator.pushNamed(context, 'schedule/resultsPage');
             },

@@ -12,6 +12,15 @@ class AppColors {
   //Azul claro
   static const Color lightBlue = Color(0X333B70A2);
 
+  //Segundo Tom Azul
+  static const Color secondBlue = Color(0XFF00a1d7);
+
+  //Terceiro Tom Azul
+  static const Color thirdBlue = Color(0XFF3b70a2);
+
+  //Verde
+  static const Color green = Color(0XFF10C476);
+
 /*
   //Verde claro - menu lateral
   static const Color verdeClaro = Color(0XFFBEE2C7);
