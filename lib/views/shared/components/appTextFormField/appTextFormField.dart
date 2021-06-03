@@ -48,6 +48,8 @@ class AppTextFormField extends StatelessWidget {
     return Padding(
       padding: externalPadding ?? EdgeInsets.zero,
       child: TextFormField(
+
+        textCapitalization: TextCapitalization.sentences,
         minLines: obscureText==null ? minLines ?? 1 : 1,
         maxLines: obscureText==null ? maxLines ?? 2 : 1,
         readOnly: readOnly ?? false,

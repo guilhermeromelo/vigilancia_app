@@ -19,6 +19,7 @@ import 'package:vigilancia_app/views/splash/splashPage.dart';
 import 'package:vigilancia_app/views/user/userListPage.dart';
 import 'package:vigilancia_app/views/user/userRegistration.dart';
 import 'package:intl/intl.dart';
+import 'package:vigilancia_app/views/user/UserEditionNoAdminPermition.dart';
 import 'package:vigilancia_app/views/workplace/workplaceInfoPage.dart';
 import 'package:vigilancia_app/views/workplace/workplaceListPage.dart';
 import 'package:vigilancia_app/views/workplace/workplaceRegistration.dart';
@@ -45,7 +46,7 @@ void main() async {
       .toString();
 */
   SingletonSchedule().isDaytime=true;
-  User logado = User(type: 0, name: "Guilherme", matricula: "0212313", id: 5);
+  User logado = User(type: 1, name: "Guilherme", matricula: "0212313", id: 5);
   SingletonLogin().loggedUser = logado;
 
 
@@ -71,6 +72,7 @@ void main() async {
       'schedule/resultsPage': (context) => SortResultsPage(),
       //User
       'user/registration': (context) => UserRegistrationPage(),
+      'user/registrationNoAdmin': (context) => UserEditionNoAdminPermitionPage(),
       'user/list': (context) => UserListPage(),
       //Guard
       'guard/registration': (context) => GuardRegistrationPage(),

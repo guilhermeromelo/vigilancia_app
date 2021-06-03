@@ -6,6 +6,7 @@ import 'package:vigilancia_app/models/guard/guard.dart';
 import 'package:vigilancia_app/views/login/singletonLogin.dart';
 import 'package:vigilancia_app/views/shared/components/header/internalHeader.dart';
 import 'package:vigilancia_app/views/shared/constants/appColors.dart';
+import 'package:vigilancia_app/views/user/singletonUser.dart';
 
 class Menu extends StatefulWidget {
   @override
@@ -77,13 +78,13 @@ class _MenuState extends State<Menu> {
   Widget widgetBotoesInicio() {
     bool boolMobile = _size.width < _size.height;
     return Wrap(
-      direction: SingletonLogin().loggedUser.type == 0 ? Axis.horizontal : Axis.vertical,
+      direction: Axis.horizontal,
       crossAxisAlignment: WrapCrossAlignment.center,
       runSpacing: boolMobile ? _size.width * .1 : _size.width * .05,
       spacing: boolMobile ? _size.width * .1 : _size.width * .1,
       // runSpacing: size.height * 0.02,
       // spacing: 20,
-      children: SingletonLogin().loggedUser.type == 0 ? <Widget>[
+      children: <Widget>[
         botaoInicio(
           colorButton: Colors.white,
           textButton: "Escala",
@@ -94,9 +95,15 @@ class _MenuState extends State<Menu> {
         ),
         botaoInicio(
           colorButton: Colors.white,
-          textButton: "Usuários",
+          textButton: SingletonLogin().loggedUser.type == 0 ? "Usuários" : "Meu Usuário",
           fncOnPressed: () {
-            Navigator.pushNamed(context, 'user/list');
+            if(SingletonLogin().loggedUser.type == 0){
+              Navigator.pushNamed(context, 'user/list');
+            }else{
+              SingletonUser().isUpdate = true;
+              SingletonUser().user = SingletonLogin().loggedUser;
+              Navigator.pushNamed(context, 'user/registrationNoAdmin');
+            }
           },
           iconButton: Icons.person,
         ),
@@ -116,33 +123,7 @@ class _MenuState extends State<Menu> {
           },
           iconButton: Icons.admin_panel_settings,
         ),
-      ] : <Widget>[
-        botaoInicio(
-          colorButton: Colors.white,
-          textButton: "Escala",
-          fncOnPressed: () async {
-            Navigator.pushNamed(context, 'schedule/schedulePage');
-          },
-          iconButton: Icons.pending_actions,
-        ),
-        botaoInicio(
-          colorButton: Colors.white,
-          textButton: "Postos de Trabalho",
-          fncOnPressed: () {
-            Navigator.pushNamed(context, 'workplace/list');
-          },
-          iconButton: Icons.wb_shade,
-        ),
-        botaoInicio(
-          colorButton: Colors.white,
-          textButton: "Porteiros e Vigilantes",
-          fncOnPressed: () {
-            Navigator.pushNamed(context, 'guard/list');
-          },
-          iconButton: Icons.admin_panel_settings,
-        ),
-
-      ],
+      ]
     );
   }
 

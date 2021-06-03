@@ -6,6 +6,7 @@ import 'package:vigilancia_app/models/user/user.dart';
 import 'package:vigilancia_app/views/shared/components/appTextFormField/appTextFormField.dart';
 import 'package:vigilancia_app/views/shared/components/button/AppButton.dart';
 import 'package:vigilancia_app/views/shared/components/header/InternalHeaderWithTabBar.dart';
+import 'package:vigilancia_app/views/shared/components/header/internalHeader.dart';
 import 'package:vigilancia_app/views/shared/components/popup/popup.dart';
 import 'package:vigilancia_app/views/shared/components/titleOrRowBuilder/TitleOrRowBuilder.dart';
 import 'package:vigilancia_app/views/shared/constants/appColors.dart';
@@ -17,12 +18,14 @@ String _matricula = "";
 String _senha = "";
 bool _obscureText = true;
 
-class UserRegistrationPage extends StatefulWidget {
+class UserEditionNoAdminPermitionPage extends StatefulWidget {
   @override
-  _UserRegistrationPageState createState() => _UserRegistrationPageState();
+  _UserEditionNoAdminPermitionPageState createState() =>
+      _UserEditionNoAdminPermitionPageState();
 }
 
-class _UserRegistrationPageState extends State<UserRegistrationPage> {
+class _UserEditionNoAdminPermitionPageState
+    extends State<UserEditionNoAdminPermitionPage> {
   @override
   void initState() {
     // TODO: implement initState
@@ -40,12 +43,8 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return InternalHeaderWithTabBar(
-      initialIndex: SingletonUser().isUpdate ? SingletonUser().user.type : 0,
-      tabQuantity_x2_or_x3: 2,
-      text1: "Administrador",
-      text2: "Líder Equipe",
-      title: SingletonUser().isUpdate ? "Editar Usuário" : "Novo Usuário",
+    return InternalHeader(
+      title: "Editar Usuário",
       leftIcon: Icons.arrow_back_ios,
       leftIconFunction: () {
         Navigator.pop(context);
@@ -77,28 +76,21 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
               }
             }
           : null,
-      widget1: UserRegistrationSubPage(
-        index: 0,
-      ),
-      widget2: UserRegistrationSubPage(
-        index: 1,
-      ),
+      body: UserRegistrationNoAdminSubPage(),
     );
   }
 }
 
-class UserRegistrationSubPage extends StatefulWidget {
+class UserRegistrationNoAdminSubPage extends StatefulWidget {
   final _formKey = GlobalKey<FormState>();
-  int index;
-
-  UserRegistrationSubPage({Key key, this.index}) : super(key: key);
 
   @override
-  _UserRegistrationSubPageState createState() =>
-      _UserRegistrationSubPageState();
+  _UserRegistrationNoAdminSubPageState createState() =>
+      _UserRegistrationNoAdminSubPageState();
 }
 
-class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
+class _UserRegistrationNoAdminSubPageState
+    extends State<UserRegistrationNoAdminSubPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -168,8 +160,7 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
                 ),
               )),
           AppButton(
-            labelText:
-                SingletonUser().isUpdate == false ? "Cadastrar" : "Atualizar",
+            labelText: "Atualizar",
             onPressedFunction: () async {
               if (widget._formKey.currentState.validate()) {
                 var bytes = utf8.encode(_senha); // data being hashed
@@ -179,20 +170,13 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
                     id: SingletonUser().isUpdate ? SingletonUser().user.id : 0,
                     name: _name,
                     matricula: _matricula,
-                    type: widget.index,
                     senha: digest.toString());
-                if (SingletonUser().isUpdate) {
-                  if (_senha.isEmpty) {
-                    await updateUserWithoutPassword(newUser, context);
-                  } else {
-                    await updateUserWithPassword(newUser, context);
-                  }
+                if (_senha.isEmpty) {
+                  await updateUserWithoutPassword(newUser, context);
                 } else {
-                  await addUser(newUser, context);
+                  await updateUserWithPassword(newUser, context);
                 }
-
-                await Navigator.popUntil(context, ModalRoute.withName('menu'));
-                Navigator.pushNamed(context, 'user/list');
+                Navigator.pop(context);
               }
             },
           ),
