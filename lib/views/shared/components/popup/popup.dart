@@ -177,3 +177,65 @@ class _PopUpYesOrNoState extends State<PopUpYesOrNo> {
     );
   }
 }
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------
+
+class PopUpInfo extends StatefulWidget {
+  Function onOkPressed;
+  String title;
+  String text;
+
+  PopUpInfo(
+      {Key key, this.onOkPressed, this.title, this.text})
+      : super(key: key);
+
+  @override
+  _PopUpInfoState createState() => _PopUpInfoState();
+}
+
+class _PopUpInfoState extends State<PopUpInfo> {
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return AlertDialog(
+      title: Text(
+        widget.title,
+        textAlign: TextAlign.center,
+      ),
+      content: Text(
+        widget.text,
+        textAlign: TextAlign.center,
+      ),
+      actions: [
+        Container(
+          width: (size.width * 0.77),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                child: AppButton(
+                  backgroundColor: Colors.green,
+                  labelText: "Ok",
+                  onPressedFunction: widget.onOkPressed ?? () {},
+                ),
+                width: (size.width * 0.70) / 2,
+              )
+            ],
+          ),
+        )
+      ],
+      titleTextStyle: TextStyle(
+          color: AppColors.mainBlue, fontSize: 24, fontWeight: FontWeight.w500),
+      contentTextStyle: TextStyle(
+          color: Colors.black, fontSize: 20, fontWeight: FontWeight.w500),
+      contentPadding: EdgeInsets.only(
+          left: size.width * 0.06,
+          right: size.width * 0.06,
+          top: 20,
+          bottom: 0),
+      actionsOverflowDirection: VerticalDirection.up,
+      actionsPadding: EdgeInsets.only(bottom: 20),
+    );
+  }
+}
