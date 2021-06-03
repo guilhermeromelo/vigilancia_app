@@ -5,14 +5,15 @@ class AppButton extends StatelessWidget {
   String labelText;
   Function onPressedFunction;
   Color backgroundColor;
+  EdgeInsets externalPadding;
 
-  AppButton({Key key, this.labelText, this.onPressedFunction, this.backgroundColor})
+  AppButton({Key key, this.labelText, this.onPressedFunction, this.backgroundColor, this.externalPadding})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 15, right: 15, top: 30),
+      padding: externalPadding ?? EdgeInsets.only(left: 15, right: 15, top: 30),
       child: RaisedButton(
         padding: EdgeInsets.only(top: 12, bottom: 12),
         child: Text(

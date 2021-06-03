@@ -7,6 +7,7 @@ import 'package:vigilancia_app/controllers/guard/guardDAO.dart';
 import 'package:vigilancia_app/views/guard/guardListPage.dart';
 import 'package:vigilancia_app/views/guard/guardRegistration.dart';
 import 'package:vigilancia_app/views/login/login_page.dart';
+import 'package:vigilancia_app/views/login/singletonLogin.dart';
 import 'package:vigilancia_app/views/menu/menu.dart';
 import 'package:vigilancia_app/views/schedule/scheduleListPage.dart';
 import 'package:vigilancia_app/views/schedule/singletonSchedule.dart';
@@ -23,6 +24,7 @@ import 'package:vigilancia_app/views/workplace/workplaceListPage.dart';
 import 'package:vigilancia_app/views/workplace/workplaceRegistration.dart';
 
 import 'models/guard/guard.dart';
+import 'models/user/user.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,6 +45,9 @@ void main() async {
       .toString();
 */
   SingletonSchedule().isDaytime=true;
+  User logado = User(type: 0, name: "Guilherme", matricula: "0212313", id: 5);
+  SingletonLogin().loggedUser = logado;
+
 
   runApp(MaterialApp(
     localizationsDelegates: [
@@ -50,7 +55,7 @@ void main() async {
       GlobalWidgetsLocalizations.delegate
     ],
     supportedLocales: [const Locale('pt', 'BR')],
-    initialRoute: 'splash',
+    initialRoute: 'menu',//'splash',
     debugShowCheckedModeBanner: false,
     routes: {
       //Splash

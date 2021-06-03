@@ -15,21 +15,24 @@ import 'package:vigilancia_app/views/shared/components/header/internalHeader.dar
 import 'package:vigilancia_app/views/shared/components/titleOrRowBuilder/TitleOrRowBuilder.dart';
 import 'package:vigilancia_app/views/shared/constants/appColors.dart';
 
-
 import 'dart:typed_data';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart';
 
+String note;
+
 class SortResultsPage extends StatefulWidget {
   Schedule _scheduleToShow;
-
+  bool isButtonVisible = true;
   @override
   _SortResultsPageState createState() => _SortResultsPageState();
 }
 
 class _SortResultsPageState extends State<SortResultsPage> {
+  ScreenshotController screenshotController = ScreenshotController();
   bool isDaytime = SingletonSchedule().isDaytime;
+
   @override
   Widget build(BuildContext context) {
     widget._scheduleToShow = SingletonSchedule().schedule;
@@ -40,17 +43,46 @@ class _SortResultsPageState extends State<SortResultsPage> {
         Navigator.of(context).pop();
       },
       leftIcon: Icons.arrow_back_ios,
+      rightIcon1Function: () {
+        setState(() {
+          widget.isButtonVisible = false;
+        });
+        _takeScreenshotandShare();
+      },
+      rightIcon1: Icons.share,
       body: SortResultsSubPage(
         scheduleToShow: widget._scheduleToShow,
+        screenshotController: screenshotController,
+        isButtonVisible: widget.isButtonVisible,
       ),
     );
+  }
+
+  _takeScreenshotandShare() async {
+    Uint8List _imageFile;
+    _imageFile = null;
+    screenshotController
+        .capture(delay: Duration(milliseconds: 10))
+        .then((Uint8List image) async {
+      _imageFile = image;
+      setState(() {
+        _imageFile = image;
+        widget.isButtonVisible = true;
+      });
+      await Share.file('Anupam', 'screenshot.png', _imageFile, 'image/png');
+    }).catchError((onError) {
+      print(onError);
+    });
   }
 }
 
 class SortResultsSubPage extends StatefulWidget {
   Schedule scheduleToShow;
-  String note = "";
-  SortResultsSubPage({Key key, this.scheduleToShow}) : super(key: key);
+  bool isButtonVisible;
+  ScreenshotController screenshotController;
+
+  SortResultsSubPage({Key key, this.scheduleToShow, this.screenshotController, this.isButtonVisible})
+      : super(key: key);
 
   @override
   _SortResultsSubPageState createState() => _SortResultsSubPageState();
@@ -58,27 +90,35 @@ class SortResultsSubPage extends StatefulWidget {
 
 class _SortResultsSubPageState extends State<SortResultsSubPage> {
   Size get size => MediaQuery.of(context).size;
-  ScreenshotController screenshotController = ScreenshotController();
   File _imageFile;
 
   @override
   void initState() {
     // TODO: implement initState
-    widget.note = widget.scheduleToShow.note;
+    note = widget.scheduleToShow.note;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     //print(SingletonSchedule().selectedWorkplacesWithGuards);
-    return Screenshot(
-      child: Container(color: Colors.white,
-        child: ListView.builder(
-          itemCount: widget.scheduleToShow.workPlacesWithGuards.length,
-          itemBuilder: itemBuilder,
+    return Container(
+      height: double.infinity,
+      child: SingleChildScrollView(
+        child: Screenshot(
+          child: Container(
+            width: double.infinity,
+            child: ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: widget.scheduleToShow.workPlacesWithGuards.length,
+              itemBuilder: itemBuilder,
+            ),
+            color: Colors.white,
+          ),
+          controller: widget.screenshotController,
         ),
       ),
-      controller: screenshotController,
     );
   }
 
@@ -172,80 +212,56 @@ class _SortResultsSubPageState extends State<SortResultsSubPage> {
             minLines: 3,
             maxLines: 3,
             onChangedFunction: (text) {
-              widget.note = text;
+              note = text;
             },
-            initialValue: widget.note,
+            initialValue: note,
           ),
         ),
         Container(
           padding: EdgeInsets.only(bottom: 20),
           width: size.width,
-          child: AppButton(
-            backgroundColor: Colors.black,
-            labelText: "Atualizar Observações",
-            onPressedFunction: () async {
-              FocusScope.of(context).requestFocus(new FocusNode());
-              await updateNoteSchedule(
-                  context: context, note: widget.note, id: schedule.id);
-            },
+          child: Visibility(
+            visible: widget.isButtonVisible,
+            child: AppButton(
+              externalPadding: EdgeInsets.only(left: 15, right: 15, top: 15),
+              backgroundColor: Colors.black,
+              labelText: "Atualizar Observações",
+              onPressedFunction: () async {
+                FocusScope.of(context).requestFocus(new FocusNode());
+                await updateNoteSchedule(
+                    context: context, note: note, id: schedule.id);
+              },
+            ),
           ),
         ),
-        Container(
-          padding: EdgeInsets.only(bottom: 30),
-          width: size.width,
-          child: AppButton(
-            labelText: "Compartilhar Escala",
-            onPressedFunction: () async {
-              //_takeScreenshotandShare();
-            },
-          ),
-        )
       ],
     );
   }
-/*
-  _takeScreenshotandShare() async {
-    _imageFile = null;
-    screenshotController
-        .capture(delay: Duration(milliseconds: 10), pixelRatio: 2.0)
-        .then((File image) async {
-      setState(() {
-        _imageFile = image;
-      });
-      final directory = (await getApplicationDocumentsDirectory()).path;
-      Uint8List pngBytes = _imageFile.readAsBytesSync();
-      File imgFile = new File('$directory/screenshot.png');
-      imgFile.writeAsBytes(pngBytes);
-      print("File Saved to Gallery");
-      await Share.file('Anupam', 'screenshot.png', pngBytes, 'image/png');
-    }).catchError((onError) {
-      print(onError);
-    });
-  }*/
-}
 
-Widget scheduleHeader({Key key, Schedule schedule}) {
-  return Column(
-    children: [
-      TitleBuilder(
-          title: "Informações da Escala",
-          padding: EdgeInsets.only(top: 10, bottom: 5)),
-      RowBuilderx2(
-        flex1: 50,
-        flex2: 50,
-        padding: EdgeInsets.only(left: 8),
-        subject1: "Turno: ",
-        text1: schedule.type == 0
-            ? "Diurno"
-            : (schedule.type == 1 ? "Noturno" : "Erro"),
-        subject2: "Data: ",
-        text2:
-            DateFormat("dd/MM/yy").format(schedule.scheduleDateTime).toString(),
-      ),
-      RowBuilder(
-          subject: "Criador: ",
-          text: schedule.creatorUser,
-          padding: EdgeInsets.only(left: 8))
-    ],
-  );
+  Widget scheduleHeader({Key key, Schedule schedule}) {
+    return Column(
+      children: [
+        TitleBuilder(
+            title: "Informações da Escala",
+            padding: EdgeInsets.only(top: 10, bottom: 5)),
+        RowBuilderx2(
+          flex1: 50,
+          flex2: 50,
+          padding: EdgeInsets.only(left: 8),
+          subject1: "Turno: ",
+          text1: schedule.type == 0
+              ? "Diurno"
+              : (schedule.type == 1 ? "Noturno" : "Erro"),
+          subject2: "Data: ",
+          text2: DateFormat("dd/MM/yy")
+              .format(schedule.scheduleDateTime)
+              .toString(),
+        ),
+        RowBuilder(
+            subject: "Criador: ",
+            text: schedule.creatorUser,
+            padding: EdgeInsets.only(left: 8))
+      ],
+    );
+  }
 }
