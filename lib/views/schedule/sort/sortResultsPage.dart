@@ -8,7 +8,7 @@ import 'package:vigilancia_app/controllers/schedule/scheduleDAO.dart';
 import 'package:vigilancia_app/models/guard/guard.dart';
 import 'package:vigilancia_app/models/schedule/scheldule.dart';
 import 'package:vigilancia_app/views/schedule/singletonSchedule.dart';
-import 'package:vigilancia_app/views/schedule/sort/sortAlgorithm.dart';
+import 'file:///C:/Users/Guilherme/Desktop/Programacao/vigilancia_app/lib/controllers/schedule/sortAlgorithm.dart';
 import 'package:vigilancia_app/views/shared/components/appTextFormField/appTextFormField.dart';
 import 'package:vigilancia_app/views/shared/components/button/AppButton.dart';
 import 'package:vigilancia_app/views/shared/components/header/internalHeader.dart';

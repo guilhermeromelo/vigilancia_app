@@ -4,11 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:vigilancia_app/controllers/schedule/dateValidation.dart';
 import 'package:vigilancia_app/models/workplace/workplace.dart';
 import 'package:vigilancia_app/views/login/singletonLogin.dart';
 import 'package:vigilancia_app/views/schedule/singletonSchedule.dart';
 import 'package:vigilancia_app/views/schedule/sort/selectGuardsPage.dart';
-import 'package:vigilancia_app/views/schedule/sort/sortAlgorithm.dart';
+import 'file:///C:/Users/Guilherme/Desktop/Programacao/vigilancia_app/lib/controllers/schedule/sortAlgorithm.dart';
 import 'package:vigilancia_app/views/shared/components/appTextFormField/appTextFormField.dart';
 import 'package:vigilancia_app/views/shared/components/button/AppButton.dart';
 import 'package:vigilancia_app/views/shared/components/cards/workplaceEdititableCard.dart';
@@ -58,6 +59,8 @@ class _SelectWorkplacePageState extends State<SelectWorkplacePage> {
     _isAllSelected = 0;
     _tempModification.clear();
     _idSelected.clear();
+    dormanCont = 0;
+    guardCount = 0;
     guardPlacesCont = SingletonSchedule().selectedGuards.length;
     dormanPlacesCont = SingletonSchedule().selectedDoormans.length;
     super.initState();
@@ -245,26 +248,45 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
                             guardPlacesCont == guardCount)
                         ? PopUpSchedule(
                             onButtonPressed: () async {
-                              List<Map<String, dynamic>> selectedWorkplaces =
-                                  new List();
-                              _list.forEach((element) {
-                                if (element['isChecked'] == true) {
-                                  selectedWorkplaces.add(element);
-                                }
-                              });
-                              //print(selectedWorkplaces);
-                              SingletonSchedule().selectedWorkplaces =
-                                  selectedWorkplaces;
-                              sortGuards(
-                                  creator: widget._creatorName,
-                                  date: _selectedDate,
-                                  context: context,
-                                  type: SingletonSchedule().isDaytime ? 0 : 1);
+                              if (await isDateValid(_selectedDate,
+                                  SingletonSchedule().isDaytime)) {
+                                List<Map<String, dynamic>> selectedWorkplaces =
+                                    new List();
+                                _list.forEach((element) {
+                                  if (element['isChecked'] == true) {
+                                    selectedWorkplaces.add(element);
+                                  }
+                                });
+                                //print(selectedWorkplaces);
+                                SingletonSchedule().selectedWorkplaces =
+                                    selectedWorkplaces;
+                                sortGuards(
+                                    creator: widget._creatorName,
+                                    date: _selectedDate,
+                                    context: context,
+                                    type:
+                                        SingletonSchedule().isDaytime ? 0 : 1);
 
-                              await Navigator.popUntil(context,
-                                  ModalRoute.withName('schedule/schedulePage'));
-                              Navigator.pushNamed(
-                                  context, 'schedule/resultsPage');
+                                await Navigator.popUntil(
+                                    context,
+                                    ModalRoute.withName(
+                                        'schedule/schedulePage'));
+                                Navigator.pushNamed(
+                                    context, 'schedule/resultsPage');
+                              } else {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return PopUpInfo(
+                                        onOkPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        title: "Atenção !",
+                                        text:
+                                            "Esta escala já foi sorteada! Verifique o dia e o turno e tente novamente.",
+                                      );
+                                    });
+                              }
                             },
                             onFormTextFieldChange: getItem,
                             formTextFieldValidator: (text) {

@@ -4,6 +4,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:vigilancia_app/models/schedule/scheldule.dart';
 import 'package:vigilancia_app/views/shared/constants/appColors.dart';
 
+import 'dateValidation.dart';
+
 Future<String> whoIsNextSchedule() async {
   var snapshot = (await FirebaseFirestore.instance
       .collection("schedule")
@@ -31,12 +33,15 @@ Future<String> whoIsNextSchedule() async {
 
 Future<String> addSchedule(Schedule newSchedule, BuildContext context) async {
   String idNextSchedule = await whoIsNextSchedule();
-  await FirebaseFirestore.instance.collection("schedule").doc(idNextSchedule).set({
+  await FirebaseFirestore.instance
+      .collection("schedule")
+      .doc(idNextSchedule)
+      .set({
     "id": int.parse(idNextSchedule),
     "creatorUser": newSchedule.creatorUser,
     "workPlacesWithGuards": newSchedule.workPlacesWithGuards,
     "creationDateTime": DateTime.now(),
-    "scheduleDateTime": newSchedule.scheduleDateTime,
+    "scheduleDateTime": removeTime(newSchedule.scheduleDateTime),
     "note": newSchedule.note,
     "type": newSchedule.type,
     "visible": true
@@ -54,8 +59,8 @@ void updateSchedule(Schedule updateSchedule, BuildContext context) async {
   });
 }*/
 
-
-void updateNoteSchedule({Key key, int id, String note, BuildContext context}) async {
+void updateNoteSchedule(
+    {Key key, int id, String note, BuildContext context}) async {
   await FirebaseFirestore.instance
       .collection("schedule")
       .doc(id.toString())
@@ -98,4 +103,20 @@ void updateScheduleVisibility(int id, bool visible) async {
       .collection("schedule")
       .doc(id.toString())
       .update({"visible": visible});
+}
+
+Future<bool> checkDuplicateSchedule(DateTime dateToCheck, bool isDay) async {
+  bool alreadyExist = false;
+
+  List<Schedule> scheduleList = List();
+  await FirebaseFirestore.instance
+      .collection("schedule")
+      .where('scheduleDateTime', isEqualTo: removeTime(dateToCheck))
+      .where('type', isEqualTo: isDay ? 0 : 1)
+      .get()
+      .then((QuerySnapshot querySnapshot) {
+        if(querySnapshot.docs.length != 0 || querySnapshot.docs.isNotEmpty)
+          alreadyExist = true;
+  });
+  return alreadyExist;
 }
