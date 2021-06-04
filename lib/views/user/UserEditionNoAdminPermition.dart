@@ -49,33 +49,6 @@ class _UserEditionNoAdminPermitionPageState
       leftIconFunction: () {
         Navigator.pop(context);
       },
-      rightIcon1: SingletonUser().isUpdate ? Icons.delete : null,
-      rightIcon1Function: SingletonUser().isUpdate
-          ? () {
-              if (SingletonUser().isUpdate) {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return PopUpYesOrNo(
-                      title: 'Deletar Usuário',
-                      text: 'Deseja realmente deletar este usuário?',
-                      onYesPressed: () async {
-                        SingletonUser().currentIndexForUserListPage =
-                            SingletonUser().user.type;
-                        await deleteUser(SingletonUser().user.id, context);
-                        await Navigator.popUntil(
-                            context, ModalRoute.withName('menu'));
-                        Navigator.pushNamed(context, 'user/list');
-                      },
-                      onNoPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    );
-                  },
-                );
-              }
-            }
-          : null,
       body: UserRegistrationNoAdminSubPage(),
     );
   }
@@ -110,6 +83,8 @@ class _UserRegistrationNoAdminSubPageState
             },
           ),
           AppTextFormField(
+            keyboardInputType: TextInputType.number,
+            readOnly: true,
             initialValue: _matricula,
             labelText: "Matrícula",
             externalPadding: EdgeInsets.only(top: 15, left: 10, right: 10),
@@ -120,7 +95,9 @@ class _UserRegistrationNoAdminSubPageState
               _matricula = text;
             },
           ),
+          Text("A matrícula pode ser alterada somente por um Administrador.", style: TextStyle(fontSize: 15),textAlign: TextAlign.center,),
           AppTextFormField(
+            textCapitalization: TextCapitalization.none,
             suffixIcon: _obscureText ? Icons.visibility : Icons.visibility_off,
             suffixIconOnPressed: () {
               setState(() {

@@ -146,6 +146,7 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
             },
           ),
           AppTextFormField(
+            keyboardInputType: TextInputType.number,
             onChangedFunction: (text) {
               _matricula = text;
             },

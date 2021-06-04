@@ -61,6 +61,7 @@ class _ScheduleSubPageState extends State<ScheduleSubPage> {
             Column(
               children: [
                 AppTextFormField(
+                  textCapitalization: TextCapitalization.sentences,
                   labelText: "Pesquisar",
                   externalPadding:
                       EdgeInsets.only(top: 15, left: 10, right: 10),

@@ -45,9 +45,8 @@ void main() async {
       .format(DateTime.now())
       .toString();
 */
-  SingletonSchedule().isDaytime=true;
-  User logado = User(type: 1, name: "Guilherme", matricula: "0212313", id: 5);
-  SingletonLogin().loggedUser = logado;
+  /*User logado = User(type: 1, name: "Guilherme", matricula: "0212313", id: 1);
+  SingletonLogin().loggedUser = logado;*/
 
 
   runApp(MaterialApp(
@@ -56,7 +55,7 @@ void main() async {
       GlobalWidgetsLocalizations.delegate
     ],
     supportedLocales: [const Locale('pt', 'BR')],
-    initialRoute: 'menu',//'splash',
+    initialRoute: 'splash',
     debugShowCheckedModeBanner: false,
     routes: {
       //Splash

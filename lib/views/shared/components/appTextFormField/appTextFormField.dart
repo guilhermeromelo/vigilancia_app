@@ -20,27 +20,29 @@ class AppTextFormField extends StatelessWidget {
   bool readOnly;
   int minLines;
   int maxLines;
+  TextCapitalization textCapitalization;
 
   TextEditingController _controller = TextEditingController();
 
-  AppTextFormField({
-    Key key,
-    this.initialValue,
-    this.onChangedFunction,
-    this.validatorFunction,
-    this.keyboardInputType,
-    this.labelText,
-    this.inputFormatterField,
-    this.suffixIcon,
-    this.suffixIconColor,
-    this.suffixIconOnPressed,
-    this.externalPadding,
-    this.autoFocus,
-    this.obscureText,
-    this.readOnly,
-    this.minLines,
-    this.maxLines
-  }) : super(key: key);
+  AppTextFormField(
+      {Key key,
+      this.initialValue,
+      this.onChangedFunction,
+      this.validatorFunction,
+      this.keyboardInputType,
+      this.labelText,
+      this.inputFormatterField,
+      this.suffixIcon,
+      this.suffixIconColor,
+      this.suffixIconOnPressed,
+      this.externalPadding,
+      this.autoFocus,
+      this.obscureText,
+      this.readOnly,
+      this.minLines,
+      this.maxLines,
+      this.textCapitalization})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,10 +50,9 @@ class AppTextFormField extends StatelessWidget {
     return Padding(
       padding: externalPadding ?? EdgeInsets.zero,
       child: TextFormField(
-
-        textCapitalization: TextCapitalization.sentences,
-        minLines: obscureText==null ? minLines ?? 1 : 1,
-        maxLines: obscureText==null ? maxLines ?? 2 : 1,
+        textCapitalization: textCapitalization ?? TextCapitalization.words,
+        minLines: obscureText == null ? minLines ?? 1 : 1,
+        maxLines: obscureText == null ? maxLines ?? 2 : 1,
         readOnly: readOnly ?? false,
         obscureText: obscureText ?? false,
         autofocus: autoFocus ?? false,

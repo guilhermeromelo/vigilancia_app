@@ -118,6 +118,7 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
             },
           ),
           AppTextFormField(
+            keyboardInputType: TextInputType.number,
             initialValue: _matricula,
             labelText: "Matrícula",
             externalPadding: EdgeInsets.only(top: 15, left: 10, right: 10),
@@ -129,6 +130,7 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
             },
           ),
           AppTextFormField(
+            textCapitalization: TextCapitalization.none,
             suffixIcon: _obscureText ? Icons.visibility : Icons.visibility_off,
             suffixIconOnPressed: () {
               setState(() {

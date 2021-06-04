@@ -208,6 +208,7 @@ class _SortResultsSubPageState extends State<SortResultsSubPage> {
         Padding(
           padding: EdgeInsets.only(top: 25, left: 8, right: 8),
           child: AppTextFormField(
+            textCapitalization: TextCapitalization.sentences,
             labelText: "Observações: ",
             minLines: 3,
             maxLines: 3,

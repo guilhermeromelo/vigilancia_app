@@ -56,6 +56,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             AppTextFormField(
+              keyboardInputType: TextInputType.number,
               initialValue: widget._matricula,
               labelText: "Matrícula",
               externalPadding: EdgeInsets.only(top: size.height*0.015, left: 10, right: 10),
@@ -67,6 +68,7 @@ class _LoginPageState extends State<LoginPage> {
               },
             ),
             AppTextFormField(
+              textCapitalization: TextCapitalization.none,
               suffixIcon: widget._obscureText ? Icons.visibility : Icons.visibility_off,
               suffixIconOnPressed: (){
                 setState(() {

@@ -283,7 +283,7 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
                                         },
                                         title: "Atenção !",
                                         text:
-                                            "Esta escala já foi sorteada! Verifique o dia e o turno e tente novamente.",
+                                            "Esta escala já foi sorteada! Verifique o data e o turno e tente novamente.",
                                       );
                                     });
                               }
