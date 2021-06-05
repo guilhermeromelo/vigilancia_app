@@ -88,7 +88,7 @@ class WorkplaceListSubPage extends StatefulWidget {
 class _WorkplaceListSubPageState extends State<WorkplaceListSubPage> {
   @override
   Widget build(BuildContext context) {
-
+    SingletonWorkplace().currentIndexForWorkplaceListPage = widget.index;
     if (widget.snapshot.data.docs.length == 0) {
       return containerWithNotFoundMessage(
           "Desculpe! Não encontrei ninguém cadastrado neste time :(");

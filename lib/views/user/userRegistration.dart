@@ -41,7 +41,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
   @override
   Widget build(BuildContext context) {
     return InternalHeaderWithTabBar(
-      initialIndex: SingletonUser().isUpdate ? SingletonUser().user.type : 0,
+      initialIndex: SingletonUser().isUpdate ? SingletonUser().user.type : 1,
       tabQuantity_x2_or_x3: 2,
       text1: "Administrador",
       text2: "Líder Equipe",

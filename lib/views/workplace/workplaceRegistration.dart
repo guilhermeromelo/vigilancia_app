@@ -33,7 +33,7 @@ class _WorkplaceRegistrationPageState extends State<WorkplaceRegistrationPage> {
       _placeName = "";
       _doormanQt = 0;
       _guardQt = 0;
-      _initialIndex = 0;
+      _initialIndex = SingletonWorkplace().currentIndexForWorkplaceListPage;
     }
     super.initState();
   }
