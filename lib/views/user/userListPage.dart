@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:vigilancia_app/models/user/user.dart';
+import 'package:vigilancia_app/views/login/singletonLogin.dart';
 import 'package:vigilancia_app/views/shared/components/cards/guardCard.dart';
 import 'package:vigilancia_app/views/shared/components/header/InternalHeaderWithTabBar.dart';
 import 'package:vigilancia_app/views/shared/components/widgetStreamOrFutureBuilder/widgetStreamOrFutureBuilder.dart';
@@ -71,10 +72,8 @@ class _UserListPageState extends State<UserListPage> {
         SingletonUser().isUpdate = false;
         Navigator.pushNamed(context, 'user/registration');
       },
-      rightIcon1Function: (){
-        setState(() {
-
-        });
+      rightIcon1Function: () {
+        setState(() {});
       },
       rightIcon1: Icons.sync,
       text1: "Todos",
@@ -114,9 +113,9 @@ class _UserListSubPageState extends State<UserListSubPage> {
 
   Widget workplaceItemBuilder(BuildContext context, int index) {
     User userToShow = docToUser(widget.snapshot.data.docs.elementAt(index));
-    if(widget.index == 0){
+    if (widget.index == 0) {
       return userCardBuilder(userToShow);
-    }else{
+    } else {
       if (userToShow.type + 1 == widget.index)
         return userCardBuilder(userToShow);
       else
@@ -124,8 +123,6 @@ class _UserListSubPageState extends State<UserListSubPage> {
           height: 0,
         );
     }
-    
-
   }
 
   Widget userCardBuilder(User userToShow) {
@@ -136,10 +133,12 @@ class _UserListSubPageState extends State<UserListSubPage> {
           child: GuardCard(
             onCardTap: () {
               SingletonUser().isUpdate = true;
-            SingletonUser().user = userToShow;
+              SingletonUser().user = userToShow;
               Navigator.pushNamed(context, 'user/registration');
             },
-            name: userToShow.name,
+            name: (userToShow.name == SingletonLogin().loggedUser.name)
+                ? userToShow.name + " (Você)"
+                : userToShow.name,
             id: userToShow.id,
             type: userToShow.type,
             cpf: userToShow.matricula,

@@ -6,6 +6,7 @@ import 'package:vigilancia_app/views/shared/components/button/AppButton.dart';
 import 'package:vigilancia_app/views/shared/components/cards/guardCard.dart';
 import 'package:vigilancia_app/views/shared/components/header/internalHeader.dart';
 import 'package:vigilancia_app/views/shared/components/header/internalHeaderWithTabBarx5.dart';
+import 'package:vigilancia_app/views/shared/components/popup/popup.dart';
 import 'package:vigilancia_app/views/shared/components/titleOrRowBuilder/TitleOrRowBuilder.dart';
 import 'package:vigilancia_app/views/shared/components/widgetStreamOrFutureBuilder/widgetStreamOrFutureBuilder.dart';
 
@@ -399,20 +400,35 @@ class _SelectGuardsSubPageState extends State<SelectGuardsSubPage> {
       child: AppButton(
         labelText: "Prosseguir",
         onPressedFunction: () {
-          print(_selectedGuards.toString());
-          List<Guard> singletonSelectedGuards = new List();
-          List<Guard> singletonSelectedDoormans = new List();
-          _selectedGuards.forEach((element) {
-            if (element.type == 1) {
-              singletonSelectedDoormans.add(element);
-            } else {
-              singletonSelectedGuards.add(element);
-            }
-          });
-          SingletonSchedule().selectedGuards = singletonSelectedGuards;
-          SingletonSchedule().selectedDoormans = singletonSelectedDoormans;
-          print("selected doormans..." + singletonSelectedDoormans.toString());
-          Navigator.pushNamed(context, 'schedule/selectWorkplacesPage');
+          if(_selectedGuards.length > 0){
+            print(_selectedGuards.toString());
+            List<Guard> singletonSelectedGuards = new List();
+            List<Guard> singletonSelectedDoormans = new List();
+            _selectedGuards.forEach((element) {
+              if (element.type == 1) {
+                singletonSelectedDoormans.add(element);
+              } else {
+                singletonSelectedGuards.add(element);
+              }
+            });
+            SingletonSchedule().selectedGuards = singletonSelectedGuards;
+            SingletonSchedule().selectedDoormans = singletonSelectedDoormans;
+            print("selected doormans..." + singletonSelectedDoormans.toString());
+            Navigator.pushNamed(context, 'schedule/selectWorkplacesPage');
+          }else{
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return PopUpInfo(
+                    onOkPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    title: "Problema Encontrado!",
+                    text:
+                    "Selecione pelo menos uma pessoa para prosseguir.",
+                  );
+                });
+          }
         },
       ),
     );
