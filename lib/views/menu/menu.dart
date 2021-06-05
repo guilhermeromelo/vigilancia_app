@@ -5,6 +5,7 @@ import 'package:vigilancia_app/controllers/guard/guardDAO.dart';
 import 'package:vigilancia_app/models/guard/guard.dart';
 import 'package:vigilancia_app/views/login/singletonLogin.dart';
 import 'package:vigilancia_app/views/shared/components/header/internalHeader.dart';
+import 'package:vigilancia_app/views/shared/components/popup/popup.dart';
 import 'package:vigilancia_app/views/shared/constants/appColors.dart';
 import 'package:vigilancia_app/views/user/singletonUser.dart';
 
@@ -30,16 +31,28 @@ class _MenuState extends State<Menu> {
               "assets/logo_nome_azul.png",
               width: 120,
             ),
-            Padding(padding: EdgeInsets.only(top:5), child: Text("By Guilherme R. Melo", style: TextStyle(fontSize: 16,color: AppColors.mainBlue),),)
+            Padding(
+              padding: EdgeInsets.only(top: 5),
+              child: Text(
+                "By Guilherme R. Melo",
+                style: TextStyle(fontSize: 16, color: AppColors.mainBlue),
+              ),
+            )
           ],
         ),
         alignment: Alignment.center,
       ),
       title: "Vigilância App",
-      leftIcon: null,
-      leftIconFunction: null,
+      leftIcon: Icons.info_outline,
+      leftIconFunction: () {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return PopUpAboutApp();
+            });
+      },
       rightIcon1: Icons.logout,
-      rightIcon1Function: (){
+      rightIcon1Function: () {
         _clearSharedPreferences();
         Navigator.pushReplacementNamed(context, 'login');
       },
@@ -78,53 +91,54 @@ class _MenuState extends State<Menu> {
   Widget widgetBotoesInicio() {
     bool boolMobile = _size.width < _size.height;
     return Wrap(
-      direction: Axis.horizontal,
-      crossAxisAlignment: WrapCrossAlignment.center,
-      runSpacing: boolMobile ? _size.width * .1 : _size.width * .05,
-      spacing: boolMobile ? _size.width * .1 : _size.width * .1,
-      // runSpacing: size.height * 0.02,
-      // spacing: 20,
-      children: <Widget>[
-        botaoInicio(
-          colorButton: Colors.white,
-          textButton: "Escala",
-          fncOnPressed: () async {
-            Navigator.pushNamed(context, 'schedule/schedulePage');
-          },
-          iconButton: Icons.pending_actions,
-        ),
-        botaoInicio(
-          colorButton: Colors.white,
-          textButton: SingletonLogin().loggedUser.type == 0 ? "Usuários" : "Meu Usuário",
-          fncOnPressed: () {
-            if(SingletonLogin().loggedUser.type == 0){
-              Navigator.pushNamed(context, 'user/list');
-            }else{
-              SingletonUser().isUpdate = true;
-              SingletonUser().user = SingletonLogin().loggedUser;
-              Navigator.pushNamed(context, 'user/registrationNoAdmin');
-            }
-          },
-          iconButton: Icons.person,
-        ),
-        botaoInicio(
-          colorButton: Colors.white,
-          textButton: "Postos de Trabalho",
-          fncOnPressed: () {
-            Navigator.pushNamed(context, 'workplace/list');
-          },
-          iconButton: Icons.wb_shade,
-        ),
-        botaoInicio(
-          colorButton: Colors.white,
-          textButton: "Porteiros e Vigilantes",
-          fncOnPressed: () {
-            Navigator.pushNamed(context, 'guard/list');
-          },
-          iconButton: Icons.admin_panel_settings,
-        ),
-      ]
-    );
+        direction: Axis.horizontal,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        runSpacing: boolMobile ? _size.width * .1 : _size.width * .05,
+        spacing: boolMobile ? _size.width * .1 : _size.width * .1,
+        // runSpacing: size.height * 0.02,
+        // spacing: 20,
+        children: <Widget>[
+          botaoInicio(
+            colorButton: Colors.white,
+            textButton: "Escala",
+            fncOnPressed: () async {
+              Navigator.pushNamed(context, 'schedule/schedulePage');
+            },
+            iconButton: Icons.pending_actions,
+          ),
+          botaoInicio(
+            colorButton: Colors.white,
+            textButton: SingletonLogin().loggedUser.type == 0
+                ? "Usuários"
+                : "Meu Usuário",
+            fncOnPressed: () {
+              if (SingletonLogin().loggedUser.type == 0) {
+                Navigator.pushNamed(context, 'user/list');
+              } else {
+                SingletonUser().isUpdate = true;
+                SingletonUser().user = SingletonLogin().loggedUser;
+                Navigator.pushNamed(context, 'user/registrationNoAdmin');
+              }
+            },
+            iconButton: Icons.person,
+          ),
+          botaoInicio(
+            colorButton: Colors.white,
+            textButton: "Postos de Trabalho",
+            fncOnPressed: () {
+              Navigator.pushNamed(context, 'workplace/list');
+            },
+            iconButton: Icons.wb_shade,
+          ),
+          botaoInicio(
+            colorButton: Colors.white,
+            textButton: "Porteiros e Vigilantes",
+            fncOnPressed: () {
+              Navigator.pushNamed(context, 'guard/list');
+            },
+            iconButton: Icons.admin_panel_settings,
+          ),
+        ]);
   }
 
   //CRIANDO O BOTÃO DA HOME.

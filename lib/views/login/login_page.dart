@@ -8,6 +8,7 @@ import 'package:vigilancia_app/models/user/user.dart';
 import 'package:vigilancia_app/views/login/singletonLogin.dart';
 import 'package:vigilancia_app/views/shared/components/appTextFormField/appTextFormField.dart';
 import 'package:vigilancia_app/views/shared/components/button/AppButton.dart';
+import 'package:vigilancia_app/views/shared/components/popup/popup.dart';
 import 'package:vigilancia_app/views/shared/constants/appColors.dart';
 import 'package:vigilancia_app/views/shared/constants/masks.dart';
 
@@ -31,16 +32,15 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Form(
         key: widget._formKey,
-        child:
-        Column(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.only(bottom: size.height*0.01),
+              padding: EdgeInsets.only(bottom: size.height * 0.01),
               child: Image.asset(
                 "assets/logo_nome_azul.png",
-                height: size.height*0.10,
+                height: size.height * 0.10,
               ),
             ),
             Padding(
@@ -59,18 +59,20 @@ class _LoginPageState extends State<LoginPage> {
               keyboardInputType: TextInputType.number,
               initialValue: widget._matricula,
               labelText: "Matrícula",
-              externalPadding: EdgeInsets.only(top: size.height*0.015, left: 10, right: 10),
+              externalPadding: EdgeInsets.only(
+                  top: size.height * 0.015, left: 10, right: 10),
               validatorFunction: (text) {
                 if (text.isEmpty) return "Campo Vazio";
               },
-              onChangedFunction: (text){
+              onChangedFunction: (text) {
                 widget._matricula = text;
               },
             ),
             AppTextFormField(
               textCapitalization: TextCapitalization.none,
-              suffixIcon: widget._obscureText ? Icons.visibility : Icons.visibility_off,
-              suffixIconOnPressed: (){
+              suffixIcon:
+                  widget._obscureText ? Icons.visibility : Icons.visibility_off,
+              suffixIconOnPressed: () {
                 setState(() {
                   widget._obscureText = !widget._obscureText;
                 });
@@ -78,34 +80,77 @@ class _LoginPageState extends State<LoginPage> {
               obscureText: widget._obscureText,
               initialValue: widget._senha,
               labelText: "Senha",
-              externalPadding: EdgeInsets.only(top: size.height*0.015, left: 10, right: 10),
+              externalPadding: EdgeInsets.only(
+                  top: size.height * 0.015, left: 10, right: 10),
               validatorFunction: (text) {
                 if (text.isEmpty) return "Campo Vazio";
               },
-              onChangedFunction: (text){
+              onChangedFunction: (text) {
                 widget._senha = text;
               },
             ),
             Container(
               width: size.width,
-              child:  AppButton(
+              child: AppButton(
                 labelText: "Entrar",
                 onPressedFunction: () async {
                   FocusScope.of(context).requestFocus(new FocusNode());
                   var bytes = utf8.encode(widget._senha); // data being hashed
                   var digest = sha1.convert(bytes);
 
-                  if(widget._formKey.currentState.validate()){
-                    QuerySnapshot snapshot;
-                    snapshot = await FirebaseFirestore.instance.collection("users")
+                  if (widget._formKey.currentState.validate()) {
+
+                    await FirebaseFirestore.instance
+                        .collection("users")
                         .where("matricula", isEqualTo: widget._matricula)
                         .where("senha", isEqualTo: digest.toString())
-                        .get();
-                    if(snapshot!=null && snapshot.docs.isNotEmpty){
-                      SingletonLogin().loggedUser = docToUser(snapshot.docs.first);
-                      _increment();
-                      Navigator.pushReplacementNamed(context, 'menu');
-                    }
+                        .get()
+                        .timeout(Duration(seconds: 5), onTimeout: () {
+                      throw (showDialog(
+                          context: context,
+                          builder: (context) {
+                            return PopUpInfo(
+                              onOkPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              title: "Problema Encontrado!",
+                              text:
+                                  "Verifique sua conexão com a Internet ou tente novamente mais tarde!",
+                            );
+                          }));
+                    }).catchError((err) {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return PopUpInfo(
+                              onOkPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              title: "Problema Encontrado!",
+                              text:
+                                  "Verifique sua conexão com a Internet ou tente novamente mais tarde!",
+                            );
+                          });
+                    }).then((QuerySnapshot snapshot) {
+                      if (snapshot != null && snapshot.docs.isNotEmpty) {
+                        SingletonLogin().loggedUser =
+                            docToUser(snapshot.docs.first);
+                        _increment();
+                        Navigator.pushReplacementNamed(context, 'menu');
+                      } else {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return PopUpInfo(
+                                onOkPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                title: "Problema Encontrado!",
+                                text: "Verifique seu usuário, senha e conexão com a internet.",
+                              );
+                            });
+                      }
+                    });
                   }
                 },
               ),

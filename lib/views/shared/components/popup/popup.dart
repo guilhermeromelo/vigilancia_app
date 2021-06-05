@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:vigilancia_app/views/shared/components/appTextFormField/appTextFormField.dart';
 import 'package:vigilancia_app/views/shared/components/button/AppButton.dart';
 import 'package:vigilancia_app/views/shared/constants/appColors.dart';
 import 'package:vigilancia_app/views/shared/constants/masks.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PopUpSchedule extends StatefulWidget {
   Function onButtonPressed;
@@ -186,8 +188,7 @@ class PopUpInfo extends StatefulWidget {
   String title;
   String text;
 
-  PopUpInfo(
-      {Key key, this.onOkPressed, this.title, this.text})
+  PopUpInfo({Key key, this.onOkPressed, this.title, this.text})
       : super(key: key);
 
   @override
@@ -218,6 +219,92 @@ class _PopUpInfoState extends State<PopUpInfo> {
                   backgroundColor: Colors.green,
                   labelText: "Ok",
                   onPressedFunction: widget.onOkPressed ?? () {},
+                ),
+                width: (size.width * 0.70) / 2,
+              )
+            ],
+          ),
+        )
+      ],
+      titleTextStyle: TextStyle(
+          color: AppColors.mainBlue, fontSize: 24, fontWeight: FontWeight.w500),
+      contentTextStyle: TextStyle(
+          color: Colors.black, fontSize: 20, fontWeight: FontWeight.w500),
+      contentPadding: EdgeInsets.only(
+          left: size.width * 0.06,
+          right: size.width * 0.06,
+          top: 20,
+          bottom: 0),
+      actionsOverflowDirection: VerticalDirection.up,
+      actionsPadding: EdgeInsets.only(bottom: 20),
+    );
+  }
+}
+
+//---------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------
+
+class PopUpAboutApp extends StatefulWidget {
+  @override
+  _PopUpAboutAppState createState() => _PopUpAboutAppState();
+}
+
+class _PopUpAboutAppState extends State<PopUpAboutApp> {
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return AlertDialog(
+      title: Text(
+        "Vigilância App - v1.0",
+        textAlign: TextAlign.center,
+      ),
+      content: Text.rich(
+        TextSpan(
+          children: <TextSpan>[
+            TextSpan(
+              text:
+                  "Aplicativo desenvolvido para facilitar o sorteio dos Postos de Trabalho.",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 18.0,
+              ),
+            ),
+            TextSpan(
+              text: "\n\nDesenvolvido por:\n",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 18.0,
+              ),
+            ),
+            TextSpan(
+                text: "Guilherme R Melo",
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    launch('https://www.linkedin.com/in/guilherme-r-melo/',
+                        forceWebView: true, enableJavaScript: true);
+                  }),
+          ],
+        ),
+        textAlign: TextAlign.center,
+      ),
+      actions: [
+        Container(
+          width: (size.width * 0.77),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                child: AppButton(
+                  backgroundColor: Colors.green,
+                  labelText: "Ok",
+                  onPressedFunction: () {
+                    Navigator.of(context).pop();
+                  },
                 ),
                 width: (size.width * 0.70) / 2,
               )
