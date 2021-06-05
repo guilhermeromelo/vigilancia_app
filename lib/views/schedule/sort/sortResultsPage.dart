@@ -25,6 +25,7 @@ String note;
 class SortResultsPage extends StatefulWidget {
   Schedule _scheduleToShow;
   bool isButtonVisible = true;
+
   @override
   _SortResultsPageState createState() => _SortResultsPageState();
 }
@@ -81,7 +82,11 @@ class SortResultsSubPage extends StatefulWidget {
   bool isButtonVisible;
   ScreenshotController screenshotController;
 
-  SortResultsSubPage({Key key, this.scheduleToShow, this.screenshotController, this.isButtonVisible})
+  SortResultsSubPage(
+      {Key key,
+      this.scheduleToShow,
+      this.screenshotController,
+      this.isButtonVisible})
       : super(key: key);
 
   @override
@@ -178,6 +183,7 @@ class _SortResultsSubPageState extends State<SortResultsSubPage> {
                 height: 0,
               ),
         TitleBuilder(
+          fontWeight: FontWeight.bold,
             padding: EdgeInsets.only(top: 25, bottom: 5),
             title: widget.scheduleToShow.workPlacesWithGuards[index.toString()]
                 ['name']),
@@ -235,6 +241,16 @@ class _SortResultsSubPageState extends State<SortResultsSubPage> {
             ),
           ),
         ),
+        Visibility(
+          visible: !widget.isButtonVisible,
+          child: Padding(
+            padding: EdgeInsets.only(top: 10, bottom: 15),
+            child: Image.asset(
+              "assets/logo_nome_azul.png",
+              width: 120,
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -243,18 +259,19 @@ class _SortResultsSubPageState extends State<SortResultsSubPage> {
     return Column(
       children: [
         TitleBuilder(
+            fontWeight: FontWeight.bold,
             title: "Informações da Escala",
             padding: EdgeInsets.only(top: 10, bottom: 5)),
         RowBuilderx2(
           flex1: 50,
           flex2: 50,
           padding: EdgeInsets.only(left: 8),
-          subject1: "Turno: ",
-          text1: schedule.type == 0
+          subject2: "Turno: ",
+          text2: schedule.type == 0
               ? "Diurno"
               : (schedule.type == 1 ? "Noturno" : "Erro"),
-          subject2: "Data: ",
-          text2: DateFormat("dd/MM/yy")
+          subject1: "Data: ",
+          text1: DateFormat("dd/MM/yy")
               .format(schedule.scheduleDateTime)
               .toString(),
         ),

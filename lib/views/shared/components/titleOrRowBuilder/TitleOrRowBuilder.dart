@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vigilancia_app/views/shared/constants/appColors.dart';
 
-Padding TitleBuilder({Key key, EdgeInsets padding, String title}) {
+Padding TitleBuilder({Key key, EdgeInsets padding, String title, FontWeight fontWeight}) {
   return Padding(
     padding: padding ?? EdgeInsets.zero,
     child: Row(
@@ -9,7 +9,7 @@ Padding TitleBuilder({Key key, EdgeInsets padding, String title}) {
       children: [
         Text(
           title ?? "",
-          style: TextStyle(fontSize: 20, color: AppColors.mainBlue),
+          style: TextStyle(fontSize: 20, color: AppColors.mainBlue, fontWeight: fontWeight ?? FontWeight.normal),
         )
       ],
     ),
