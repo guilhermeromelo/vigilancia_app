@@ -39,3 +39,5 @@ app.*.symbols
 
 # Obfuscation related
 app.*.map.json
+android/app/banco_antigo_google-services.json
+android/app/google-services.json
