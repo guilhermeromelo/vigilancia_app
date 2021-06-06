@@ -119,6 +119,7 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
             },
           ),
           AppTextFormField(
+            inputFormatterField: AppMasks.matriculaMask,
             readOnly: SingletonUser().isUpdate == true ? true : false,
             keyboardInputType: TextInputType.number,
             initialValue: _matricula,
@@ -126,6 +127,7 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
             externalPadding: EdgeInsets.only(top: 15, left: 10, right: 10),
             validatorFunction: (text) {
               if (text.isEmpty) return "Campo Vazio";
+              if (text.length<=3) return "Matrícula Inválida";
             },
             onChangedFunction: (text) {
               _matricula = text;

@@ -56,13 +56,15 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             AppTextFormField(
+              inputFormatterField: AppMasks.matriculaMask,
               keyboardInputType: TextInputType.number,
               initialValue: widget._matricula,
               labelText: "Matrícula",
               externalPadding: EdgeInsets.only(
                   top: size.height * 0.015, left: 10, right: 10),
-              validatorFunction: (text) {
+              validatorFunction: (String text) {
                 if (text.isEmpty) return "Campo Vazio";
+                if (text.length<=3) return "Matrícula Inválida";
               },
               onChangedFunction: (text) {
                 widget._matricula = text;

@@ -7,6 +7,9 @@ class AppMasks {
   static  final MaskTextInputFormatter dataMask = MaskTextInputFormatter(
       mask: '##/##/##', filter: {"#": RegExp(r'[0-9]')}, initialText: "");
 
+  static  final MaskTextInputFormatter matriculaMask = MaskTextInputFormatter(
+      mask: '######', filter: {"#": RegExp(r'[0-9]')}, initialText: "");
+
   //Hour Mask
   static  final MaskTextInputFormatter hourMask = MaskTextInputFormatter(
       mask: '##:##', filter: {"#": RegExp(r'[0-9]')}, initialText: "");
