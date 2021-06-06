@@ -149,6 +149,7 @@ class _UserRegistrationNoAdminSubPageState
                     id: SingletonUser().isUpdate ? SingletonUser().user.id : 0,
                     name: _name,
                     matricula: _matricula,
+                    type: 1,
                     senha: digest.toString());
                 if (_senha.isEmpty) {
                   await updateUserWithoutPassword(newUser, context);
