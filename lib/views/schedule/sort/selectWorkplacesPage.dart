@@ -164,154 +164,21 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
   Widget ItemBuilder(BuildContext context, int index) {
     Size _size = MediaQuery.of(context).size;
     if (index == 0) {
-      return Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                  icon: Icon(_isAllSelected == 0
-                      ? Icons.check_box_outline_blank
-                      : _isAllSelected == 1
-                          ? Icons.indeterminate_check_box_outlined
-                          : Icons.check_box_outlined),
-                  onPressed: () {
-                    setState(() {
-                      if (_isAllSelected == 2) {
-                        _isAllSelected = 0;
-                      } else {
-                        _isAllSelected = 2;
-                      }
-                      if (_isAllSelected == 2) {
-                        _list.forEach((element) {
-                          _idSelected.add(element['id']);
-                          element['isChecked'] = true;
-                        });
-                        updateCont();
-                      } else {
-                        _idSelected.clear();
-                        _list.forEach((element) {
-                          element['isChecked'] = false;
-                        });
-                        updateCont();
-                      }
-                    });
-                  }),
-              Text(
-                "Selecionar Todos",
-                style: TextStyle(fontSize: 19),
-              )
-            ],
-          ),
-          WorkplaceCardBuilder(index)
-        ],
-      );
+      if(_list.length == 1){
+        return Column(
+          children: [SubPageHeaderBuilder(), WorkplaceCardBuilder(index), subPageFooter(_size)],
+        );
+      }else{
+        return Column(
+          children: [SubPageHeaderBuilder(), WorkplaceCardBuilder(index)],
+        );
+      }
+
     } else if (index == _list.length - 1) {
       return Column(
         children: [
           WorkplaceCardBuilder(index),
-          Padding(
-            padding: EdgeInsets.only(top: 15),
-            child: Text(
-              "Porteiros - Disp.: ${dormanPlacesCont}/ Alocados: ${dormanCont}",
-              style: TextStyle(
-                  fontSize: 20,
-                  color: (dormanPlacesCont == dormanCont)
-                      ? Colors.green
-                      : Colors.red),
-            ),
-          ),
-          Text(
-            "Vigilantes - Disp.: ${guardPlacesCont}/ Alocados: ${guardCount}",
-            style: TextStyle(
-                fontSize: 20,
-                color: (guardPlacesCont == guardCount)
-                    ? Colors.green
-                    : Colors.red),
-          ),
-          Container(
-            width: _size.width,
-            child: AppButton(
-              externalPadding:
-                  EdgeInsets.only(left: 15, right: 15, top: 30, bottom: 20),
-              labelText: "Sortear",
-              onPressedFunction: () {
-                //print(_tempModification);
-                print(_list);
-
-                updateCont();
-
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return (dormanCont == dormanPlacesCont &&
-                            guardPlacesCont == guardCount)
-                        ? PopUpSchedule(
-                            onButtonPressed: () async {
-                              if (await isDateValid(_selectedDate,
-                                  SingletonSchedule().isDaytime)) {
-                                List<Map<String, dynamic>> selectedWorkplaces =
-                                    new List();
-                                _list.forEach((element) {
-                                  if (element['isChecked'] == true) {
-                                    selectedWorkplaces.add(element);
-                                  }
-                                });
-                                //print(selectedWorkplaces);
-                                SingletonSchedule().selectedWorkplaces =
-                                    selectedWorkplaces;
-                                sortGuards(
-                                    creator: widget._creatorName,
-                                    date: _selectedDate,
-                                    context: context,
-                                    type:
-                                        SingletonSchedule().isDaytime ? 0 : 1);
-
-                                await Navigator.popUntil(
-                                    context,
-                                    ModalRoute.withName(
-                                        'schedule/schedulePage'));
-                                Navigator.pushNamed(
-                                    context, 'schedule/resultsPage');
-                              } else {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return PopUpInfo(
-                                        onOkPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        title: "Atenção !",
-                                        text:
-                                            "Esta escala já foi sorteada! Verifique o data e o turno e tente novamente.",
-                                      );
-                                    });
-                              }
-                            },
-                            onFormTextFieldChange: getItem,
-                            formTextFieldValidator: (text) {
-                              if (text.isEmpty) return "Campo Vazio";
-                            },
-                          )
-                        : PopUpInfo(
-                            onOkPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            title: "Atenção !",
-                            text: (dormanCont != dormanPlacesCont &&
-                                    guardPlacesCont != guardCount)
-                                ? "O Número de Porteiros e Vigilantes disponíveis deve ser igual ao número de Alocados"
-                                : ((dormanCont != dormanPlacesCont)
-                                    ? "O Número de Porteiros disponíveis deve ser igual ao número de Alocados"
-                                    : (guardPlacesCont != guardCount)
-                                        ? "O Número de Vigilantes disponíveis deve ser igual ao número de Alocados"
-                                        : ""),
-                          );
-                  },
-                );
-              },
-            ),
-          )
+          subPageFooter(_size)
         ],
       );
     } else {
@@ -328,7 +195,6 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
         _list[index]['doormanQt'] = element.doormanQt;
       }
     });
-
     return Padding(
       padding: EdgeInsets.only(top: 20),
       child: WorkplaceEditableCard(
@@ -415,6 +281,155 @@ class _SelectWorkplaceSubPageState extends State<SelectWorkplaceSubPage> {
           });
         },
       ),
+    );
+  }
+
+  Widget SubPageHeaderBuilder() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        IconButton(
+            icon: Icon(_isAllSelected == 0
+                ? Icons.check_box_outline_blank
+                : _isAllSelected == 1
+                    ? Icons.indeterminate_check_box_outlined
+                    : Icons.check_box_outlined),
+            onPressed: () {
+              setState(() {
+                if (_isAllSelected == 2) {
+                  _isAllSelected = 0;
+                } else {
+                  _isAllSelected = 2;
+                }
+                if (_isAllSelected == 2) {
+                  _list.forEach((element) {
+                    _idSelected.add(element['id']);
+                    element['isChecked'] = true;
+                  });
+                  updateCont();
+                } else {
+                  _idSelected.clear();
+                  _list.forEach((element) {
+                    element['isChecked'] = false;
+                  });
+                  updateCont();
+                }
+              });
+            }),
+        Text(
+          "Selecionar Todos",
+          style: TextStyle(fontSize: 19),
+        )
+      ],
+    );
+  }
+
+  Widget subPageFooter(Size _size){
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: 15),
+          child: Text(
+            "Porteiros - Disp.: ${dormanPlacesCont}/ Alocados: ${dormanCont}",
+            style: TextStyle(
+                fontSize: 20,
+                color: (dormanPlacesCont == dormanCont)
+                    ? Colors.green
+                    : Colors.red),
+          ),
+        ),
+        Text(
+          "Vigilantes - Disp.: ${guardPlacesCont}/ Alocados: ${guardCount}",
+          style: TextStyle(
+              fontSize: 20,
+              color: (guardPlacesCont == guardCount)
+                  ? Colors.green
+                  : Colors.red),
+        ),
+        Container(
+          width: _size.width,
+          child: AppButton(
+            externalPadding:
+            EdgeInsets.only(left: 15, right: 15, top: 30, bottom: 20),
+            labelText: "Sortear",
+            onPressedFunction: () {
+              //print(_tempModification);
+              print(_list);
+
+              updateCont();
+
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return (dormanCont == dormanPlacesCont &&
+                      guardPlacesCont == guardCount)
+                      ? PopUpSchedule(
+                    onButtonPressed: () async {
+                      if (await isDateValid(_selectedDate,
+                          SingletonSchedule().isDaytime)) {
+                        List<Map<String, dynamic>> selectedWorkplaces =
+                        new List();
+                        _list.forEach((element) {
+                          if (element['isChecked'] == true) {
+                            selectedWorkplaces.add(element);
+                          }
+                        });
+                        //print(selectedWorkplaces);
+                        SingletonSchedule().selectedWorkplaces =
+                            selectedWorkplaces;
+                        sortGuards(
+                            creator: widget._creatorName,
+                            date: _selectedDate,
+                            context: context,
+                            type:
+                            SingletonSchedule().isDaytime ? 0 : 1);
+
+                        await Navigator.popUntil(
+                            context,
+                            ModalRoute.withName(
+                                'schedule/schedulePage'));
+                        Navigator.pushNamed(
+                            context, 'schedule/resultsPage');
+                      } else {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return PopUpInfo(
+                                onOkPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                title: "Atenção !",
+                                text:
+                                "Esta escala já foi sorteada! Verifique o data e o turno e tente novamente.",
+                              );
+                            });
+                      }
+                    },
+                    onFormTextFieldChange: getItem,
+                    formTextFieldValidator: (text) {
+                      if (text.isEmpty) return "Campo Vazio";
+                    },
+                  )
+                      : PopUpInfo(
+                    onOkPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    title: "Atenção !",
+                    text: (dormanCont != dormanPlacesCont &&
+                        guardPlacesCont != guardCount)
+                        ? "O Número de Porteiros e Vigilantes disponíveis deve ser igual ao número de Alocados"
+                        : ((dormanCont != dormanPlacesCont)
+                        ? "O Número de Porteiros disponíveis deve ser igual ao número de Alocados"
+                        : (guardPlacesCont != guardCount)
+                        ? "O Número de Vigilantes disponíveis deve ser igual ao número de Alocados"
+                        : ""),
+                  );
+                },
+              );
+            },
+          ),
+        )
+      ],
     );
   }
 
