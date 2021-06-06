@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:vigilancia_app/controllers/user/userDAO.dart';
@@ -118,6 +119,7 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
             },
           ),
           AppTextFormField(
+            readOnly: SingletonUser().isUpdate == true ? true : false,
             keyboardInputType: TextInputType.number,
             initialValue: _matricula,
             labelText: "Matrícula",
@@ -128,6 +130,14 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
             onChangedFunction: (text) {
               _matricula = text;
             },
+          ),
+          Visibility(
+            visible: SingletonUser().isUpdate,
+            child: Text(
+              "A matrícula não pode ser alterada.",
+              style: TextStyle(fontSize: 15),
+              textAlign: TextAlign.center,
+            ),
           ),
           AppTextFormField(
             textCapitalization: TextCapitalization.none,
@@ -186,15 +196,39 @@ class _UserRegistrationSubPageState extends State<UserRegistrationSubPage> {
                 if (SingletonUser().isUpdate) {
                   if (_senha.isEmpty) {
                     await updateUserWithoutPassword(newUser, context);
+
                   } else {
                     await updateUserWithPassword(newUser, context);
                   }
+                  await Navigator.popUntil(context, ModalRoute.withName('menu'));
+                  Navigator.pushNamed(context, 'user/list');
                 } else {
-                  await addUser(newUser, context);
+                  await FirebaseFirestore.instance
+                      .collection("users")
+                      .where("matricula", isEqualTo: newUser.matricula)
+                      .where("visible", isEqualTo: true)
+                      .get()
+                      .then((QuerySnapshot value) async {
+                    if (value.docs.length == 0) {
+                      await addUser(newUser, context);
+                      await Navigator.popUntil(context, ModalRoute.withName('menu'));
+                      Navigator.pushNamed(context, 'user/list');
+                    } else {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return PopUpInfo(
+                              onOkPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              title: "Problema Encontrado!",
+                              text:
+                                  "Esta Matrícula já existe na base de dados de usuários!",
+                            );
+                          });
+                    }
+                  });
                 }
-
-                await Navigator.popUntil(context, ModalRoute.withName('menu'));
-                Navigator.pushNamed(context, 'user/list');
               }
             },
           ),

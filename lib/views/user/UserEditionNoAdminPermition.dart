@@ -95,7 +95,7 @@ class _UserRegistrationNoAdminSubPageState
               _matricula = text;
             },
           ),
-          Text("A matrícula pode ser alterada somente por um Administrador.", style: TextStyle(fontSize: 15),textAlign: TextAlign.center,),
+          Text("A matrícula não pode ser alterada.", style: TextStyle(fontSize: 15),textAlign: TextAlign.center,),
           AppTextFormField(
             textCapitalization: TextCapitalization.none,
             suffixIcon: _obscureText ? Icons.visibility : Icons.visibility_off,

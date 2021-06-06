@@ -99,11 +99,11 @@ class _LoginPageState extends State<LoginPage> {
                   var digest = sha1.convert(bytes);
 
                   if (widget._formKey.currentState.validate()) {
-
                     await FirebaseFirestore.instance
                         .collection("users")
                         .where("matricula", isEqualTo: widget._matricula)
                         .where("senha", isEqualTo: digest.toString())
+                        .where("visible", isEqualTo: true)
                         .get()
                         .timeout(Duration(seconds: 5), onTimeout: () {
                       throw (showDialog(
@@ -146,7 +146,8 @@ class _LoginPageState extends State<LoginPage> {
                                   Navigator.of(context).pop();
                                 },
                                 title: "Problema Encontrado!",
-                                text: "Verifique seu usuário, senha e conexão com a internet.",
+                                text:
+                                    "Verifique seu usuário, senha e conexão com a internet.",
                               );
                             });
                       }
