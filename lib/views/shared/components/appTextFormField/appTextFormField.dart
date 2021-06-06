@@ -20,28 +20,29 @@ class AppTextFormField extends StatelessWidget {
   bool readOnly;
   int minLines;
   int maxLines;
+  TextStyle textStyle;
   TextCapitalization textCapitalization;
 
   TextEditingController _controller = TextEditingController();
 
-  AppTextFormField(
-      {Key key,
-      this.initialValue,
-      this.onChangedFunction,
-      this.validatorFunction,
-      this.keyboardInputType,
-      this.labelText,
-      this.inputFormatterField,
-      this.suffixIcon,
-      this.suffixIconColor,
-      this.suffixIconOnPressed,
-      this.externalPadding,
-      this.autoFocus,
-      this.obscureText,
-      this.readOnly,
-      this.minLines,
-      this.maxLines,
-      this.textCapitalization})
+  AppTextFormField({Key key,
+    this.initialValue,
+    this.onChangedFunction,
+    this.validatorFunction,
+    this.keyboardInputType,
+    this.labelText,
+    this.inputFormatterField,
+    this.suffixIcon,
+    this.suffixIconColor,
+    this.suffixIconOnPressed,
+    this.externalPadding,
+    this.autoFocus,
+    this.obscureText,
+    this.readOnly,
+    this.minLines,
+    this.maxLines,
+    this.textStyle,
+    this.textCapitalization})
       : super(key: key);
 
   @override
@@ -60,21 +61,21 @@ class AppTextFormField extends StatelessWidget {
         validator: validatorFunction,
         controller: _controller,
         keyboardType: keyboardInputType ?? TextInputType.text,
-        style: TextStyle(fontSize: 18),
+        style: textStyle ?? TextStyle(fontSize: 18),
         decoration: InputDecoration(
             labelText: labelText,
             labelStyle: TextStyle(
               color: AppColors.mainBlue,
               fontSize: 20,
             ),
-            suffixIcon: IconButton(
+            suffixIcon: (suffixIcon != null) ? IconButton(
               icon: Icon(
                 suffixIcon,
                 color: suffixIconColor,
                 size: 20,
               ),
               onPressed: suffixIconOnPressed,
-            ),
+            ) : null,
             filled: true,
             fillColor: Colors.white,
             enabledBorder: OutlineInputBorder(

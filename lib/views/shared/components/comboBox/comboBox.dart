@@ -35,6 +35,7 @@ class ComboBox extends StatefulWidget {
   String currentObject;
   EdgeInsets paddingExterno;
   Function validatorFunction;
+  String placeholder;
 
   TextEditingController _controller = TextEditingController();
 
@@ -45,7 +46,8 @@ class ComboBox extends StatefulWidget {
       this.onTapFunction,
       this.currentObject,
       this.paddingExterno,
-      this.validatorFunction})
+      this.validatorFunction,
+      this.placeholder})
       : super(key: key);
 
   final borderProps = OutlineInputBorder(
@@ -91,53 +93,59 @@ class _ComboBoxState extends State<ComboBox> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TitleBuilder(
-            padding: EdgeInsets.only(bottom: 5), title: widget.title),
-      TextFormField(
-      validator: widget.validatorFunction,
-      controller: widget._controller,
-      style: TextStyle(fontSize: 18),
-      decoration: InputDecoration(
-
-          suffixIcon: DropdownButtonHideUnderline(
-              child: Padding(
-                  padding: const EdgeInsets.only(left: 25.0, right: 10),
-                  child: DropdownButton(
-                    hint: Text("Selecionar...",maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: AppColors.mainBlue,
-                        fontSize: 20,
-                      ),),
-                    value: widget.currentObject,
-                    items: _dropDownMenuItems,
-                    onChanged: (String text){
-                      FocusScope.of(context).requestFocus(new FocusNode());
-                      changedItem(text);
-                    },
-                    iconEnabledColor: AppColors.mainBlue,
-                    isExpanded: true,
-                    //isDense: true,
-                  ))),
-          filled: true,
-          fillColor: Colors.white,
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          contentPadding: EdgeInsets.fromLTRB(25, 10, 25, 10),
-          errorStyle: TextStyle(
-            fontSize: 16,
-          )),
-    ),
+        (widget.title != null)
+            ? TitleBuilder(
+                padding: EdgeInsets.only(bottom: 5), title: widget.title)
+            : Container(
+                height: 0,
+              ),
+        TextFormField(
+          validator: widget.validatorFunction ?? null,
+          controller: widget._controller,
+          style: TextStyle(fontSize: 18),
+          decoration: InputDecoration(
+              suffixIcon: DropdownButtonHideUnderline(
+                  child: Padding(
+                      padding: const EdgeInsets.only(left: 25.0, right: 10),
+                      child: DropdownButton(
+                        hint: Text(
+                          widget.placeholder ?? "Selecionar...",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: AppColors.mainBlue,
+                            fontSize: 20,
+                          ),
+                        ),
+                        value: widget.currentObject,
+                        items: _dropDownMenuItems,
+                        onChanged: (String text) {
+                          FocusScope.of(context).requestFocus(new FocusNode());
+                          changedItem(text);
+                        },
+                        iconEnabledColor: AppColors.mainBlue,
+                        isExpanded: true,
+                        //isDense: true,
+                      ))),
+              filled: true,
+              fillColor: Colors.white,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              contentPadding: EdgeInsets.fromLTRB(25, 10, 25, 10),
+              errorStyle: TextStyle(
+                fontSize: 16,
+              )),
+        ),
       ],
     );
   }

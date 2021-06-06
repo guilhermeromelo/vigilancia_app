@@ -9,6 +9,7 @@ import 'package:vigilancia_app/views/guard/guardRegistration.dart';
 import 'package:vigilancia_app/views/login/login_page.dart';
 import 'package:vigilancia_app/views/login/singletonLogin.dart';
 import 'package:vigilancia_app/views/menu/menu.dart';
+import 'package:vigilancia_app/views/schedule/scheduleHistoryPage.dart';
 import 'package:vigilancia_app/views/schedule/scheduleListPage.dart';
 import 'package:vigilancia_app/views/schedule/singletonSchedule.dart';
 import 'package:vigilancia_app/views/schedule/sort/selectGuardsPage.dart';
@@ -66,6 +67,7 @@ void main() async {
       'menu': (context) => Menu(),
       //Schedule
       'schedule/schedulePage': (context) => ScheduleListPage(),
+      'schedule/scheduleHistoryPage': (context) => ScheduleHistoryPage(),
       'schedule/selectGuardsPage': (context) => SelectGuardsPage(),
       'schedule/selectWorkplacesPage': (context) => SelectWorkplacePage(),
       'schedule/resultsPage': (context) => SortResultsPage(),

@@ -24,7 +24,7 @@ class _ScheduleListPageState extends State<ScheduleListPage> {
     scheduleStream = FirebaseFirestore.instance
         .collection("schedule")
         .orderBy("id", descending: true)
-        .limit(30)
+        .limit(6)
         .snapshots();
 
     return InternalHeader(
@@ -32,6 +32,10 @@ class _ScheduleListPageState extends State<ScheduleListPage> {
       leftIcon: Icons.arrow_back_ios,
       leftIconFunction: () {
         Navigator.pop(context);
+      },
+      rightIcon1: Icons.history,
+      rightIcon1Function: () {
+        Navigator.pushNamed(context, 'schedule/scheduleHistoryPage');
       },
       body: ScheduleSubPage(),
     );
@@ -55,20 +59,11 @@ class _ScheduleSubPageState extends State<ScheduleSubPage> {
         Stack(
           children: [
             Container(
-              height: 155,
+              height: 90,
               color: AppColors.lightBlue,
             ),
             Column(
               children: [
-                AppTextFormField(
-                  textCapitalization: TextCapitalization.sentences,
-                  labelText: "Pesquisar",
-                  externalPadding:
-                      EdgeInsets.only(top: 15, left: 10, right: 10),
-                  validatorFunction: (text) {
-                    if (text.isEmpty) return "Campo Vazio";
-                  },
-                ),
                 Padding(
                   padding: EdgeInsets.only(top: 5, bottom: 5),
                   child: Text(
@@ -86,7 +81,8 @@ class _ScheduleSubPageState extends State<ScheduleSubPage> {
                         labelText: "Diurna",
                         onPressedFunction: () {
                           SingletonSchedule().isDaytime = true;
-                          Navigator.pushNamed(context, 'schedule/selectGuardsPage');
+                          Navigator.pushNamed(
+                              context, 'schedule/selectGuardsPage');
                         },
                       ),
                       width: (size.width * 0.70) / 2,
@@ -98,7 +94,8 @@ class _ScheduleSubPageState extends State<ScheduleSubPage> {
                         labelText: "Noturna",
                         onPressedFunction: () {
                           SingletonSchedule().isDaytime = false;
-                          Navigator.pushNamed(context, 'schedule/selectGuardsPage');
+                          Navigator.pushNamed(
+                              context, 'schedule/selectGuardsPage');
                         },
                       ),
                       width: (size.width * 0.70) / 2,
@@ -174,5 +171,5 @@ class _ScheduleSubPageState extends State<ScheduleSubPage> {
 var scheduleStream = FirebaseFirestore.instance
     .collection("schedule")
     .orderBy("id", descending: true)
-    .limit(30)
+    .limit(6)
     .snapshots();
